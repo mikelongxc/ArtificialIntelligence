@@ -105,6 +105,9 @@ class State:
     def __lt__(self, other):
         return self.f < other.f
 
+    def __repr__(self):
+        return ", ".join([str(x) for x in self.tiles])
+
     def is_goal_state(self):
         return self.h == 0
 
@@ -129,8 +132,8 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
         next_frontier_states = get_frontier_states(state)
 
         for new_frontier_state in next_frontier_states:
-            if state.is_goal_state():
-                return state.path
+            if new_frontier_state.is_goal_state():
+                return new_frontier_state.path
             q.put(new_frontier_state)
 
 
@@ -143,11 +146,13 @@ def get_frontier_states(state: State) -> List:
     empty_index = state.tiles.index(0)
     width = int(len(state.tiles) ** 0.5)
 
+    # don't allow opposite move
     if len(state.path) > 0:
         prev = state.path[len(state.path) - 1]
         opposite = opposite_moves.get(prev)
         allowed_moves = allowed_moves.replace(opposite, "")
 
+    # shorten allowed moves
     if empty_index % width == width - 1:
         allowed_moves = allowed_moves.replace("H", "")
     if empty_index < width:
@@ -169,7 +174,7 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
     width = int(len(state.tiles) ** 0.5)
     next_tiles = []
 
-    # copy tiles into mutable array
+    # copy state tiles into mutable array
     for i in range(len(state.tiles)):
         next_tiles.append(state.tiles[i])
 
@@ -186,7 +191,7 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
         next_tiles[empty_index], next_tiles[empty_index - 1] \
             = next_tiles[empty_index - 1], next_tiles[empty_index]
 
-    g = state.path_cost + 1
+    g = state.g + 1
 
     path = state.path + move
 
@@ -196,7 +201,8 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
 def main() -> None:
     print("hello world")
     # tiles = (0, 1, 2, 3)
-    tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
+    #tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
+    tiles = (7, 0, 8, 6, 3, 5, 1, 2, 4)
     print(solve_puzzle(tiles))
 
 
