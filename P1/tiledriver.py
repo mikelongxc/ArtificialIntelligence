@@ -138,8 +138,15 @@ def get_frontier_states(state: State) -> List:
     next_frontier_states = []
 
     allowed_moves = "HJKL"
+    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
+
     empty_index = state.tiles.index(0)
     width = int(len(state.tiles) ** 0.5)
+
+    if len(state.path) > 0:
+        prev = state.path[len(state.path) - 1]
+        opposite = opposite_moves.get(prev)
+        allowed_moves = allowed_moves.replace(opposite, "")
 
     if empty_index % width == width - 1:
         allowed_moves = allowed_moves.replace("H", "")
@@ -188,8 +195,8 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
 
 def main() -> None:
     print("hello world")
-    tiles = (0, 1, 2, 3)
-    # tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
+    # tiles = (0, 1, 2, 3)
+    tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
     print(solve_puzzle(tiles))
 
 
