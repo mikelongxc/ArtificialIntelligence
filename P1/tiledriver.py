@@ -118,7 +118,7 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
     optimal number of moves to solve the given puzzle.
     """
 
-    q = queue.PriorityQueue()
+    q: queue.PriorityQueue = queue.PriorityQueue()
 
     while True:
         if q.empty():
@@ -129,7 +129,7 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
         next_frontier_states = get_frontier_states(state)
 
         for new_frontier_state in next_frontier_states:
-            if (state.is_goal_state()):
+            if state.is_goal_state():
                 return state.path
             q.put(new_frontier_state)
 
@@ -141,13 +141,13 @@ def get_frontier_states(state: State) -> List:
     empty_index = state.tiles.index(0)
     width = int(len(state.tiles) ** 0.5)
 
-    if (empty_index % width == width - 1):
+    if empty_index % width == width - 1:
         allowed_moves = allowed_moves.replace("H", "")
-    if (empty_index < width):
+    if empty_index < width:
         allowed_moves = allowed_moves.replace("J", "")
-    if (empty_index >= len(state.tiles) - width):
+    if empty_index >= len(state.tiles) - width:
         allowed_moves = allowed_moves.replace("K", "")
-    if (empty_index % width == 0):
+    if empty_index % width == 0:
         allowed_moves = allowed_moves.replace("L", "")
 
     # for each allowed move, add new state to frontier states
@@ -166,16 +166,16 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
     for i in range(len(state.tiles)):
         next_tiles.append(state.tiles[i])
 
-    if (move == "H"):
+    if move == "H":
         next_tiles[empty_index], next_tiles[empty_index + 1] \
             = next_tiles[empty_index + 1], next_tiles[empty_index]
-    elif (move == "J"):
+    elif move == "J":
         next_tiles[empty_index], next_tiles[empty_index - width] \
             = next_tiles[empty_index - width], next_tiles[empty_index]
-    elif (move == "K"):
+    elif move == "K":
         next_tiles[empty_index], next_tiles[empty_index + width] \
             = next_tiles[empty_index + width], next_tiles[empty_index]
-    elif (move == "L"):
+    elif move == "L":
         next_tiles[empty_index], next_tiles[empty_index - 1] \
             = next_tiles[empty_index - 1], next_tiles[empty_index]
 
@@ -188,10 +188,9 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
 
 def main() -> None:
     print("hello world")
-    tiles = (0,1,2,3)
+    tiles = (0, 1, 2, 3)
     # tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
     print(solve_puzzle(tiles))
-    pass  # optional program test driver
 
 
 if __name__ == "__main__":
