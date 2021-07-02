@@ -250,7 +250,7 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
     return State(tuple(next_tiles), path, g)
 
 
-def swap_tiles(move: str, next_tiles: [int, ...], empty_index: int, width: int):
+def swap_tiles(move: str, next_tiles: List, empty_index: int, width: int):
     """
     Helper function for create_new_state(). Swaps any two tiles
     i.e. (3, 2, 0, 1) to (3, 2, 1, 0)
