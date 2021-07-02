@@ -129,22 +129,16 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
     while 1:
         cur_state = q.get()
 
-        next_frontier_states = find_frontier_states(cur_state)
-
-        # for each new frontier state check if is goal or add to frontier queue
-        for new_frontier_state in next_frontier_states:
-            if new_frontier_state.is_goal_state():
-                return new_frontier_state.path
-            q.put(new_frontier_state)
+        found_path = configure_frontier(cur_state, q)
+        if found_path != "":
+            return found_path
 
 
-def find_frontier_states(state: State) -> List:
+def configure_frontier(state: State, q: queue.PriorityQueue) -> str:
     """
-    Helper function for solve_puzzle. Returns a list of frontier states that
-    were reachable from whatever current state
+    Helper function for solve_puzzle. Returns either an empty string
+    or the optimal path if it was found
     """
-    next_frontier_states = []
-
     empty_index = state.tiles.index(0)
 
     # deduce which moves are allowed
@@ -153,9 +147,12 @@ def find_frontier_states(state: State) -> List:
     # for each allowed move, add new state to frontier states
     for move in allowed_moves:
         next_state = create_new_state(state, move, empty_index)
-        next_frontier_states.append(next_state)
 
-    return next_frontier_states
+        if next_state.is_goal_state():
+            return next_state.path
+        q.put(next_state)
+
+    return ""
 
 
 def configure_moves(state: State, empty_index: int) -> str:
@@ -181,9 +178,8 @@ def configure_moves(state: State, empty_index: int) -> str:
         allowed_moves += "L"
 
     # take away opposite move from previous move
-    if len(state.path) > 0:
-        prev = state.path[len(state.path) - 1]
-        opposite = opposite_moves.get(prev)
+    if len(state.path) != 0:
+        opposite = opposite_moves.get(state.path[len(state.path) - 1])
         allowed_moves = allowed_moves.replace(opposite, "")
 
     return allowed_moves
@@ -238,7 +234,7 @@ def main() -> None:
     #tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
     # tiles = (7, 0, 8, 6, 3, 5, 1, 2, 4)
     tiles = (0, 3, 6, 5, 4, 7, 2, 1, 8)
-    # print(solve_puzzle(tiles))
+    print(solve_puzzle(tiles))
 
 
 if __name__ == "__main__":
