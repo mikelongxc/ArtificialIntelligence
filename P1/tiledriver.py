@@ -123,7 +123,7 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
 
     q: queue.PriorityQueue = queue.PriorityQueue()
 
-    while True:
+    while 1:
         if q.empty():
             state = State(tiles, "", 0)
             if state.is_goal_state():
@@ -140,29 +140,16 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
 
 
 def get_frontier_states(state: State) -> List:
+    """
+    Helper function for solve_puzzle. Returns a list of frontier states that
+    were reachable from whatever current state
+    """
     next_frontier_states = []
 
-    allowed_moves = "HJKL"
-    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
-
     empty_index = state.tiles.index(0)
-    width = int(len(state.tiles) ** 0.5)
 
-    # don't allow opposite move
-    if len(state.path) > 0:
-        prev = state.path[len(state.path) - 1]
-        opposite = opposite_moves.get(prev)
-        allowed_moves = allowed_moves.replace(opposite, "")
-
-    # shorten allowed moves
-    if empty_index % width == width - 1:
-        allowed_moves = allowed_moves.replace("H", "")
-    if empty_index < width:
-        allowed_moves = allowed_moves.replace("J", "")
-    if empty_index >= len(state.tiles) - width:
-        allowed_moves = allowed_moves.replace("K", "")
-    if empty_index % width == 0:
-        allowed_moves = allowed_moves.replace("L", "")
+    # deduce which moves are allowed
+    allowed_moves = configure_moves(state, empty_index)
 
     # for each allowed move, add new state to frontier states
     for move in allowed_moves:
@@ -172,7 +159,78 @@ def get_frontier_states(state: State) -> List:
     return next_frontier_states
 
 
+def configure_moves1(state: State, empty_index: int) -> str:
+    """
+    Helper function for get_frontier_states(). Returns a string of which
+    moves are allowed given the location of the empty tile
+    """
+    allowed_moves = "HJKL"
+    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
+    width = int(len(state.tiles) ** 0.5)
+
+    # don't allow opposite move
+    if len(state.path) > 0:
+        prev = state.path[len(state.path) - 1]
+        opposite = opposite_moves.get(prev)
+        allowed_moves = allowed_moves.replace(opposite, "")
+
+    # take away "left" move if empty tile on right edge of puzzle
+    if empty_index % width == width - 1:
+        allowed_moves = allowed_moves.replace("H", "")
+    # take away "down" move if empty tile on the top edge of puzzle
+    if empty_index < width:
+        allowed_moves = allowed_moves.replace("J", "")
+    # take away "up" move if empty tile on bottom edge of puzzle
+    if empty_index >= len(state.tiles) - width:
+        allowed_moves = allowed_moves.replace("K", "")
+    # take away "right" move if empty tile on left edge of puzzle
+    if empty_index % width == 0:
+        allowed_moves = allowed_moves.replace("L", "")
+
+    return allowed_moves
+
+def configure_moves(state: State, empty_index: int) -> str:
+    """
+    Helper function for get_frontier_states(). Returns a string of which
+    moves are allowed given the location of the empty tile
+    """
+    allowed_moves = "HJKL"
+    _moves = ""
+    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
+    width = int(len(state.tiles) ** 0.5)
+
+    # don't allow opposite move
+    if len(state.path) > 0:
+        prev = state.path[len(state.path) - 1]
+        opposite = opposite_moves.get(prev)
+        allowed_moves = allowed_moves.replace(opposite, "")
+
+    # take away "left" move if empty tile on right edge of puzzle
+    if empty_index % width != width - 1:
+        _moves += "H"
+    # take away "down" move if empty tile on the top edge of puzzle
+    if empty_index >= width:
+        _moves += "J"
+    # take away "up" move if empty tile on bottom edge of puzzle
+    if empty_index < len(state.tiles) - width:
+        _moves += "K"
+    # take away "right" move if empty tile on left edge of puzzle
+    if empty_index % width != 0:
+        _moves += "L"
+
+    if len(state.path) > 0:
+        prev = state.path[len(state.path) - 1]
+        opposite = opposite_moves.get(prev)
+        _moves = _moves.replace(opposite, "")
+
+    return _moves
+
+
 def create_new_state(state: State, move: str, empty_index: int) -> State:
+    """
+    Helper function for get_frontier_states(). Returns a newly configured
+    State object based on a singular move made.
+    """
     width = int(len(state.tiles) ** 0.5)
     next_tiles = []
 
@@ -180,6 +238,23 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
     for i in range(len(state.tiles)):
         next_tiles.append(state.tiles[i])
 
+    # swap tiles with appropriate move made
+    swap_tiles(move, next_tiles, empty_index, width)
+
+    # increment g because config is just 1 singular move away
+    g = state.g + 1
+
+    # update path string with new move
+    path = state.path + move
+
+    return State(tuple(next_tiles), path, g)
+
+
+def swap_tiles(move: str, next_tiles: [int], empty_index: int, width: int):
+    """
+    Helper function for create_new_state(). Swaps any two tiles
+    i.e. (3, 2, 0, 1) to (3, 2, 1, 0)
+    """
     if move == "H":
         next_tiles[empty_index], next_tiles[empty_index + 1] \
             = next_tiles[empty_index + 1], next_tiles[empty_index]
@@ -193,17 +268,12 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
         next_tiles[empty_index], next_tiles[empty_index - 1] \
             = next_tiles[empty_index - 1], next_tiles[empty_index]
 
-    g = state.g + 1
-
-    path = state.path + move
-
-    return State(tuple(next_tiles), path, g)
-
 
 def main() -> None:
-    tiles = (0, 1, 2, 3)
+    # tiles = (0, 1, 2, 3)
     #tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
     # tiles = (7, 0, 8, 6, 3, 5, 1, 2, 4)
+    tiles = (0, 3, 6, 5, 4, 7, 2, 1, 8)
     print(solve_puzzle(tiles))
 
 
