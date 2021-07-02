@@ -126,6 +126,8 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
     while True:
         if q.empty():
             state = State(tiles, "", 0)
+            if state.is_goal_state():
+                return state.path
         else:
             state = q.get()
 
@@ -199,10 +201,9 @@ def create_new_state(state: State, move: str, empty_index: int) -> State:
 
 
 def main() -> None:
-    print("hello world")
-    # tiles = (0, 1, 2, 3)
+    tiles = (0, 1, 2, 3)
     #tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
-    tiles = (7, 0, 8, 6, 3, 5, 1, 2, 4)
+    # tiles = (7, 0, 8, 6, 3, 5, 1, 2, 4)
     print(solve_puzzle(tiles))
 
 
