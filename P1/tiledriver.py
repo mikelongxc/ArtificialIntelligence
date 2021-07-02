@@ -1,4 +1,4 @@
-# Name:         
+# Name:         Michael Long
 # Course:       CSC 480
 # Instructor:   Daniel Kauffman
 # Assignment:   Tile Driver I
@@ -87,6 +87,29 @@ class Heuristic:
         return True
 
 
+class State:
+
+    def __init__(self, tiles: Tuple[int, ...], path: str, g: int):
+        self.tiles = tiles
+
+        self.g = g
+        self.h = Heuristic.get(tiles)
+        self.f = self.g + self.h
+
+        self.path_cost = 0
+
+        # represents current path i.e. "HJKL"
+        self.path = path
+
+    # for priority queue
+    def __lt__(self, other):
+        return self.f < other.f
+
+    def is_goal_state(self):
+        return self.h == 0
+
+    def set_path_cost(self, new_cost):
+        self.path_cost = new_cost
 
 
 def solve_puzzle(tiles: Tuple[int, ...]) -> str:
@@ -95,10 +118,79 @@ def solve_puzzle(tiles: Tuple[int, ...]) -> str:
     optimal number of moves to solve the given puzzle.
     """
 
+    q = queue.PriorityQueue()
 
+    while True:
+        if q.empty():
+            state = State(tiles, "", 0)
+        else:
+            state = q.get()
+
+        next_frontier_states = get_frontier_states(state)
+
+        for new_frontier_state in next_frontier_states:
+            if (state.is_goal_state()):
+                return state.path
+            q.put(new_frontier_state)
+
+
+def get_frontier_states(state: State) -> List:
+    next_frontier_states = []
+
+    allowed_moves = "HJKL"
+    empty_index = state.tiles.index(0)
+    width = int(len(state.tiles) ** 0.5)
+
+    if (empty_index % width == width - 1):
+        allowed_moves = allowed_moves.replace("H", "")
+    if (empty_index < width):
+        allowed_moves = allowed_moves.replace("J", "")
+    if (empty_index >= len(state.tiles) - width):
+        allowed_moves = allowed_moves.replace("K", "")
+    if (empty_index % width == 0):
+        allowed_moves = allowed_moves.replace("L", "")
+
+    # for each allowed move, add new state to frontier states
+    for move in allowed_moves:
+        next_state = create_new_state(state, move, empty_index)
+        next_frontier_states.append(next_state)
+
+    return next_frontier_states
+
+
+def create_new_state(state: State, move: str, empty_index: int) -> State:
+    width = int(len(state.tiles) ** 0.5)
+    next_tiles = []
+
+    # copy tiles into mutable array
+    for i in range(len(state.tiles)):
+        next_tiles.append(state.tiles[i])
+
+    if (move == "H"):
+        next_tiles[empty_index], next_tiles[empty_index + 1] \
+            = next_tiles[empty_index + 1], next_tiles[empty_index]
+    elif (move == "J"):
+        next_tiles[empty_index], next_tiles[empty_index - width] \
+            = next_tiles[empty_index - width], next_tiles[empty_index]
+    elif (move == "K"):
+        next_tiles[empty_index], next_tiles[empty_index + width] \
+            = next_tiles[empty_index + width], next_tiles[empty_index]
+    elif (move == "L"):
+        next_tiles[empty_index], next_tiles[empty_index - 1] \
+            = next_tiles[empty_index - 1], next_tiles[empty_index]
+
+    g = state.path_cost + 1
+
+    path = state.path + move
+
+    return State(tuple(next_tiles), path, g)
 
 
 def main() -> None:
+    print("hello world")
+    tiles = (0,1,2,3)
+    # tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
+    print(solve_puzzle(tiles))
     pass  # optional program test driver
 
 
