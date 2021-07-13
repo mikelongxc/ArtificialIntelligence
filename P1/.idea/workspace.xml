@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="12fdfdf6-3cc6-46a0-b5e3-b658dd0ee371" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tiledriver.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="203" column="19" selection-start-line="203" selection-start-column="19" selection-end-line="203" selection-end-column="19" />
+            <state relative-caret-position="285">
+              <caret line="235" column="39" lean-forward="true" selection-start-line="235" selection-start-column="39" selection-end-line="235" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -40,10 +40,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="40" />
-    <option name="y" value="30" />
-    <option name="width" value="1184" />
-    <option name="height" value="719" />
+    <option name="x" value="160" />
+    <option name="y" value="120" />
+    <option name="width" value="960" />
+    <option name="height" value="583" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -179,8 +179,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tiledriver.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="203" column="19" selection-start-line="203" selection-start-column="19" selection-end-line="203" selection-end-column="19" />
+        <state relative-caret-position="285">
+          <caret line="235" column="39" lean-forward="true" selection-start-line="235" selection-start-column="39" selection-end-line="235" selection-end-column="39" />
         </state>
       </provider>
     </entry>
