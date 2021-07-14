@@ -65,7 +65,8 @@ class State:
     def __init__(self, tiles: Tuple[int, ...], prev_move: str):
         self.tiles = tiles
         self.prev_move = prev_move
-        self.lc = tiledriver.Heuristic._get_linear_conflicts(tiles, int(len(tiles) ** 0.5))
+        self.lc = tiledriver.Heuristic._get_linear_conflicts\
+            (tiles, int(len(tiles) ** 0.5))
 
     def __eq__(self, other):
         for i in range(len(self.tiles)):
@@ -90,7 +91,7 @@ def generate_random(width: int) -> Tuple[int, ...]:
 
     random.shuffle(random_tiles)
 
-    while not is_solvable(random_tiles):
+    while not is_solvable(tuple(random_tiles)):
         random.shuffle(random_tiles)
 
     return tuple(random_tiles)
@@ -109,7 +110,7 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
     k = width * 2
     found = False
     k_list = [None] * k
-    successor_list = [(k + (k * 4))]
+    # successor_list = [(k + (k * 4))]
     successor_queue: queue.PriorityQueue = queue.PriorityQueue()
 
     # generate initial random k_states
@@ -128,7 +129,8 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
     while not found:
         # for each k_state, add successors to a 'total successor' list
         for k_state in k_list:
-            possible_answ = generate_successors(k_state, successor_queue, width, min_lc)
+            possible_answ = generate_successors(\
+                k_state, successor_queue, width, min_lc)
 
             if possible_answ != []:
                 return tuple(possible_answ)
@@ -139,6 +141,8 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
             k_list[i] = successor_queue.get()
 
         successor_queue.queue.clear()
+
+    return tuple()
 
 
 def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
@@ -155,7 +159,8 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
 
     # for each move in allowed moves, create new state
     for move in allowed_moves:
-        next_frontier = create_frontier_state(k_state.tiles, move, empty_index, width)
+        next_frontier = create_frontier_state(\
+            k_state.tiles, move, empty_index, width)
 
         # check to make sure next_frontier doesnt get added if prev_move
         if next_frontier.prev_move != "" \
@@ -173,98 +178,6 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
             return list(next_frontier.tiles)
 
     return []
-
-
-def OLD_generate_successors(k_state: State, successor_list: List[State], \
-                        width: int, min_lc: int) -> Tuple[int, ...]:
-    """
-    From a k-state (max k), add successor states to successor_list
-    from |generate_random()| based on whatever move can be made
-    """
-    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
-
-    # find the allowed moves from k_state
-    empty_index = k_state.tiles.index(0)
-    allowed_moves = _get_allowed_moves(k_state.tiles, width, empty_index)
-
-    # for each move in allowed moves, create new state
-    for move in allowed_moves:
-        next_frontier = create_frontier_state()
-
-        # check to make sure next_frontier doesnt get added if prev_move
-        if next_frontier.prev_move != "" \
-                and next_frontier.prev_move == opposite_moves.get(move):
-            continue
-
-        successor_list.append(next_frontier)
-
-        # check if we get lucky and generated successor is ideal
-        if next_frontier.lc >= min_lc:
-            return next_frontier.tiles
-
-    return tuple()
-
-
-def conflict_tiles_old(width: int, min_lc: int) -> Tuple[int, ...]:
-    """
-    Create a solvable shuffled puzzle of the given width with a minimum number
-    of linear conflicts (ignoring Manhattan distance).
-
-    >>> tiles = conflict_tiles(3, 5)
-    >>> tiledriver.Heuristic._get_linear_conflicts(tiles, 3)
-    5
-    """
-
-    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
-
-    tiles = generate_random(width)
-    lc = tiledriver.Heuristic._get_linear_conflicts(tiles, width)
-    if lc >= min_lc:
-        return tiles
-
-    # tiles = (7, 3, 0, 2, 5, 1, 6, 8, 4)
-
-    prev_move = ""
-    i = 0
-
-    while 1:
-
-        i = i + 1
-
-        empty_index = tiles.index(0)
-        allowed_moves = _get_allowed_moves(tiles, width, empty_index)
-
-        x = 0
-        max_LC = 0
-        temp_move = ""
-        for move in allowed_moves:
-            potential_move = _create_new_state(tiles, move, empty_index, width)
-            if prev_move != "" and prev_move == opposite_moves.get(move):
-                continue
-            empty_index = potential_move.index(0)
-            next_state_lc = tiledriver.Heuristic._get_linear_conflicts(potential_move, width)
-
-            if x == 0:
-                max_LC = next_state_lc
-                next_state = potential_move
-                temp_move = move
-
-
-            if next_state_lc > max_LC:
-                max_LC = next_state_lc
-                next_state = potential_move
-                temp_move = move
-
-            x = x + 1
-
-        prev_move = temp_move
-
-        tiles = next_state
-
-        if max_LC >= min_lc:
-            return tiles
-        else:
-            print()
 
 
 def create_frontier_state(tiles: Tuple[int, ...], move: str,\
@@ -305,16 +218,17 @@ def swap_tiles(move: str, next_tiles: List, empty_index: int, width: int)\
             = next_tiles[empty_index - 1], next_tiles[empty_index]
 
 
-def is_equal(t1: Tuple[int,...], t2: Tuple[int,...]) -> bool:
+def is_equal(t1: Tuple[int, ...], t2: Tuple[int, ...]) -> bool:
     for i in range(len(t1)):
         if t1[i] != t2[i]:
             return False
     return True
 
 
-def _get_allowed_moves(tiles: Tuple[int,...], width: int, empty_index: int) -> str:
+def _get_allowed_moves(tiles: Tuple[int, ...], \
+                       width: int, empty_index: int) -> str:
     allowed_moves = ""
-    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
+    # opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
 
     # take away "left" move if empty tile on right edge of puzzle
     if empty_index % width != width - 1:
@@ -332,7 +246,8 @@ def _get_allowed_moves(tiles: Tuple[int,...], width: int, empty_index: int) -> s
     return allowed_moves
 
 
-def _create_new_state(tiles: Tuple[int, ...], move: str, empty_index: int, width: int) -> Tuple[int, ...]:
+def _create_new_state(tiles: Tuple[int, ...], move: str, \
+                      empty_index: int, width: int) -> Tuple[int, ...]:
     """
     Helper function for find_frontier_states(). Returns a newly configured
     State object based on a singular move made.
