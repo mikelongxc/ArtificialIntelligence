@@ -68,6 +68,8 @@ class State:
         self.lc = tiledriver.Heuristic._get_linear_conflicts\
             (tiles, int(len(tiles) ** 0.5))
 
+        self.plateau_count = 0
+
     def __eq__(self, other):
         for i in range(len(self.tiles)):
             if self.tiles[i] != other.tiles[i]:
@@ -77,6 +79,12 @@ class State:
     # for priority queue
     def __lt__(self, other):
         return self.lc < other.lc
+
+    def increment_plateau_count(self):
+        self.plateau_count += 1
+
+
+
 
 
 def generate_random(width: int) -> Tuple[int, ...]:
@@ -94,6 +102,7 @@ def generate_random(width: int) -> Tuple[int, ...]:
     while not is_solvable(tuple(random_tiles)):
         random.shuffle(random_tiles)
 
+    print("generating random")
     return tuple(random_tiles)
 
 
@@ -107,7 +116,9 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
     5
     """
 
-    k = 1000000
+    # k = width ** width
+    # k = 4 * width ** (width/2)
+    k = 4 * min_lc ** min_lc
     found = False
     # k_list = [None] * k
     k_list = []
@@ -157,7 +168,9 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
 
     # find the allowed moves from k_state
     empty_index = k_state.tiles.index(0)
-    allowed_moves = _get_allowed_moves(k_state.tiles, width, empty_index)
+
+    allowed_moves = _get_allowed_moves(\
+        k_state.tiles, width, empty_index, k_state.prev_move)
 
     # for each move in allowed moves, create new state
     for move in allowed_moves:
@@ -165,14 +178,25 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
             k_state.tiles, move, empty_index, width)
 
         # check to make sure next_frontier doesnt get added if prev_move
-        if next_frontier.prev_move != "" \
+        """if next_frontier.prev_move != "" \
                 and next_frontier.prev_move == opposite_moves.get(move):
-            continue
+            continue"""
 
+        print("K: " + str(k_state.lc) + ", F: " + str(next_frontier.lc))
+        print("index: " + str(next_frontier.tiles.index(0)))
+        # plateau
         if k_state.lc < next_frontier.lc:
             successor_queue.put(next_frontier)
+        elif k_state.lc == next_frontier.lc:
+            if k_state.plateau_count > width - 1:
+                successor_queue.put(State(generate_random(width), ""))
+            else:
+                successor_queue.put(next_frontier)
+
+            k_state.increment_plateau_count()
+
         else:
-            successor_queue.put(State(generate_random(width), move))
+            successor_queue.put(State(generate_random(width), ""))
 
 
         # check if we get lucky and generated successor is ideal
@@ -228,9 +252,9 @@ def is_equal(t1: Tuple[int, ...], t2: Tuple[int, ...]) -> bool:
 
 
 def _get_allowed_moves(tiles: Tuple[int, ...], \
-                       width: int, empty_index: int) -> str:
+                       width: int, empty_index: int, prev_move: str) -> str:
     allowed_moves = ""
-    # opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
+    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
 
     # take away "left" move if empty tile on right edge of puzzle
     if empty_index % width != width - 1:
@@ -244,6 +268,10 @@ def _get_allowed_moves(tiles: Tuple[int, ...], \
     # take away "right" move if empty tile on left edge of puzzle
     if empty_index % width != 0:
         allowed_moves += "L"
+
+    if prev_move != "":
+        opposite = opposite_moves.get(prev_move)
+        allowed_moves.replace(opposite, "")
 
     return allowed_moves
 
