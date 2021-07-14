@@ -106,7 +106,6 @@ def generate_random(width: int) -> Tuple[int, ...]:
     while not is_solvable(tuple(random_tiles)):
         random.shuffle(random_tiles)
 
-    print("generating random")
     return tuple(random_tiles)
 
 
@@ -153,7 +152,7 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
                 return tuple(possible_answ)
 
 
-        # for each successor, choose k-best TODO: randomization k-pick
+        # for each successor, choose k-best
         for i in range(k):
             k_list[i] = successor_queue.get()
 
@@ -168,8 +167,6 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
     From a k-state (max k), add successor states to successor_list
     from |generate_random()| based on whatever move can be made
     """
-    opposite_moves = {"H": "L", "J": "K", "K": "J", "L": "H"}
-
     # find the allowed moves from k_state
     empty_index = k_state.tiles.index(0)
 
@@ -181,18 +178,10 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
         next_frontier = create_frontier_state(\
             k_state.tiles, move, empty_index, width)
 
-        # check to make sure next_frontier doesnt get added if prev_move
-        """if next_frontier.prev_move != "" \
-                and next_frontier.prev_move == opposite_moves.get(move):
-            continue"""
-
-        print("K: " + str(k_state.lc) + ", F: " + str(next_frontier.lc))
-        print("index: " + str(next_frontier.tiles.index(0)))
         # plateau
         if k_state.lc < next_frontier.lc:
             successor_queue.put(next_frontier)
         elif k_state.lc == next_frontier.lc:
-            print("ct: " + str(k_state.plateau_count))
             # use min_lc in place of hardcode TODO t
             if k_state.plateau_count > min_lc:
                 successor_queue.put(State(generate_random(width), ""))
