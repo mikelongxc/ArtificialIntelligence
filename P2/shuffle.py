@@ -366,6 +366,8 @@ def shuffle_tiles(width: int, min_len: int,
 
         successor_queue.queue.clear()
 
+    return tuple()
+
 
 def _generate_successors(k_state: State, successor_queue: queue.PriorityQueue,\
                         width: int, min_len: int,\
@@ -399,7 +401,7 @@ def _generate_successors(k_state: State, successor_queue: queue.PriorityQueue,\
 
             k_state.increment_annealing_count()
 
-        if next_frontier.h > int(0.6 * min_len):
+        if next_frontier.h > int(0.5 * min_len):
             sol = solve_puzzle(next_frontier.tiles)
             if len(sol) >= min_len:
                 print(sol)
