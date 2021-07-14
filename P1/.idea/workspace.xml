@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="12fdfdf6-3cc6-46a0-b5e3-b658dd0ee371" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../P2/shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/shuffle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../P2/tiledriver.py" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/tiledriver.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

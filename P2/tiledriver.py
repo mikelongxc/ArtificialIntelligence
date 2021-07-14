@@ -233,7 +233,8 @@ def main() -> None:
     # tiles = (0, 1, 2, 3)
     #tiles = (6, 7, 8, 3, 0, 5, 1, 2, 4)
     # tiles = (7, 0, 8, 6, 3, 5, 1, 2, 4)
-    tiles = (0, 3, 6, 5, 4, 7, 2, 1, 8)
+    #tiles = (0, 3, 6, 5, 4, 7, 2, 1, 8)
+    tiles = (6, 7, 2, 5, 1, 8, 3, 0, 4)
     print(solve_puzzle(tiles))
 
 
