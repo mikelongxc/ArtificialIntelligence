@@ -109,7 +109,8 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
 
     k = width * 2
     found = False
-    k_list = [None] * k
+    # k_list = [None] * k
+    k_list = []
     # successor_list = [(k + (k * 4))]
     successor_queue: queue.PriorityQueue = queue.PriorityQueue()
 
@@ -124,7 +125,8 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
             return tiles"""
 
         # add k_state to k_list
-        k_list[i] = k_state
+        #k_list[i] = k_state
+        k_list.append(k_state)
 
     while not found:
         # for each k_state, add successors to a 'total successor' list
