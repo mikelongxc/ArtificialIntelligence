@@ -121,8 +121,8 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
         k_state = State(tiles, "")
 
         # if random and we get lucky, return
-        """if k_state.lc >= min_lc:
-            return tiles"""
+        if k_state.lc >= min_lc:
+            return tiles
 
         # add k_state to k_list
         #k_list[i] = k_state
