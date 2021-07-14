@@ -69,6 +69,7 @@ class State:
             (tiles, int(len(tiles) ** 0.5))
 
         self.plateau_count = 0
+        self.annealing_count = 0
 
     def __eq__(self, other):
         for i in range(len(self.tiles)):
@@ -78,10 +79,13 @@ class State:
 
     # for priority queue
     def __lt__(self, other):
-        return self.lc < other.lc
+        return self.lc > other.lc
 
     def increment_plateau_count(self):
         self.plateau_count += 1
+
+    def increment_annealing_count(self):
+        self.annealing_count += 1
 
 
 
@@ -118,7 +122,7 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
 
     # k = width ** width
     # k = 4 * width ** (width/2)
-    k = 4 * min_lc ** min_lc
+    k = 1000
     found = False
     # k_list = [None] * k
     k_list = []
@@ -188,7 +192,9 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
         if k_state.lc < next_frontier.lc:
             successor_queue.put(next_frontier)
         elif k_state.lc == next_frontier.lc:
-            if k_state.plateau_count > width - 1:
+            print("ct: " + str(k_state.plateau_count))
+            # use min_lc in place of hardcode TODO t
+            if k_state.plateau_count > min_lc:
                 successor_queue.put(State(generate_random(width), ""))
             else:
                 successor_queue.put(next_frontier)
@@ -196,8 +202,12 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
             k_state.increment_plateau_count()
 
         else:
-            successor_queue.put(State(generate_random(width), ""))
+            if k_state.annealing_count > min_lc:
+                successor_queue.put(State(generate_random(width), ""))
+            else:
+                successor_queue.put(next_frontier)
 
+            k_state.increment_annealing_count()
 
         # check if we get lucky and generated successor is ideal
         if next_frontier.lc >= min_lc:
@@ -328,9 +338,11 @@ def shuffle_tiles(width: int, min_len: int,
 
 
 def main() -> None:
-    x = conflict_tiles(3, 10)
-    # x = (0, 7, 3, 2, 4, 5, 8, 1, 6)
-    # y = tiledriver.Heuristic._get_linear_conflicts(x, 3)
+    x = conflict_tiles(5, 18)
+    #x = (8, 7, 6, 5, 4, 3, 2, 1, 0)
+    #y = tiledriver.Heuristic._get_linear_conflicts(x, 3)
+
+
 
     #c = (7, 4, 0, 5, 1, 3, 6, 2, 8)
     #print(tiledriver.Heuristic._get_linear_conflicts(c, 3))
