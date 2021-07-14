@@ -62,14 +62,20 @@ def _count_inversions(ints: List[int]) -> Tuple[List[int], int]:
 
 class State:
 
-    def __init__(self, tiles: Tuple[int, ...], prev_move: str):
+    def __init__(self, tiles: Tuple[int, ...], prev_move: str, fxn_no: int):
         self.tiles = tiles
         self.prev_move = prev_move
         self.lc = tiledriver.Heuristic._get_linear_conflicts\
             (tiles, int(len(tiles) ** 0.5))
 
+        self.h = tiledriver.Heuristic._get_manhattan_distance\
+            (tiles, int(len(tiles) ** 0.5))
+
         self.plateau_count = 0
         self.annealing_count = 0
+
+        # 0 if neither(both). 1 if conflict_tiles. 2 if shuffle_tiles
+        self.fxn_no = fxn_no
 
     def __eq__(self, other):
         for i in range(len(self.tiles)):
@@ -79,13 +85,22 @@ class State:
 
     # for priority queue
     def __lt__(self, other):
-        return self.lc > other.lc
+        if self.fxn_no == 1:
+            return self.lc > other.lc
+        elif self.fxn_no == 2:
+            return self.h > other.h
+        else:
+            print("ERROR IT SHOULD NEVER FALL HERE")
+            return False
 
     def increment_plateau_count(self):
         self.plateau_count += 1
 
     def increment_annealing_count(self):
         self.annealing_count += 1
+
+    def set_fxn_no(self, new):
+        self.fxn_no = new
 
 
 
@@ -132,7 +147,7 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
     for i in range(k):
         # gen random tiles, put tiles in state obj.
         tiles = generate_random(width)
-        k_state = State(tiles, "")
+        k_state = State(tiles, "", 1)
 
         # if random and we get lucky, return
         if k_state.lc >= min_lc:
@@ -177,6 +192,7 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
     for move in allowed_moves:
         next_frontier = create_frontier_state(\
             k_state.tiles, move, empty_index, width)
+        next_frontier.set_fxn_no(1)
 
         # plateau
         if k_state.lc < next_frontier.lc:
@@ -184,7 +200,7 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
         elif k_state.lc == next_frontier.lc:
             # use min_lc in place of hardcode TODO t
             if k_state.plateau_count > min_lc:
-                successor_queue.put(State(generate_random(width), ""))
+                successor_queue.put(State(generate_random(width), "", 1))
             else:
                 successor_queue.put(next_frontier)
 
@@ -192,7 +208,7 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
 
         else:
             if k_state.annealing_count > min_lc:
-                successor_queue.put(State(generate_random(width), ""))
+                successor_queue.put(State(generate_random(width), "", 1))
             else:
                 successor_queue.put(next_frontier)
 
@@ -208,7 +224,7 @@ def generate_successors(k_state: State, successor_queue: queue.PriorityQueue, \
 def create_frontier_state(tiles: Tuple[int, ...], move: str,\
                      empty_index: int, width: int) -> State:
     """
-    Helper function for find_frontier_states(). Returns a newly configured
+    Helper function. Returns a newly configured
     State object based on a singular move made.
     """
     next_tiles = []
@@ -220,13 +236,13 @@ def create_frontier_state(tiles: Tuple[int, ...], move: str,\
     # swap tiles with appropriate move made
     swap_tiles(move, next_tiles, empty_index, width)
 
-    return State(tuple(next_tiles), move)
+    return State(tuple(next_tiles), move, 0)
 
 
 def swap_tiles(move: str, next_tiles: List, empty_index: int, width: int)\
         -> None:
     """
-    Helper function for create_new_state(). Swaps any two tiles
+    Helper function for create_frontier_state(). Swaps any two tiles
     i.e. (3, 2, 0, 1) to (3, 2, 1, 0)
     """
     if move == "H":
@@ -325,19 +341,80 @@ def shuffle_tiles(width: int, min_len: int,
     6
     """
 
+    k = 1000
+    found = False
+    k_list = []
+    successor_queue: queue.PriorityQueue = queue.PriorityQueue()
+
+    # generate k initial states
+    for i in range(k):
+        tiles = generate_random(width)
+        k_state = State(tiles, "", 2)
+        k_list.append(k_state)
+
+    while not found:
+        # for each k state, gen successors
+        for k_state in k_list:
+            possible_answ = _generate_successors(\
+                k_state, successor_queue, width, min_len, solve_puzzle)
+
+            if possible_answ != []:
+                return tuple(possible_answ)
+
+        for i in range(k):
+            k_list[i] = successor_queue.get()
+
+        successor_queue.queue.clear()
+
+
+def _generate_successors(k_state: State, successor_queue: queue.PriorityQueue,\
+                        width: int, min_len: int,\
+                         solve_puzzle: Callable[[Tuple[int, ...]], str]) \
+        -> List[int]:
+    empty_index = k_state.tiles.index(0)
+    allowed_moves = _get_allowed_moves(\
+        k_state.tiles, width, empty_index, k_state.prev_move)
+
+    for move in allowed_moves:
+
+        next_frontier = create_frontier_state( \
+            k_state.tiles, move, empty_index, width)
+
+        next_frontier.set_fxn_no(2)
+
+        if k_state.h < next_frontier.h:
+            successor_queue.put(next_frontier)
+        elif k_state.h == k_state.h:
+            if k_state.plateau_count > min_len: #TODO play
+                successor_queue.put(State(generate_random(width), "", 2))
+            else:
+                successor_queue.put(next_frontier)
+
+            k_state.increment_plateau_count()
+        else:
+            if k_state.annealing_count > min_len:
+                successor_queue.put(State(generate_random(width), "", 2))
+            else:
+                successor_queue.put(next_frontier)
+
+            k_state.increment_annealing_count()
+
+        if next_frontier.h > int(0.6 * min_len):
+            sol = solve_puzzle(next_frontier.tiles)
+            if len(sol) >= min_len:
+                print(sol)
+                return list(next_frontier.tiles)
+
+    return []
+
 
 def main() -> None:
-    x = conflict_tiles(5, 18)
-    #x = (8, 7, 6, 5, 4, 3, 2, 1, 0)
-    #y = tiledriver.Heuristic._get_linear_conflicts(x, 3)
+    # x = conflict_tiles(5, 18)
+    #HEUR = tiledriver.Heuristic._get_linear_conflicts(x, 3)
+    # print(x)
 
-
-
-    #c = (7, 4, 0, 5, 1, 3, 6, 2, 8)
-    #print(tiledriver.Heuristic._get_linear_conflicts(c, 3))
-
-    # g =  (7, 3, 0, 2, 5, 1, 6, 8, 4)
-    print(x)
+    y = shuffle_tiles(3, 29, tiledriver.solve_puzzle)
+    print(y)
 
 
 if __name__ == "__main__":
