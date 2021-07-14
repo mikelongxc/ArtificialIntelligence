@@ -107,7 +107,7 @@ def conflict_tiles(width: int, min_lc: int) -> Tuple[int, ...]:
     5
     """
 
-    k = width * 2
+    k = 1000000
     found = False
     # k_list = [None] * k
     k_list = []
@@ -300,7 +300,7 @@ def shuffle_tiles(width: int, min_len: int,
 
 
 def main() -> None:
-    x = conflict_tiles(3, 3)
+    x = conflict_tiles(3, 10)
     # x = (0, 7, 3, 2, 4, 5, 8, 1, 6)
     # y = tiledriver.Heuristic._get_linear_conflicts(x, 3)
 
