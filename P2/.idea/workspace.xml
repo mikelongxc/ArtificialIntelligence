@@ -4,7 +4,6 @@
     <list default="true" id="7116ff54-dcce-4762-b8ba-fc40eb3f872b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../P1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiledriver.py" beforeDir="false" afterPath="$PROJECT_DIR$/tiledriver.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +16,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tiledriver.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="211" column="74" selection-start-line="211" selection-start-column="73" selection-end-line="211" selection-end-column="74" />
+            <state relative-caret-position="102">
+              <caret line="101" column="4" selection-start-line="101" selection-start-column="4" selection-end-line="103" selection-end-column="31" />
               <folding>
                 <element signature="e#144#156#0" expanded="true" />
               </folding>
@@ -29,11 +28,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/shuffle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="105" column="12" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="12" />
+            <state relative-caret-position="364">
+              <caret line="393" column="12" lean-forward="true" selection-start-line="393" selection-start-column="12" selection-end-line="393" selection-end-column="12" />
               <folding>
                 <element signature="e#133#146#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/queue.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="111">
+              <caret line="253" selection-start-line="253" selection-end-line="253" />
             </state>
           </provider>
         </entry>
@@ -48,8 +56,10 @@
       <find>tuple</find>
       <find>tuple[</find>
       <find>= state</find>
-      <find>is_equa</find>
       <find>\</find>
+      <find>**</find>
+      <find>queue</find>
+      <find>is_equa</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -208,7 +218,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2266289" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.42492917" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3569405" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -225,24 +235,36 @@
           <line>237</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/shuffle.py</url>
+          <line>129</line>
+          <option name="timeStamp" value="68" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tiledriver.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="211" column="74" selection-start-line="211" selection-start-column="73" selection-end-line="211" selection-end-column="74" />
+        <state relative-caret-position="102">
+          <caret line="101" column="4" selection-start-line="101" selection-start-column="4" selection-end-line="103" selection-end-column="31" />
           <folding>
             <element signature="e#144#156#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="253" selection-start-line="253" selection-end-line="253" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/shuffle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="105" column="12" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="12" />
+        <state relative-caret-position="364">
+          <caret line="393" column="12" lean-forward="true" selection-start-line="393" selection-start-column="12" selection-end-line="393" selection-end-column="12" />
           <folding>
             <element signature="e#133#146#0" expanded="true" />
           </folding>
