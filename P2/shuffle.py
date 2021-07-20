@@ -387,7 +387,7 @@ def _generate_successors(k_state: State, successor_queue: queue.PriorityQueue,\
         if k_state.h < next_frontier.h:
             successor_queue.put(next_frontier)
         elif k_state.h == k_state.h:
-            if k_state.plateau_count > min_len: #TODO play
+            if k_state.plateau_count > min_len * 2: #TODO play
                 successor_queue.put(State(generate_random(width), "", 2))
             else:
                 successor_queue.put(next_frontier)
