@@ -273,9 +273,13 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 k = 0
                 converges = True
                 gen_no = False
-                break;
+                break
 
-            for i in range(0, n, 2):
+            res = select(new_population, selected, fe, n)
+            if res != "":
+                return res
+
+            """for i in range(0, n, 2):
                 new_programs = crossover(selected[i], selected[i + 1])
 
                 score1 = new_programs[0].score_fitness(fe)
@@ -288,7 +292,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
                 # add the new programs to the next_pop list until full
                 new_population.append(new_programs[0])
-                new_population.append(new_programs[1])
+                new_population.append(new_programs[1])"""
 
         for i in range(k):
             population[i] = new_population[i]
@@ -296,11 +300,31 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
         # copy_array(population, new_population, k)
 
 
+def select(new_population: List[Program], selected: List[Program],\
+           fe: FitnessEvaluator, n: int) -> str:
+    for i in range(0, n, 2):
+        new_programs = crossover(selected[i], selected[i + 1])
+
+        score1 = new_programs[0].score_fitness(fe)
+        score2 = new_programs[1].score_fitness(fe)
+
+        if score1 == 0:
+            return new_programs[0].sequence
+        elif score2 == 0:
+            return new_programs[1].sequence
+
+        # add the new programs to the next_pop list until full
+        new_population.append(new_programs[0])
+        new_population.append(new_programs[1])
+
+    return ""
+
+
 def bad_average(selected: List[Program]) -> bool:
-    sum = 0
+    _sum = 0
     for i in range(len(selected)):
-        sum += selected[i].score
-    if (sum / len(selected)) > 15:
+        _sum += selected[i].score
+    if (_sum / len(selected)) > 15:
         return True
     return False
 
