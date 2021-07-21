@@ -333,7 +333,6 @@ def generate_random_loop(max_len: int) -> str:
     ptr_dirs = "><"
     dirs_ptrs = "<>"
 
-    done = False
     i = 0
 
     if i == 0 and _dir == 0:
