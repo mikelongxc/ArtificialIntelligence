@@ -16,11 +16,21 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/biogimmickry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="238" column="22" lean-forward="true" selection-start-line="238" selection-start-column="22" selection-end-line="238" selection-end-column="22" />
+            <state relative-caret-position="1338">
+              <caret line="327" column="26" selection-start-line="327" selection-start-column="26" selection-end-line="327" selection-end-column="26" />
               <folding>
                 <element signature="e#143#156#0" expanded="true" />
+                <element signature="e#7981#8710#1" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/codecs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="226">
+              <caret line="309" selection-start-line="309" selection-end-line="309" />
             </state>
           </provider>
         </entry>
@@ -45,8 +55,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1440" />
-    <option name="y" value="-157" />
+    <option name="x" value="1439" />
+    <option name="y" value="23" />
     <option name="width" value="1920" />
     <option name="height" value="1057" />
   </component>
@@ -142,7 +152,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.15314402" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3306288" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.28600407" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -151,6 +161,22 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/biogimmickry.py</url>
+          <line>234</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/biogimmickry.py</url>
+          <line>262</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
@@ -174,12 +200,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="309" selection-start-line="309" selection-end-line="309" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/biogimmickry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="238" column="22" lean-forward="true" selection-start-line="238" selection-start-column="22" selection-end-line="238" selection-end-column="22" />
+        <state relative-caret-position="1338">
+          <caret line="327" column="26" selection-start-line="327" selection-start-column="26" selection-end-line="327" selection-end-column="26" />
           <folding>
             <element signature="e#143#156#0" expanded="true" />
+            <element signature="e#7981#8710#1" />
           </folding>
         </state>
       </provider>

@@ -191,7 +191,7 @@ def generate_random_program(max_len: int) -> Program:
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for i in range(random.randint(0, max_len)):
-        print(i) # TODO
+        # print(i) # TODO
         sequence_str += valid_commands[random.randint(0, 3)]
 
     return Program(sequence_str)
@@ -200,7 +200,7 @@ def generate_random_program(max_len: int) -> Program:
 def generate_random(fe: FitnessEvaluator, max_len: int,\
                     k: int, population: List[Program]) -> str:
     for i in range(k):
-        print(i) # TODO
+        # print(i) # TODO
         # generate random program
         program = generate_random_program(max_len)
         # score newly generated random program and stop if 0
@@ -226,15 +226,15 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     # new_population: List[Program] = []
 
-    k = 20        # k represents the initial population size
+    k = 1000        # k represents the initial population size
     # N = 0.5        # N is top percentile for selection process
 
     converges = True
     gen_no = 0
     while 1:
         gen_no = gen_no + 1
-        # print(gen_no)
-        if gen_no == 15:
+        print(gen_no)
+        if gen_no == 50:
             converges = True
             gen_no = 0
 
@@ -244,21 +244,46 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             population: List[Program] = []
             res = generate_random(fe, max_len, k, population)
             if res != "":
+                print("from RANDOM")
                 return res
 
         new_population: List[Program] = []
 
         while len(population) != len(new_population):
             # select 2 programs in top N percentile
-            n = k//10
+            #n = k//10
+            n = k // 2
 
             weights = []
             for i in range(len(population)):
-                weights.append(10 - population[i].score)
+                weights.append(20 - population[i].score)
 
             # weights = populate_weights(k, population)
 
             selected = random.choices(population, weights=weights, k=n)
+
+            selected.sort(key=lambda program: program.sequence)
+
+            for i in range(0, n, 2):
+                n_p = []
+                n_p.append(selected[i])
+                n_p.append(selected[i + 1])
+
+                new_programs = crossover(n_p)
+
+                score1 = new_programs[0].score_fitness(fe)
+                score2 = new_programs[1].score_fitness(fe)
+
+                if score1 == 0:
+                    return new_programs[0].sequence
+                elif score2 == 0:
+                    return new_programs[1].sequence
+
+                # add the new programs to the next_pop list until full
+                new_population.append(new_programs[0])
+                new_population.append(new_programs[1])
+
+            """selected = random.choices(population, weights=weights, k=n)
 
             for i in range(0, n, 2):
                 n_p = []
@@ -277,7 +302,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
                 # add the new programs to the next_pop list until full
                 new_population.append(new_programs[0])
-                new_population.append(new_programs[1])
+                new_population.append(new_programs[1])"""
 
         for i in range(k):
             population[i] = new_population[i]
@@ -300,8 +325,8 @@ def copy_array(into: List[Program], of: List[Program], k: int) -> None:
 def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
     # array = (1, 3, 2, 2, 0, 1, 0) # works
-    #array = (-1, 2, -3, -3)
-    array = (19,)
+    array = (-1, 2, -3, -7)
+    # array = (15,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
     max_len = 0  # no BF loop required
