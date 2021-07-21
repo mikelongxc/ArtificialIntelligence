@@ -321,6 +321,22 @@ def copy_array(into: List[Program], of: List[Program], k: int) -> None:
 
 
 def generate_random_loop(max_len: int) -> str:
+    """
+    This function is the rdm generator for functions with loops
+
+    Yes, this function was hacked together and is objectively "bad" code
+    but I was able to find out the patterns associated with loops and
+    separated them into four parts:
+        1 the pointers that change between the counter and the
+            loop-incremented-value.
+        2 the total number of iterations for the counter (with the counter
+            decrement/increment)
+        3 the actual -/+ inside the loop
+        4 the loop brackets
+
+    these components make it so that randomization is a little less naive and
+    each sequence generated is a valid loop
+    """
     sequence = ""
     # 1: ptr handling
     _dir = random.randint(0, 1) # 0 if ><> 1 if x><
@@ -333,36 +349,34 @@ def generate_random_loop(max_len: int) -> str:
     ptr_dirs = "><"
     dirs_ptrs = "<>"
 
-    i = 0
-
-    if i == 0 and _dir == 0:
+    # 1. optional counter index position
+    if _dir == 0:
         sequence = ">"
-        i += 1
 
+    # 2. total loop incrementer/decrementer
     num_n_iter = random.randint(0, max_len // 4)
     for _ in range(num_n_iter):
         sequence = sequence + plusorminus[_niter]
-        i += 1
 
+    # 4. opening brackets
     sequence = sequence + "["
-    i += 1
 
+    # 1. ptr that goes to adjust loop values from the counter index
     sequence = sequence + dirs_ptrs[_dir]
-    i += 1
 
+    # 3. what the loop is changing (+/-)
     num_loop_val = random.randint(0, max_len // 2)
     for _ in range(num_loop_val):
         sequence = sequence + plusorminus[_loopval]
-        i += 1
 
+    # 1. ptr changer
     sequence = sequence + ptr_dirs[_dir]
-    i += 1
 
+    # 2. loop decrement or incrementer (before closing bracket)
     sequence = sequence + minusorplus[_niter]
-    i += 1
 
+    # 4. closing bracket
     sequence = sequence + "]"
-    i += 1
 
     return sequence[:max_len]
 
@@ -373,7 +387,6 @@ def main() -> None:  # optional driver
     """for i in range(30):
         x = generate_random_loop(20)
         print(x)"""
-    array = (20, 0)
     array = (0, 20)
     max_len = 15
 
