@@ -191,7 +191,7 @@ def generate_random_program(max_len: int) -> Program:
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for i in range(random.randint(0, max_len)):
-        # print(i) # TODO
+        print(i) # TODO
         sequence_str += valid_commands[random.randint(0, 3)]
 
     return Program(sequence_str)
@@ -200,7 +200,7 @@ def generate_random_program(max_len: int) -> Program:
 def generate_random(fe: FitnessEvaluator, max_len: int,\
                     k: int, population: List[Program]) -> str:
     for i in range(k):
-        # print(i) # TODO
+        print(i) # TODO
         # generate random program
         program = generate_random_program(max_len)
         # score newly generated random program and stop if 0
@@ -301,7 +301,7 @@ def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
     # array = (1, 3, 2, 2, 0, 1, 0) # works
     #array = (-1, 2, -3, -3)
-    array = (20,)
+    array = (19,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
     max_len = 0  # no BF loop required
