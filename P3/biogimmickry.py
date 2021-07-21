@@ -213,13 +213,13 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     # N = 0.5        # N is top percentile for selection process
 
     converges = True
-    gen_no = 0
+    # gen_no = 0
     while 1:
-        gen_no = gen_no + 1
+        """gen_no = gen_no + 1
         print(gen_no)
         if gen_no == 2000:
             converges = True
-            gen_no = 0
+            gen_no = 0"""
 
         # generate initial random, score initial random, add to population
         if converges:
@@ -236,7 +236,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                     return program.sequence
                 population.append(program)
 
-        new_population = []
+        new_population: List[Program] = []
 
         while len(population) != len(new_population):
             # select 2 programs in top N percentile
