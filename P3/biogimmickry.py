@@ -120,7 +120,7 @@ class Program:
         return evaluated_score
 
 
-def crossover(selected: List[Program]):
+def crossover(selected: List[Program]) -> List[Program]:
     new_programs = []
 
     if len(selected[0].program) < len(selected[1].program):
@@ -155,6 +155,7 @@ def generate_random_program(max_len: int) -> Program:
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for i in range(random.randint(0, max_len)):
+        print(i)
         program_str += valid_commands[random.randint(0, 3)]
         # program_str += valid_commands[random.randint(0, 5)]
 
@@ -169,14 +170,15 @@ def _create_program(fe: FitnessEvaluator, max_len: int) -> str:
     Use fe.evaluate(program) to get a program's fitness score (zero is best).
     """
 
-    mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
+    # mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
 
     population = []
 
     k = 500        # k represents the initial population size
-    N = 0.5        # N is top percentile for selection process
+    # n = 0.5        # N is top percentile for selection process
 
     for i in range(k):
+        print(i)
         # generate random program
         program = generate_random_program(max_len)
         # score newly generated random program and stop if 0
@@ -206,7 +208,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
 
-    new_population = []
+    new_population: List[Program] = []
 
     k = 100        # k represents the initial population size
     N = 0.5        # N is top percentile for selection process
