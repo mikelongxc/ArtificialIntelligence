@@ -174,9 +174,30 @@ def mutate(sequence: str) -> str:
 
     new_cmd = valid_commands[rdm_int]
 
-    # sequence = sequence.replace(sequence,)
-
     return sequence[:index] + new_cmd + sequence[index + 1:]
+
+
+def new_mutate(sequence: str) -> str:
+    valid_commands = "><+-"
+
+    # mutation rate is 50%
+    rdm_int = random.randint(-3, 3)
+    if rdm_int < 0:
+        return sequence
+
+    seq_len = len(sequence)
+
+    new_sequence = ""
+
+    for _ in range(seq_len // 5):
+        rdm_cmd = random.randint(0, 3)
+        rdm_index = random.randint(0, seq_len)
+
+        new_cmd = valid_commands[rdm_cmd]
+
+        new_sequence = sequence[:rdm_index] + new_cmd + sequence[rdm_index + 1:]
+
+    return new_sequence
 
 
 def generate_random_program(max_len: int) -> Program:
@@ -190,6 +211,7 @@ def generate_random_program(max_len: int) -> Program:
         max_len = 35
 
     sequence_str = ""
+    # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for _ in range(random.randint(0, max_len)):
         sequence_str += valid_commands[random.randint(0, 3)]
@@ -201,10 +223,7 @@ def generate_random(fe: FitnessEvaluator, max_len: int,\
                     k: int, population: List[Program]) -> str:
     for _ in range(k):
         # generate random program
-        if max_len == 0:
-            program = generate_random_program(max_len)
-        else:
-            program = Program(generate_random_loop(max_len))
+        program = generate_random_program(max_len)
         # score newly generated random program and stop if 0
         fitness_score = program.score_fitness(fe)
         if fitness_score == 0:
@@ -215,26 +234,12 @@ def generate_random(fe: FitnessEvaluator, max_len: int,\
     return ""
 
 
-def create_program(fe: FitnessEvaluator, max_len: int) -> str:
-    """
-    Return a program string no longer than max_len that, when interpreted,
-    populates a memory array that exactly matches a target array.
-
-    Use fe.evaluate(program) to get a program's fitness score (zero is best).
-    """
-
-    # mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
-
-    # new_population: List[Program] = []
-
-    # k = 1000
-    # N = 0.5        # N is top percentile for selection process
-
+def create_program_noloop(fe: FitnessEvaluator, max_len: int) -> str:
     converges = True
     gen_no = 0
 
     while 1:
-        k = 1000 # k represents the initial population size
+        k = 1000  # k represents the initial population size
         gen_no = gen_no + 1
         print(gen_no)
         if gen_no == 100:
@@ -254,11 +259,15 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
         ct = [0]
 
         while ct[0] != k:
+            # select 2 programs in top N percentile
+            # n = k//10
+            # n = k // 2
+
             weights = populate_weights(k, population)
 
             population.sort(key=lambda program: program.score)
 
-            selected = random.choices(population, weights=weights, k=k//2)
+            selected = random.choices(population, weights=weights, k=k // 2)
             selected.sort(key=lambda program: program.score)
 
             if bad_average(selected):
@@ -267,7 +276,78 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 gen_no = False
                 break
 
-            res = select(new_population, selected, fe, k//2, ct)
+            res = select(new_population, selected, fe, k // 2, ct)
+            if res != "":
+                return res
+
+        for i in range(k):
+            population[i] = new_population[i]
+
+
+def create_program(fe: FitnessEvaluator, max_len: int) -> str:
+    """
+    Return a program string no longer than max_len that, when interpreted,
+    populates a memory array that exactly matches a target array.
+
+    Use fe.evaluate(program) to get a program's fitness score (zero is best).
+    """
+
+    # mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
+
+    # new_population: List[Program] = []
+
+    # k = 1000
+    # N = 0.5        # N is top percentile for selection process
+
+    if max_len == 0:
+        return create_program_noloop(fe, max_len)
+    else:
+        return create_program_wloop(fe, max_len)
+
+
+def create_program_wloop(fe: FitnessEvaluator, max_len: int) -> str:
+    converges = True
+    gen_no = 0
+
+    while 1:
+        k = 1000  # k represents the initial population size
+        gen_no = gen_no + 1
+        print(gen_no)
+        if gen_no == 100:
+            converges = True
+            gen_no = 0
+
+        # generate initial random, score initial random, add to population
+        if converges:
+            converges = False
+            population: List[Program] = []
+            res = generate_random(fe, max_len, k, population)
+            if res != "":
+                # print("from RANDOM")
+                return res
+
+        new_population: List[Program] = []
+        ct = [0]
+
+        while ct[0] != k:
+            # select 2 programs in top N percentile
+            # n = k//10
+            # n = k // 2
+
+            weights = populate_weights(k, population)
+
+            population.sort(key=lambda program: program.score)
+
+            selected = random.choices(population, weights=weights, k=k // 2)
+            selected.sort(key=lambda program: program.score)
+
+            if bad_average(selected):
+                k = 0
+                converges = True
+                gen_no = False
+                break
+
+            res = select(new_population, selected, fe, k // 2, ct)
             if res != "":
                 return res
 
@@ -301,10 +381,9 @@ def bad_average(selected: List[Program]) -> bool:
     _sum = 0
     for i in range(len(selected)):
         _sum += selected[i].score
-    if (_sum / len(selected)) > 15:
+    if (_sum / len(selected)) > 15: # TODO changeable
         return True
     return False
-
 
 
 def populate_weights(k: int, population: List[Program]) -> List[int]:
@@ -327,60 +406,43 @@ def generate_random_loop(max_len: int) -> str:
     _niter = random.randint(0, 1) # 0 if +++ or -
     _loopval = random.randint(0, 1)
 
-    plusorminus = "+-"
-    minusorplus = "-+"
+    # for i in range(random.randint(12, max_len)):
 
-    ptr_dirs = "><"
-    dirs_ptrs = "<>"
 
-    done = False
-    i = 0
+    return sequence
 
-    if i == 0 and _dir == 0:
-        sequence = ">"
-        i += 1
 
-    num_n_iter = random.randint(0, max_len // 4)
-    for _ in range(num_n_iter):
-        sequence = sequence + plusorminus[_niter]
-        i += 1
 
-    sequence = sequence + "["
-    i += 1
-
-    sequence = sequence + dirs_ptrs[_dir]
-    i += 1
-
-    num_loop_val = random.randint(0, max_len // 2)
-    for _ in range(num_loop_val):
-        sequence = sequence + plusorminus[_loopval]
-        i += 1
-
-    sequence = sequence + ptr_dirs[_dir]
-    i += 1
-
-    sequence = sequence + minusorplus[_niter]
-    i += 1
-
-    sequence = sequence + "]"
-    i += 1
-
-    return sequence[:max_len]
 
 
 def main() -> None:  # optional driver
+    # array = (-1, 2, -3, 4)
+    # array = (1, 3, 2, 2, 0, 1, 0) # works
+    # array = (-1, 2, -3, -7)
+    #array = (4, 3 )
+    # array = (5, 0, 0, 0, -10, 3)
+    # array = (1, 2, 3, 0, 5, 6, 1, 2) # success w 50, time w 40
+    #array = (5, 0, 0, 0, -10, 3)
+    # array = (15,)
+    # array = [0, 0, 0, 0, 0, 0, 0, 0]
+    # array = [13]
+    # max_len = 0  # no BF loop required
 
-    # x = generate_random_loop(15)
-    """for i in range(30):
-        x = generate_random_loop(20)
-        print(x)"""
-    array = (20, 0)
-    array = (0, 20)
-    max_len = 15
+    # only attempt when non-loop programs work
+    # array = (20, 0)
+    # max_len = 15
 
-    program = create_program(FitnessEvaluator(array), max_len)
-    print(program)
-    print(FitnessEvaluator.interpret(program, len(array)))
+    #program = create_program(FitnessEvaluator(array), max_len)
+    #print(program)
+    #print(FitnessEvaluator.interpret(program, len(array)))
+    """if max_len > 0:
+        assert len(program) <= max_len
+    assert array == FitnessEvaluator.interpret(program, len(array))"""
+
+    # print(FitnessEvaluator.interpret("><<+++", len(array)))
+
+
+    generate_random_loop()
 
 
 if __name__ == "__main__":
