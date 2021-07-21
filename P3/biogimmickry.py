@@ -166,7 +166,7 @@ def mutate(sequence: str) -> str:
     index = random.randint(0, seq_len)
     valid_commands = "><+-"
 
-    rdm_int = random.randint(-3, -3) # TODO: add +2 to 3 for []
+    rdm_int = random.randint(-3, 3) # TODO: add +2 to 3 for []
     if rdm_int < 0:
         return sequence
 
@@ -191,9 +191,8 @@ def generate_random_program(max_len: int) -> Program:
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for i in range(random.randint(0, max_len)):
-        print(i)
+        # print(i)
         sequence_str += valid_commands[random.randint(0, 3)]
-        # program_str += valid_commands[random.randint(0, 5)]
 
     return Program(sequence_str)
 
@@ -210,17 +209,17 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     # new_population: List[Program] = []
 
-    k = 1000        # k represents the initial population size
+    k = 4000        # k represents the initial population size
     # N = 0.5        # N is top percentile for selection process
 
     converges = True
-    # gen_no = 0
+    gen_no = 0
     while 1:
-        """gen_no = gen_no + 1
-        print(gen_no)
-        if gen_no == 2000:
+        gen_no = gen_no + 1
+        # print(gen_no)
+        if gen_no == 15:
             converges = True
-            gen_no = 0"""
+            gen_no = 0
 
         # generate initial random, score initial random, add to population
         if converges:
@@ -279,7 +278,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 def populate_weights(k: int, population: List[Program]) -> List[int]:
     weights = []
     for i in range(k):
-        weights.append(10 - population[i].score)
+        weights.append(20 - population[i].score)
     return weights
 
 
@@ -290,7 +289,10 @@ def copy_array(into: List[Program], of: List[Program], k: int) -> None:
 
 def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
-    array = (1, 3, 2, 2, 0, 1, 0)
+    # array = (1, 3, 2, 2, 0, 1, 0) # works
+    # array = [-1, 2, -3, -3]
+    # array = [0, 0, 0, 0, 0, 0, 0, 0]
+    array = [13]
     max_len = 0  # no BF loop required
 
     # only attempt when non-loop programs work
