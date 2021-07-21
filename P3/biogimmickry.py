@@ -101,6 +101,7 @@ class FitnessEvaluator:
         z = sum(abs(x - y) for x, y in zip(expect, actual))
         return z
 
+
 class Program:
 
     def __init__(self, sequence: str):
@@ -189,11 +190,11 @@ def generate_random_program(max_len: int, loop: int) -> Program:
 
     sequence_str = ""
     # valid_commands = "><+-[]"
-    valid_commands = "><++--"
+    valid_commands = "><+-"
 
     if loop < 7: # 70% non-loop, 30% loop
         for _ in range(random.randint(0, max_len)):
-            sequence_str += valid_commands[random.randint(0, 5)]
+            sequence_str += valid_commands[random.randint(0, 3)]
     else:
         sequence_str = generate_loop_program(max_len)
 
@@ -343,7 +344,6 @@ def bad_average(selected: List[Program]) -> bool:
     if (_sum / len(selected)) > 15:
         return True
     return False
-
 
 
 def populate_weights(k: int, population: List[Program]) -> List[int]:
