@@ -382,7 +382,7 @@ def bad_average(selected: List[Program]) -> bool:
     _sum = 0
     for i in range(len(selected)):
         _sum += selected[i].score
-    if (_sum / len(selected)) > 15:
+    if (_sum / len(selected)) > 13: # TODO changeable
         return True
     return False
 
