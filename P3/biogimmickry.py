@@ -213,7 +213,6 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     # N = 0.5        # N is top percentile for selection process
 
     converges = True
-    cutting = False
     gen_no = 0
     while 1:
         gen_no = gen_no + 1
@@ -236,7 +235,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                     print("gen no (regen): " + str(gen_no))
                     return program.sequence
                 population.append(program)
-                
+
         new_population = []
 
         while len(population) != len(new_population):
@@ -259,11 +258,10 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 score1 = new_programs[0].score_fitness(fe)
                 score2 = new_programs[1].score_fitness(fe)
 
-                if score1 == 0 or score2 == 0:
-                    if score1 == 0:
-                        return new_programs[0].sequence
-                    else:
-                        return new_programs[1].sequence
+                if score1 == 0:
+                    return new_programs[0].sequence
+                elif score2 == 0:
+                    return new_programs[1].sequence
 
                 # add the new programs to the next_pop list until full
                 new_population.append(new_programs[0])
