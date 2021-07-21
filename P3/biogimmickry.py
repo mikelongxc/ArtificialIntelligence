@@ -101,7 +101,6 @@ class FitnessEvaluator:
         z = sum(abs(x - y) for x, y in zip(expect, actual))
         return z
 
-
 class Program:
 
     def __init__(self, sequence: str):
@@ -125,7 +124,7 @@ class Program:
         return evaluated_score
 
 
-def crossover(p1: Program, p2: Program, max_len: int) -> List[Program]:
+def crossover(p1: Program, p2: Program) -> List[Program]:
     selected = [p1, p2]
 
     new_programs = []
@@ -139,15 +138,18 @@ def crossover(p1: Program, p2: Program, max_len: int) -> List[Program]:
 
     switch_index = random.randint(0, min_program_len)
 
-    # slice and swap
+    #program1_seq = selected[0].sequence[0:switch_index]
+    #program2_seq = selected[1].sequence[switch_index:max_program_len]
+
     swap1a = selected[0].sequence[0:switch_index]
     swap1b = selected[1].sequence[switch_index:max_program_len]
+
     swap2a = selected[1].sequence[0:switch_index]
     swap2b = selected[0].sequence[switch_index:max_program_len]
+
     program1_seq = swap1a + swap1b
     program2_seq = swap2a + swap2b
 
-    # optional mutate
     program1_seq = mutate(program1_seq)
     program2_seq = mutate(program2_seq)
 
@@ -161,9 +163,9 @@ def crossover(p1: Program, p2: Program, max_len: int) -> List[Program]:
     return new_programs
 
 
-def mutate(sequence: str) -> str:
+def oldmutate(sequence: str) -> str:
     seq_len = len(sequence)
-    index = random.randint(0, seq_len - 1)
+    index = random.randint(0, seq_len)
     valid_commands = "><+-"
 
     rdm_int = random.randint(-3, 3) # TODO: add +2 to 3 for []
@@ -176,8 +178,30 @@ def mutate(sequence: str) -> str:
 
     return sequence[:index] + new_cmd + sequence[index + 1:]
 
+def mutate(sequence: str) -> str:
+    valid_commands = "><+-"
 
-def generate_random_program(max_len: int, loop: int) -> Program:
+    # mutation rate is 50%
+    rdm_int = random.randint(-3, 3)
+    if rdm_int < 0:
+        return sequence
+
+    seq_len = len(sequence)
+
+    new_sequence = ""
+
+    for _ in range(seq_len // 5):
+        rdm_cmd = random.randint(0, 3)
+        rdm_index = random.randint(0, seq_len)
+
+        new_cmd = valid_commands[rdm_cmd]
+
+        new_sequence = sequence[:rdm_index] + new_cmd + sequence[rdm_index + 1:]
+
+    return new_sequence
+
+
+def generate_random_program(max_len: int) -> Program:
     """
     Generates a single random program object no larger than max_len
     """
@@ -186,66 +210,79 @@ def generate_random_program(max_len: int, loop: int) -> Program:
 
     if max_len == 0:
         max_len = 35
-        loop = 1 # if max len 0, NO LOOPS
 
     sequence_str = ""
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
-
-    if loop < 7: # 70% non-loop, 30% loop
-        for _ in range(random.randint(0, max_len)):
-            sequence_str += valid_commands[random.randint(0, 3)]
-    else:
-        sequence_str = generate_loop_program(max_len)
+    for _ in range(random.randint(0, max_len)):
+        sequence_str += valid_commands[random.randint(0, 3)]
 
     return Program(sequence_str)
-
-
-def generate_loop_program(max_len: int):
-    valid_commands = "><+-[]"
-    chance_commands = "><++++----"
-    bracket = 0
-    opened = False
-    closed = False
-
-    sequence_str = ""
-
-    for _ in range(random.randint(12, max_len)):
-        if bracket < 0 and opened == False:
-            sequence_str += valid_commands[4]
-            opened = True
-            bracket = 0
-        elif bracket > 0 and closed == False and opened == True:
-            sequence_str += valid_commands[5]
-            bracket = 0
-            closed = True
-        else:
-            sequence_str += chance_commands[random.randint(0, 9)]
-
-        bracket = random.randint(-10, 4)
-
-    return sequence_str
 
 
 def generate_random(fe: FitnessEvaluator, max_len: int,\
                     k: int, population: List[Program]) -> str:
     for _ in range(k):
-        # randomize chance of there being a loop
-        loop = random.randint(0, 10)
-
         # generate random program
-        program = generate_random_program(max_len, loop)
+        program = generate_random_program(max_len)
         # score newly generated random program and stop if 0
         fitness_score = program.score_fitness(fe)
         if fitness_score == 0:
             return program.sequence
-        while fitness_score == 1000:
-            program = generate_random_program(max_len, loop)
-            fitness_score = program.score_fitness(fe)
 
         population.append(program)
 
     return ""
+
+
+def create_program_noloop(fe: FitnessEvaluator, max_len: int) -> str:
+    converges = True
+    gen_no = 0
+
+    while 1:
+        k = 1000  # k represents the initial population size
+        gen_no = gen_no + 1
+        print(gen_no)
+        if gen_no == 100:
+            converges = True
+            gen_no = 0
+
+        # generate initial random, score initial random, add to population
+        if converges:
+            converges = False
+            population: List[Program] = []
+            res = generate_random(fe, max_len, k, population)
+            if res != "":
+                # print("from RANDOM")
+                return res
+
+        new_population: List[Program] = []
+        ct = [0]
+
+        while ct[0] != k:
+            # select 2 programs in top N percentile
+            # n = k//10
+            # n = k // 2
+
+            weights = populate_weights(k, population)
+
+            population.sort(key=lambda program: program.score)
+
+            selected = random.choices(population, weights=weights, k=k // 2)
+            selected.sort(key=lambda program: program.score)
+
+            if bad_average(selected):
+                k = 0
+                converges = True
+                gen_no = False
+                break
+
+            res = select(new_population, selected, fe, k // 2, ct)
+            if res != "":
+                return res
+
+        for i in range(k):
+            population[i] = new_population[i]
 
 
 def create_program(fe: FitnessEvaluator, max_len: int) -> str:
@@ -263,11 +300,18 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     # k = 1000
     # N = 0.5        # N is top percentile for selection process
 
+    if max_len == 0:
+        return create_program_noloop(fe, max_len)
+    else:
+        return create_program_wloop(fe, max_len)
+
+
+def create_program_wloop(fe: FitnessEvaluator, max_len: int) -> str:
     converges = True
     gen_no = 0
 
     while 1:
-        k = 1000 # k represents the initial population size
+        k = 1000  # k represents the initial population size
         gen_no = gen_no + 1
         print(gen_no)
         if gen_no == 100:
@@ -281,22 +325,21 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             res = generate_random(fe, max_len, k, population)
             if res != "":
                 # print("from RANDOM")
-                print(res)
                 return res
 
         new_population: List[Program] = []
-        ct = [0, max_len]
+        ct = [0]
 
         while ct[0] != k:
             # select 2 programs in top N percentile
-            #n = k//10
+            # n = k//10
             # n = k // 2
 
             weights = populate_weights(k, population)
 
             population.sort(key=lambda program: program.score)
 
-            selected = random.choices(population, weights=weights, k=k//2)
+            selected = random.choices(population, weights=weights, k=k // 2)
             selected.sort(key=lambda program: program.score)
 
             if bad_average(selected):
@@ -305,20 +348,18 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 gen_no = False
                 break
 
-            res = select(new_population, selected, fe, k//2, ct)
+            res = select(new_population, selected, fe, k // 2, ct)
             if res != "":
-                print(res)
                 return res
 
         for i in range(k):
             population[i] = new_population[i]
-
+            
 
 def select(new_population: List[Program], selected: List[Program],\
            fe: FitnessEvaluator, n: int, ct: List[int]) -> str:
     for i in range(0, n, 2):
-        # ct[1] signifies max_len. (code complexity purposes)
-        new_programs = crossover(selected[i], selected[i + 1], ct[1])
+        new_programs = crossover(selected[i], selected[i + 1])
 
         score1 = new_programs[0].score_fitness(fe)
         score2 = new_programs[1].score_fitness(fe)
@@ -359,54 +400,31 @@ def copy_array(into: List[Program], of: List[Program], k: int) -> None:
         into[i] = of[i]
 
 
-def noloops() -> None:
-
-    array = (1, 2, 3, 0, 5, 6, 1, 2) # success w 50, time w 40
-    array = (5, 0, 0, 0, -10, 3)
-    max_len = 0
-    program = create_program(FitnessEvaluator(array), max_len)
-    # print(program)
-    print(FitnessEvaluator.interpret(program, len(array)))
-    if max_len > 0:
-        assert len(program) <= max_len
-    assert array == FitnessEvaluator.interpret(program, len(array))
-
-    """array = (5, 0, 0, 0, -10, 3)
-    program = create_program(FitnessEvaluator(array), max_len)
-    # print(program)
-    print(FitnessEvaluator.interpret(program, len(array)))
-    if max_len > 0:
-        assert len(program) <= max_len
-    assert array == FitnessEvaluator.interpret(program, len(array))"""
-
-
-def wloops() -> None:
-    array = (0, 20)
-    max_len = 15
-
-    program = create_program(FitnessEvaluator(array), max_len)
-    # print(program)
-    print(FitnessEvaluator.interpret(program, len(array)))
-    if max_len > 0:
-        assert len(program) <= max_len
-    assert array == FitnessEvaluator.interpret(program, len(array))
-
-
 def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
     # array = (1, 3, 2, 2, 0, 1, 0) # works
     # array = (-1, 2, -3, -7)
     #array = (4, 3 )
     # array = (5, 0, 0, 0, -10, 3)
-    # array = (1, 2, 3, 0, 5, 6, 1, 2) # success w 50, time w 40
+    array = (1, 2, 3, 0, 5, 6, 1, 2) # success w 50, time w 40
     #array = (5, 0, 0, 0, -10, 3)
     # array = (15,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
     max_len = 0  # no BF loop required
 
-    noloops()
-    # wloops()
+    # only attempt when non-loop programs work
+    # array = (20, 0)
+    # max_len = 15
+
+    program = create_program(FitnessEvaluator(array), max_len)
+    #print(program)
+    print(FitnessEvaluator.interpret(program, len(array)))
+    """if max_len > 0:
+        assert len(program) <= max_len
+    assert array == FitnessEvaluator.interpret(program, len(array))"""
+
+    # print(FitnessEvaluator.interpret("><<+++", len(array)))
 
 
 if __name__ == "__main__":
