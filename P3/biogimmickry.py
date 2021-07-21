@@ -233,7 +233,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     converges = True
     gen_no = 0
-    
+
     while 1:
         k = 1000 # k represents the initial population size
         gen_no = gen_no + 1
@@ -267,7 +267,6 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             population.sort(key=lambda program: program.score)
 
             selected = random.choices(population, weights=weights, k=k//2)
-
             selected.sort(key=lambda program: program.score)
 
             if bad_average(selected):
@@ -279,21 +278,6 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             res = select(new_population, selected, fe, k//2)
             if res != "":
                 return res
-
-            """for i in range(0, n, 2):
-                new_programs = crossover(selected[i], selected[i + 1])
-
-                score1 = new_programs[0].score_fitness(fe)
-                score2 = new_programs[1].score_fitness(fe)
-
-                if score1 == 0:
-                    return new_programs[0].sequence
-                elif score2 == 0:
-                    return new_programs[1].sequence
-
-                # add the new programs to the next_pop list until full
-                new_population.append(new_programs[0])
-                new_population.append(new_programs[1])"""
 
         for i in range(k):
             population[i] = new_population[i]
@@ -335,6 +319,7 @@ def populate_weights(k: int, population: List[Program]) -> List[int]:
     weights = []
     for i in range(k):
         weights.append(20 - population[i].score)
+    weights.sort(reverse=True)
     return weights
 
 
@@ -348,8 +333,8 @@ def main() -> None:  # optional driver
     # array = (1, 3, 2, 2, 0, 1, 0) # works
     # array = (-1, 2, -3, -7)
     #array = (4, 3 )
-    array = (5, 0, 0, 0, -10, 3)
-    # array = (1, 2, 3, 0, 5, 6, 1, 2) # THIS IS THE HARDEST (doesnt work)
+    # array = (5, 0, 0, 0, -10, 3)
+    array = (1, 2, 3, 0, 5, 6, 1, 2) # THIS IS THE HARDEST (doesnt work)
     # array = (15,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
