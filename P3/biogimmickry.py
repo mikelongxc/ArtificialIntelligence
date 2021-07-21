@@ -187,13 +187,12 @@ def generate_random_program(max_len: int) -> Program:
     # TODO uncomment valid cmds and program_str
 
     if max_len == 0:
-        max_len = 40
+        max_len = 35
 
     sequence_str = ""
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for _ in range(random.randint(0, max_len)):
-        # print(i) # TODO
         sequence_str += valid_commands[random.randint(0, 3)]
 
     return Program(sequence_str)
@@ -202,13 +201,11 @@ def generate_random_program(max_len: int) -> Program:
 def generate_random(fe: FitnessEvaluator, max_len: int,\
                     k: int, population: List[Program]) -> str:
     for _ in range(k):
-        # print(i) # TODO
         # generate random program
         program = generate_random_program(max_len)
         # score newly generated random program and stop if 0
         fitness_score = program.score_fitness(fe)
         if fitness_score == 0:
-            # print("gen no (regen): " + str(gen_no))
             return program.sequence
 
         population.append(program)
