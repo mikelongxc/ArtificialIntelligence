@@ -233,6 +233,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     converges = True
     gen_no = 0
+    
     while 1:
         k = 1000 # k represents the initial population size
         gen_no = gen_no + 1
@@ -247,7 +248,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             population: List[Program] = []
             res = generate_random(fe, max_len, k, population)
             if res != "":
-                print("from RANDOM")
+                # print("from RANDOM")
                 return res
 
         new_population: List[Program] = []
@@ -255,7 +256,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
         while len(population) != len(new_population):
             # select 2 programs in top N percentile
             #n = k//10
-            n = k // 2
+            # n = k // 2
 
             """weights = []
             for i in range(len(population)):
@@ -265,7 +266,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
             population.sort(key=lambda program: program.score)
 
-            selected = random.choices(population, weights=weights, k=n)
+            selected = random.choices(population, weights=weights, k=k//2)
 
             selected.sort(key=lambda program: program.score)
 
@@ -275,7 +276,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 gen_no = False
                 break
 
-            res = select(new_population, selected, fe, n)
+            res = select(new_population, selected, fe, k//2)
             if res != "":
                 return res
 
