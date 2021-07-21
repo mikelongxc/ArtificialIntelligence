@@ -197,6 +197,22 @@ def generate_random_program(max_len: int) -> Program:
     return Program(sequence_str)
 
 
+def generate_random(converges: bool,fe: FitnessEvaluator, max_len: int,\
+                    k: int, population: List[Program]):
+    for i in range(k):
+        # generate random program
+        program = generate_random_program(max_len)
+        # score newly generated random program and stop if 0
+        fitness_score = program.score_fitness(fe)
+        if fitness_score == 0:
+            # print("gen no (regen): " + str(gen_no))
+            return program.sequence
+
+        population.append(program)
+
+    return ""
+
+
 def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     """
     Return a program string no longer than max_len that, when interpreted,
@@ -222,7 +238,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             gen_no = 0
 
         # generate initial random, score initial random, add to population
-        if converges:
+        """if converges:
             converges = False
             # initialize empty population list
             population = []
@@ -234,7 +250,15 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 if fitness_score == 0:
                     # print("gen no (regen): " + str(gen_no))
                     return program.sequence
-                population.append(program)
+                
+                population.append(program)"""
+        
+        if converges:
+            converges = False
+            population = []
+            res = generate_random(converges, fe, max_len, k, population)
+            if res != "":
+                return res
 
         new_population: List[Program] = []
 
