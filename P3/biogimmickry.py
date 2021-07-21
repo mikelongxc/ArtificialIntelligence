@@ -337,7 +337,7 @@ def main() -> None:  # optional driver
     # array = (-1, 2, -3, -7)
     #array = (4, 3 )
     # array = (5, 0, 0, 0, -10, 3)
-    array = (1, 2, 3, 0, 5, 6, 1, 2) # works w max_len = 50, takes too long with 40
+    array = (1, 2, 3, 0, 5, 6, 1, 2) # success w 50, time w 40
     #array = (5, 0, 0, 0, -10, 3)
     # array = (15,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
