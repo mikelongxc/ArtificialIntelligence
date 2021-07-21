@@ -124,7 +124,9 @@ class Program:
         return evaluated_score
 
 
-def crossover(selected: List[Program]) -> List[Program]:
+def crossover(p1: Program, p2: Program) -> List[Program]:
+    selected = [p1, p2]
+
     new_programs = []
 
     if len(selected[0].sequence) < len(selected[1].sequence):
@@ -265,11 +267,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             selected.sort(key=lambda program: program.sequence)
 
             for i in range(0, n, 2):
-                n_p = []
-                n_p.append(selected[i])
-                n_p.append(selected[i + 1])
-
-                new_programs = crossover(n_p)
+                new_programs = crossover(selected[i], selected[i + 1])
 
                 score1 = new_programs[0].score_fitness(fe)
                 score2 = new_programs[1].score_fitness(fe)
@@ -282,27 +280,6 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 # add the new programs to the next_pop list until full
                 new_population.append(new_programs[0])
                 new_population.append(new_programs[1])
-
-            """selected = random.choices(population, weights=weights, k=n)
-
-            for i in range(0, n, 2):
-                n_p = []
-                n_p.append(selected[i])
-                n_p.append(selected[i+1])
-
-                new_programs = crossover(n_p)
-
-                score1 = new_programs[0].score_fitness(fe)
-                score2 = new_programs[1].score_fitness(fe)
-
-                if score1 == 0:
-                    return new_programs[0].sequence
-                elif score2 == 0:
-                    return new_programs[1].sequence
-
-                # add the new programs to the next_pop list until full
-                new_population.append(new_programs[0])
-                new_population.append(new_programs[1])"""
 
         for i in range(k):
             population[i] = new_population[i]
@@ -325,7 +302,8 @@ def copy_array(into: List[Program], of: List[Program], k: int) -> None:
 def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
     # array = (1, 3, 2, 2, 0, 1, 0) # works
-    array = (-1, 2, -3, -7)
+    # array = (-1, 2, -3, -7)
+    array = (20, )
     # array = (15,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
