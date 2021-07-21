@@ -269,11 +269,10 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 new_population.append(new_programs[0])
                 new_population.append(new_programs[1])
 
+        for i in range(k):
+            population[i] = new_population[i]
 
-        """for i in range(k):
-            population[i] = new_population[i]"""
-
-        copy_array(population, new_population, k)
+        # copy_array(population, new_population, k)
 
 
 def populate_weights(k: int, population: List[Program]) -> List[int]:
