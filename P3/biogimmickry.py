@@ -235,24 +235,8 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 if fitness_score == 0:
                     print("gen no (regen): " + str(gen_no))
                     return program.sequence
-
                 population.append(program)
-        # if no converge, just score loop and add to new pop
-        elif cutting:
-            # initialize empty population list
-            for i in range(k):
-                # generate random program
-                # program = new_population[i]
-                # score newly generated random program and stop if 0
-                fitness_score = new_population[i].score_fitness(fe)
-                if fitness_score == 0:
-                    print("gen no: " + str(gen_no))
-                    return new_population[i].sequence
-
-                population[i] = new_population[i]
-
-                # new_population.append(program)
-
+                
         new_population = []
 
         while len(population) != len(new_population):
