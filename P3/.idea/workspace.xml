@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e6374af6-0c5e-4141-a2f1-9cf878183ac3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/biogimmickry.py" beforeDir="false" afterPath="$PROJECT_DIR$/biogimmickry_to_be_added_to.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,8 +27,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/biogimmickry_to_be_added_to.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="431" column="3" lean-forward="true" selection-start-line="431" selection-start-column="3" selection-end-line="436" selection-end-column="59" />
+            <state relative-caret-position="1055">
+              <caret line="416" lean-forward="true" selection-start-line="416" selection-end-line="416" />
             </state>
           </provider>
         </entry>
@@ -37,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/biogimmickry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="373" column="20" selection-start-line="373" selection-start-column="20" selection-end-line="373" selection-end-column="20" />
+            <state relative-caret-position="-2182">
+              <caret line="201" column="22" lean-forward="true" selection-start-line="201" selection-start-column="22" selection-end-line="201" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -207,10 +206,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1441" y="-157" width="1920" height="1057" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16666667" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16666667" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
@@ -218,7 +216,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2444219" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2444219" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.28600407" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -243,13 +241,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/biogimmickry.py</url>
-          <line>378</line>
+          <line>372</line>
           <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/biogimmickry.py</url>
-          <line>371</line>
-          <option name="timeStamp" value="95" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/biogimmickry.py</url>
@@ -307,15 +300,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/biogimmickry_to_be_added_to.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="431" column="3" lean-forward="true" selection-start-line="431" selection-start-column="3" selection-end-line="436" selection-end-column="59" />
+        <state relative-caret-position="1055">
+          <caret line="416" lean-forward="true" selection-start-line="416" selection-end-line="416" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/biogimmickry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="373" column="20" selection-start-line="373" selection-start-column="20" selection-end-line="373" selection-end-column="20" />
+        <state relative-caret-position="-2182">
+          <caret line="201" column="22" lean-forward="true" selection-start-line="201" selection-start-column="22" selection-end-line="201" selection-end-column="22" />
         </state>
       </provider>
     </entry>
