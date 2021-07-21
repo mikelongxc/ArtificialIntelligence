@@ -207,7 +207,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     # mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
 
-    new_population: List[Program] = []
+    # new_population: List[Program] = []
 
     k = 1000        # k represents the initial population size
     # N = 0.5        # N is top percentile for selection process
