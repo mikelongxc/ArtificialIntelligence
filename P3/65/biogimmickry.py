@@ -163,7 +163,7 @@ def crossover(p1: Program, p2: Program) -> List[Program]:
     return new_programs
 
 
-def oldmutate(sequence: str) -> str:
+def mutate(sequence: str) -> str:
     seq_len = len(sequence)
     index = random.randint(0, seq_len)
     valid_commands = "><+-"
@@ -177,28 +177,6 @@ def oldmutate(sequence: str) -> str:
     # sequence = sequence.replace(sequence,)
 
     return sequence[:index] + new_cmd + sequence[index + 1:]
-
-def mutate(sequence: str) -> str:
-    valid_commands = "><+-"
-
-    # mutation rate is 50%
-    rdm_int = random.randint(-3, 3)
-    if rdm_int < 0:
-        return sequence
-
-    seq_len = len(sequence)
-
-    new_sequence = ""
-
-    for _ in range(seq_len // 5):
-        rdm_cmd = random.randint(0, 3)
-        rdm_index = random.randint(0, seq_len)
-
-        new_cmd = valid_commands[rdm_cmd]
-
-        new_sequence = sequence[:rdm_index] + new_cmd + sequence[rdm_index + 1:]
-
-    return new_sequence
 
 
 def generate_random_program(max_len: int) -> Program:
@@ -235,56 +213,6 @@ def generate_random(fe: FitnessEvaluator, max_len: int,\
     return ""
 
 
-def create_program_noloop(fe: FitnessEvaluator, max_len: int) -> str:
-    converges = True
-    gen_no = 0
-
-    while 1:
-        k = 1000  # k represents the initial population size
-        gen_no = gen_no + 1
-        print(gen_no)
-        if gen_no == 100:
-            converges = True
-            gen_no = 0
-
-        # generate initial random, score initial random, add to population
-        if converges:
-            converges = False
-            population: List[Program] = []
-            res = generate_random(fe, max_len, k, population)
-            if res != "":
-                # print("from RANDOM")
-                return res
-
-        new_population: List[Program] = []
-        ct = [0]
-
-        while ct[0] != k:
-            # select 2 programs in top N percentile
-            # n = k//10
-            # n = k // 2
-
-            weights = populate_weights(k, population)
-
-            population.sort(key=lambda program: program.score)
-
-            selected = random.choices(population, weights=weights, k=k // 2)
-            selected.sort(key=lambda program: program.score)
-
-            if bad_average(selected):
-                k = 0
-                converges = True
-                gen_no = False
-                break
-
-            res = select(new_population, selected, fe, k // 2, ct)
-            if res != "":
-                return res
-
-        for i in range(k):
-            population[i] = new_population[i]
-
-
 def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     """
     Return a program string no longer than max_len that, when interpreted,
@@ -300,18 +228,11 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     # k = 1000
     # N = 0.5        # N is top percentile for selection process
 
-    if max_len == 0:
-        return create_program_noloop(fe, max_len)
-    else:
-        return create_program_wloop(fe, max_len)
-
-
-def create_program_wloop(fe: FitnessEvaluator, max_len: int) -> str:
     converges = True
     gen_no = 0
 
     while 1:
-        k = 1000  # k represents the initial population size
+        k = 1000 # k represents the initial population size
         gen_no = gen_no + 1
         print(gen_no)
         if gen_no == 100:
@@ -332,14 +253,14 @@ def create_program_wloop(fe: FitnessEvaluator, max_len: int) -> str:
 
         while ct[0] != k:
             # select 2 programs in top N percentile
-            # n = k//10
+            #n = k//10
             # n = k // 2
 
             weights = populate_weights(k, population)
 
             population.sort(key=lambda program: program.score)
 
-            selected = random.choices(population, weights=weights, k=k // 2)
+            selected = random.choices(population, weights=weights, k=k//2)
             selected.sort(key=lambda program: program.score)
 
             if bad_average(selected):
@@ -348,7 +269,7 @@ def create_program_wloop(fe: FitnessEvaluator, max_len: int) -> str:
                 gen_no = False
                 break
 
-            res = select(new_population, selected, fe, k // 2, ct)
+            res = select(new_population, selected, fe, k//2, ct)
             if res != "":
                 return res
 
@@ -382,9 +303,10 @@ def bad_average(selected: List[Program]) -> bool:
     _sum = 0
     for i in range(len(selected)):
         _sum += selected[i].score
-    if (_sum / len(selected)) > 13: # TODO changeable
+    if (_sum / len(selected)) > 15:
         return True
     return False
+
 
 
 def populate_weights(k: int, population: List[Program]) -> List[int]:

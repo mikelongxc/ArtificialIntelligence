@@ -1,0 +1,99 @@
+======================================================================
+ERROR: Iteratively Matches 2 Length Array
+----------------------------------------------------------------------
+ValueError: Maximum program length exceeded: [21/18]
+----------------------------------------------------------------------
+ValueError: Maximum program length exceeded: [20/18]
+----------------------------------------------------------------------
+
+
+======================================================================
+ERROR: Matches 5-8 Length Array
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "biogimmickry.py", line 278, in create_program
+    res = select(new_population, selected, fe, k//2)
+  File "biogimmickry.py", line 291, in select
+    new_programs = crossover(selected[i], selected[i + 1])
+src.error.CaseyTimeoutError: Process exceeded 45 second(s)
+
+                    Function |     Calls | Seconds
+  ------------------------------------------------
+            [casey overhead] |         0 |   21.56
+                         len |   6743639 |    4.04
+           random._randbelow |    805760 |    2.30
+                         sum |    294158 |    2.07
+                   crossover |    145580 |    2.04
+            random.randrange |    805760 |    1.97
+                         abs |   2353264 |    1.41
+              random.randint |    805760 |    1.31
+                      mutate |    291160 |    1.22
+                      select |       583 |    0.93
+  _random.Random.getrandbits |   1167179 |    0.92
+                   list.sort |      1749 |    0.80
+                 list.append |   1168316 |    0.72
+               score_fitness |    294158 |    0.62
+              int.bit_length |    805760 |    0.52
+            populate_weights |       583 |    0.47
+           random.<listcomp> |       583 |    0.42
+              bisect._bisect |    291500 |    0.41
+                    <lambda> |    583000 |    0.38
+                    __init__ |    294158 |    0.26
+       _random.Random.random |    291500 |    0.17
+     generate_random_program |      3000 |    0.10
+              create_program |         1 |    0.08
+                 bad_average |       583 |    0.04
+              random.choices |       583 |    0.03
+             generate_random |         3 |    0.01
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "biogimmickry.py", line 278, in create_program
+    res = select(new_population, selected, fe, k//2)
+  File "biogimmickry.py", line 294, in select
+    score2 = new_programs[1].score_fitness(fe)
+  File "biogimmickry.py", line 118, in score_fitness
+    evaluated_score = fe.evaluate(self.sequence)
+src.error.CaseyTimeoutError: Process exceeded 45 second(s)
+
+                    Function |     Calls | Seconds
+  ------------------------------------------------
+            [casey overhead] |         0 |   21.11
+                         len |  10803027 |    6.67
+           random._randbelow |   1054023 |    3.20
+            random.randrange |   1054023 |    2.46
+              random.randint |   1054023 |    1.69
+  _random.Random.getrandbits |   1793233 |    1.38
+                   crossover |     76095 |    1.12
+                         sum |    178189 |    1.11
+     generate_random_program |     26000 |    0.87
+                         abs |   1069134 |    0.70
+              int.bit_length |   1054023 |    0.68
+                      mutate |    152190 |    0.66
+                      select |       305 |    0.51
+                   list.sort |       987 |    0.47
+                 list.append |    659378 |    0.44
+               score_fitness |    178190 |    0.40
+            populate_weights |       329 |    0.28
+           random.<listcomp> |       329 |    0.24
+                    <lambda> |    329000 |    0.23
+              bisect._bisect |    164500 |    0.23
+                    __init__ |    178190 |    0.17
+             generate_random |        26 |    0.10
+       _random.Random.random |    164500 |    0.10
+              create_program |         1 |    0.05
+                 bad_average |       329 |    0.02
+              random.choices |       329 |    0.02
+----------------------------------------------------------------------
+
+                Matches 1 Length Array | 100% [15.0]
+ Matches 2-4 Length Non-Negative Array | 100% [20.0]
+              Matches 5-8 Length Array |  50% [30.0]
+    Iteratively Matches 2 Length Array |   0% [35.0]
+----------------------------------------------------
+                               [TOTAL] |  50%
+[1m[39m
+------------------------------
+ Submission Status | [31mFAILURE[39m |
+------------------------------
+[39m[0m
+Assignment is due in 0 day(s), 11 hour(s), 39 minute(s).

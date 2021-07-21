@@ -1,0 +1,60 @@
+======================================================================
+ERROR: Iteratively Matches 2 Length Array
+----------------------------------------------------------------------
+ValueError: Maximum program length exceeded: [21/18]
+----------------------------------------------------------------------
+ValueError: Maximum program length exceeded: [20/18]
+----------------------------------------------------------------------
+
+
+======================================================================
+ERROR: Matches 5-8 Length Array
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "biogimmickry.py", line 278, in create_program
+    res = select(new_population, selected, fe, k//2)
+  File "biogimmickry.py", line 291, in select
+    new_programs = crossover(selected[i], selected[i + 1])
+src.error.CaseyTimeoutError: Process exceeded 45 second(s)
+
+                    Function |     Calls | Seconds
+  ------------------------------------------------
+            [casey overhead] |         0 |   22.21
+                         len |  10806727 |    6.70
+           random._randbelow |    798315 |    2.42
+            random.randrange |    798315 |    1.89
+                   crossover |    100696 |    1.45
+                         sum |    215390 |    1.31
+              random.randint |    798315 |    1.30
+  _random.Random.getrandbits |   1208576 |    0.94
+                      mutate |    201391 |    0.87
+                         abs |   1292340 |    0.83
+                      select |       403 |    0.66
+                   list.sort |      1242 |    0.59
+                 list.append |    830780 |    0.55
+              int.bit_length |    798315 |    0.55
+               score_fitness |    215390 |    0.47
+     generate_random_program |     14000 |    0.38
+            populate_weights |       414 |    0.35
+           random.<listcomp> |       414 |    0.30
+              bisect._bisect |    207000 |    0.29
+                    <lambda> |    414000 |    0.28
+                    __init__ |    215390 |    0.20
+       _random.Random.random |    207000 |    0.13
+              create_program |         1 |    0.07
+             generate_random |        14 |    0.05
+                 bad_average |       414 |    0.03
+              random.choices |       414 |    0.02
+----------------------------------------------------------------------
+
+                Matches 1 Length Array | 100% [15.0]
+ Matches 2-4 Length Non-Negative Array | 100% [20.0]
+              Matches 5-8 Length Array |  75% [30.0]
+    Iteratively Matches 2 Length Array |   0% [35.0]
+----------------------------------------------------
+                               [TOTAL] |  57%
+
+------------------------------
+ Submission Status | SUCCESS |
+------------------------------
+
