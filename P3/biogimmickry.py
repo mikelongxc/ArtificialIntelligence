@@ -187,7 +187,7 @@ def generate_random_program(max_len: int) -> Program:
     # TODO uncomment valid cmds and program_str
 
     if max_len == 0:
-        max_len = 20
+        max_len = 40
 
     sequence_str = ""
     # valid_commands = "><+-[]"
@@ -228,15 +228,16 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     # new_population: List[Program] = []
 
-    k = 1000        # k represents the initial population size
+    # k = 1000
     # N = 0.5        # N is top percentile for selection process
 
     converges = True
     gen_no = 0
     while 1:
+        k = 1000 # k represents the initial population size
         gen_no = gen_no + 1
         print(gen_no)
-        if gen_no == 50:
+        if gen_no == 100:
             converges = True
             gen_no = 0
 
@@ -262,9 +263,17 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
             # weights = populate_weights(k, population)
 
+            population.sort(key=lambda program: program.score)
+
             selected = random.choices(population, weights=weights, k=n)
 
-            selected.sort(key=lambda program: program.sequence)
+            selected.sort(key=lambda program: program.score)
+
+            if bad_average(selected):
+                k = 0
+                converges = True
+                gen_no = False
+                break;
 
             for i in range(0, n, 2):
                 new_programs = crossover(selected[i], selected[i + 1])
@@ -287,6 +296,16 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
         # copy_array(population, new_population, k)
 
 
+def bad_average(selected: List[Program]) -> bool:
+    sum = 0
+    for i in range(len(selected)):
+        sum += selected[i].score
+    if (sum / len(selected)) > 15:
+        return True
+    return False
+
+
+
 def populate_weights(k: int, population: List[Program]) -> List[int]:
     weights = []
     for i in range(k):
@@ -303,7 +322,9 @@ def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
     # array = (1, 3, 2, 2, 0, 1, 0) # works
     # array = (-1, 2, -3, -7)
-    array = (20, )
+    #array = (4, 3 )
+    array = (5, 0, 0, 0, -10, 3)
+    # array = (1, 2, 3, 0, 5, 6, 1, 2) # THIS IS THE HARDEST (doesnt work)
     # array = (15,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
