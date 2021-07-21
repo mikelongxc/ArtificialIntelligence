@@ -191,7 +191,7 @@ def generate_random_program(max_len: int) -> Program:
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for i in range(random.randint(0, max_len)):
-        print(i)
+        # print(i) # TODO
         sequence_str += valid_commands[random.randint(0, 3)]
 
     return Program(sequence_str)
@@ -200,7 +200,7 @@ def generate_random_program(max_len: int) -> Program:
 def generate_random(fe: FitnessEvaluator, max_len: int,\
                     k: int, population: List[Program]) -> str:
     for i in range(k):
-        print(i)
+        # print(i) # TODO
         # generate random program
         program = generate_random_program(max_len)
         # score newly generated random program and stop if 0
@@ -226,7 +226,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     # new_population: List[Program] = []
 
-    k = 4000        # k represents the initial population size
+    k = 20        # k represents the initial population size
     # N = 0.5        # N is top percentile for selection process
 
     converges = True
@@ -239,21 +239,6 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             gen_no = 0
 
         # generate initial random, score initial random, add to population
-        """if converges:
-            converges = False
-            # initialize empty population list
-            population = []
-            for i in range(k):
-                # generate random program
-                program = generate_random_program(max_len)
-                # score newly generated random program and stop if 0
-                fitness_score = program.score_fitness(fe)
-                if fitness_score == 0:
-                    # print("gen no (regen): " + str(gen_no))
-                    return program.sequence
-                
-                population.append(program)"""
-
         if converges:
             converges = False
             population: List[Program] = []
@@ -315,7 +300,8 @@ def copy_array(into: List[Program], of: List[Program], k: int) -> None:
 def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
     # array = (1, 3, 2, 2, 0, 1, 0) # works
-    array = (-1, 2, -3, -3)
+    #array = (-1, 2, -3, -3)
+    array = (20,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
     max_len = 0  # no BF loop required
