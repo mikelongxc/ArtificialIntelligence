@@ -257,11 +257,11 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             #n = k//10
             n = k // 2
 
-            weights = []
+            """weights = []
             for i in range(len(population)):
-                weights.append(20 - population[i].score)
+                weights.append(20 - population[i].score)"""
 
-            # weights = populate_weights(k, population)
+            weights = populate_weights(k, population)
 
             population.sort(key=lambda program: program.score)
 
