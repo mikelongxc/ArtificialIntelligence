@@ -1,11 +1,11 @@
-# Name:         
+# Name:         Michael Long
 # Course:       CSC 480
 # Instructor:   Daniel Kauffman
 # Assignment:   Biogimmickry
 # Term:         Summer 2021
 
 import random
-from typing import Callable, Dict, Tuple
+from typing import Callable, Dict, Tuple, List
 
 
 class FitnessEvaluator:
@@ -100,7 +100,100 @@ class FitnessEvaluator:
         actual = FitnessEvaluator.interpret(program, len(expect))
         return sum(abs(x - y) for x, y in zip(expect, actual))
 
+class Program:
 
+    def __init__(self, program: str):
+        self.program = program
+        self.score = 0
+
+    def __lt__(self, other):
+        return self.score < other.score
+
+    def score_fitness(self, fe: FitnessEvaluator) -> int:
+        try:
+            evaluated_score = fe.evaluate(self.program)
+        except RuntimeError:
+            evaluated_score = 1000
+
+        self.score = evaluated_score
+
+        return evaluated_score
+
+
+def crossover(selected: List[Program]):
+    new_programs = []
+
+    if len(selected[0].program) < len(selected[1].program):
+        min_program_len = len(selected[0].program)
+        max_program_len = len(selected[1].program)
+    else:
+        min_program_len = len(selected[1].program)
+        max_program_len = len(selected[0].program)
+
+    switch_index = random.randint(0, min_program_len)
+
+    program1 = Program(selected[0].program[0:switch_index])
+    program2 = Program(selected[1].program[switch_index:max_program_len])
+
+    new_programs.append(program1)
+    new_programs.append(program2)
+
+    return new_programs
+
+
+def generate_random_program(max_len: int) -> Program:
+    """
+    Generates a single random program object no larger than max_len
+    """
+    # TODO: min length of loop sequence 12
+    # TODO uncomment valid cmds and program_str
+
+    if max_len == 0:
+        max_len = 20
+
+    program_str = ""
+    # valid_commands = "><+-[]"
+    valid_commands = "><+-"
+    for i in range(random.randint(0, max_len)):
+        program_str += valid_commands[random.randint(0, 3)]
+        # program_str += valid_commands[random.randint(0, 5)]
+
+    return Program(program_str)
+
+
+def _create_program(fe: FitnessEvaluator, max_len: int) -> str:
+    """
+    Return a program string no longer than max_len that, when interpreted,
+    populates a memory array that exactly matches a target array.
+
+    Use fe.evaluate(program) to get a program's fitness score (zero is best).
+    """
+
+    mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
+
+    population = []
+
+    k = 500        # k represents the initial population size
+    N = 0.5        # N is top percentile for selection process
+
+    for i in range(k):
+        # generate random program
+        program = generate_random_program(max_len)
+        # score newly generated random program and stop if 0
+        fitness_score = program.score_fitness(fe)
+        if fitness_score == 0:
+            break
+
+        population.append(program)
+
+    # select 2 programs in top N percentile
+    random.choices(population, k=2)
+    # l = random.choices(population, k=2)
+    # print(l[0].score, l[1].score)
+
+
+    # return "+++[>++++<-]"
+    return "+++"
 
 
 def create_program(fe: FitnessEvaluator, max_len: int) -> str:
@@ -111,21 +204,74 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     Use fe.evaluate(program) to get a program's fitness score (zero is best).
     """
 
+    mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
 
+    new_population = []
+
+    k = 100        # k represents the initial population size
+    N = 0.5        # N is top percentile for selection process
+
+    converges = True
+    while 1:
+
+
+        # generate initial random, score initial random, add to population
+        if converges:
+            converges = False
+            # initialize empty population list
+            population = []
+            for i in range(k):
+                # generate random program
+                program = generate_random_program(max_len)
+                # score newly generated random program and stop if 0
+                fitness_score = program.score_fitness(fe)
+                if fitness_score == 0:
+                    return program.program
+
+                population.append(program)
+        # if no converge, just score loop and add to new pop
+        else:
+            # initialize empty population list
+            for i in range(k):
+                # generate random program
+                # program = new_population[i]
+                # score newly generated random program and stop if 0
+                fitness_score = new_population[i].score_fitness(fe)
+                if fitness_score == 0:
+                    return new_population[i].program
+
+                population[i] = new_population[i]
+
+                # new_population.append(program)
+
+        new_population = []
+
+        while len(population) != len(new_population):
+            # select 2 programs in top N percentile
+            selected = random.choices(population, k=2)
+            new_programs = crossover(selected)
+            # add the new programs to the next_pop list until full
+            new_population.append(new_programs[0])
+            new_population.append(new_programs[1])
 
 
 def main() -> None:  # optional driver
-    array = (-1, 2, -3, 4)
+    # array = (-1, 2, -3, 4)
+    array = (-7, 7, 5, 2)
     max_len = 0  # no BF loop required
 
     # only attempt when non-loop programs work
-#    array = (20, 0)
-#    max_len = 15
+    # array = (20, 0)
+    # max_len = 15
 
     program = create_program(FitnessEvaluator(array), max_len)
-    if max_len > 0:
+    #print(program)
+    print(FitnessEvaluator.interpret(program, len(array)))
+    """if max_len > 0:
         assert len(program) <= max_len
-    assert array == FitnessEvaluator.interpret(program, len(array))
+    assert array == FitnessEvaluator.interpret(program, len(array))"""
+
+    # print(FitnessEvaluator.interpret("><<+++", len(array)))
 
 
 if __name__ == "__main__":
