@@ -197,7 +197,7 @@ def generate_random_program(max_len: int) -> Program:
     return Program(sequence_str)
 
 
-def generate_random(converges: bool,fe: FitnessEvaluator, max_len: int,\
+def generate_random(fe: FitnessEvaluator, max_len: int,\
                     k: int, population: List[Program]):
     for i in range(k):
         # generate random program
@@ -252,11 +252,11 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                     return program.sequence
                 
                 population.append(program)"""
-        
+
         if converges:
             converges = False
-            population = []
-            res = generate_random(converges, fe, max_len, k, population)
+            population: List[Program] = []
+            res = generate_random(fe, max_len, k, population)
             if res != "":
                 return res
 
@@ -314,9 +314,9 @@ def copy_array(into: List[Program], of: List[Program], k: int) -> None:
 def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
     # array = (1, 3, 2, 2, 0, 1, 0) # works
-    # array = [-1, 2, -3, -3]
+    array = (-1, 2, -3, -3)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
-    array = [13]
+    # array = [13]
     max_len = 0  # no BF loop required
 
     # only attempt when non-loop programs work
