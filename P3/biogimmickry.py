@@ -187,7 +187,7 @@ def generate_random_program(max_len: int) -> Program:
     # TODO uncomment valid cmds and program_str
 
     if max_len == 0:
-        max_len = 40
+        max_len = 50
 
     sequence_str = ""
     # valid_commands = "><+-[]"
