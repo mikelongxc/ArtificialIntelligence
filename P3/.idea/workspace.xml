@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/biogimmickry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="288" column="57" lean-forward="true" selection-start-line="288" selection-start-column="57" selection-end-line="288" selection-end-column="57" />
+            <state relative-caret-position="258">
+              <caret line="189" column="20" selection-start-line="189" selection-start-column="20" selection-end-line="189" selection-end-column="20" />
               <folding>
                 <element signature="e#143#156#0" expanded="true" />
               </folding>
@@ -153,8 +153,8 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3306288" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.28600407" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3306288" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.28600407" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -168,12 +168,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/biogimmickry.py</url>
-          <line>290</line>
+          <line>291</line>
           <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/biogimmickry.py</url>
-          <line>304</line>
+          <line>307</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
@@ -210,8 +210,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/biogimmickry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="288" column="57" lean-forward="true" selection-start-line="288" selection-start-column="57" selection-end-line="288" selection-end-column="57" />
+        <state relative-caret-position="258">
+          <caret line="189" column="20" selection-start-line="189" selection-start-column="20" selection-end-line="189" selection-end-column="20" />
           <folding>
             <element signature="e#143#156#0" expanded="true" />
           </folding>
