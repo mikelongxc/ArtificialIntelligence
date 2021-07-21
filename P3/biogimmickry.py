@@ -252,8 +252,9 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 return res
 
         new_population: List[Program] = []
+        ct = [0]
 
-        while len(population) != len(new_population):
+        while ct[0] != k:
             # select 2 programs in top N percentile
             #n = k//10
             # n = k // 2
@@ -275,7 +276,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 gen_no = False
                 break
 
-            res = select(new_population, selected, fe, k//2)
+            res = select(new_population, selected, fe, k//2, ct)
             if res != "":
                 return res
 
@@ -286,7 +287,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
 
 def select(new_population: List[Program], selected: List[Program],\
-           fe: FitnessEvaluator, n: int) -> str:
+           fe: FitnessEvaluator, n: int, ct: List[int]) -> str:
     for i in range(0, n, 2):
         new_programs = crossover(selected[i], selected[i + 1])
 
@@ -301,6 +302,8 @@ def select(new_population: List[Program], selected: List[Program],\
         # add the new programs to the next_pop list until full
         new_population.append(new_programs[0])
         new_population.append(new_programs[1])
+
+        ct[0] = ct[0] + 2
 
     return ""
 
@@ -334,7 +337,8 @@ def main() -> None:  # optional driver
     # array = (-1, 2, -3, -7)
     #array = (4, 3 )
     # array = (5, 0, 0, 0, -10, 3)
-    array = (1, 2, 3, 0, 5, 6, 1, 2) # THIS IS THE HARDEST (doesnt work)
+    array = (1, 2, 3, 0, 5, 6, 1, 2) # works w max_len = 50, takes too long with 40
+    #array = (5, 0, 0, 0, -10, 3)
     # array = (15,)
     # array = [0, 0, 0, 0, 0, 0, 0, 0]
     # array = [13]
