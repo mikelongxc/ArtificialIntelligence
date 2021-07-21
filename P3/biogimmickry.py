@@ -242,9 +242,11 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             # select 2 programs in top N percentile
             n = k//10
 
-            weights = []
+            """weights = []
             for i in range(len(population)):
-                weights.append(10 - population[i].score)
+                weights.append(10 - population[i].score)"""
+
+            weights = populate_weights(k, population)
 
             selected = random.choices(population, weights=weights, k=n)
 
@@ -268,8 +270,22 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 new_population.append(new_programs[1])
 
 
-        for i in range(k):
-            population[i] = new_population[i]
+        """for i in range(k):
+            population[i] = new_population[i]"""
+
+        copy_array(population, new_population, k)
+
+
+def populate_weights(k: int, population: List[Program]) -> List[int]:
+    weights = []
+    for i in range(k):
+        weights.append(10 - population[i].score)
+    return weights
+
+
+def copy_array(into: List[Program], of: List[Program], k: int):
+    for i in range(k):
+        into[i] = of[i]
 
 
 def main() -> None:  # optional driver
