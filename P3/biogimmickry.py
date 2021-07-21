@@ -242,11 +242,11 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             # select 2 programs in top N percentile
             n = k//10
 
-            """weights = []
+            weights = []
             for i in range(len(population)):
-                weights.append(10 - population[i].score)"""
+                weights.append(10 - population[i].score)
 
-            weights = populate_weights(k, population)
+            # weights = populate_weights(k, population)
 
             selected = random.choices(population, weights=weights, k=n)
 
@@ -283,7 +283,7 @@ def populate_weights(k: int, population: List[Program]) -> List[int]:
     return weights
 
 
-def copy_array(into: List[Program], of: List[Program], k: int):
+def copy_array(into: List[Program], of: List[Program], k: int) -> None:
     for i in range(k):
         into[i] = of[i]
 
