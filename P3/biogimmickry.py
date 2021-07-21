@@ -98,20 +98,24 @@ class FitnessEvaluator:
         tuple and the memory array created by interpreting the given program.
         """
         actual = FitnessEvaluator.interpret(program, len(expect))
-        return sum(abs(x - y) for x, y in zip(expect, actual))
+        z = sum(abs(x - y) for x, y in zip(expect, actual))
+        return z
 
 class Program:
 
-    def __init__(self, program: str):
-        self.program = program
+    def __init__(self, sequence: str):
+        self.sequence = sequence
         self.score = 0
 
     def __lt__(self, other):
         return self.score < other.score
 
+    def __repr__(self):
+        return str(self.score)
+
     def score_fitness(self, fe: FitnessEvaluator) -> int:
         try:
-            evaluated_score = fe.evaluate(self.program)
+            evaluated_score = fe.evaluate(self.sequence)
         except RuntimeError:
             evaluated_score = 1000
 
@@ -123,22 +127,54 @@ class Program:
 def crossover(selected: List[Program]) -> List[Program]:
     new_programs = []
 
-    if len(selected[0].program) < len(selected[1].program):
-        min_program_len = len(selected[0].program)
-        max_program_len = len(selected[1].program)
+    if len(selected[0].sequence) < len(selected[1].sequence):
+        min_program_len = len(selected[0].sequence)
+        max_program_len = len(selected[1].sequence)
     else:
-        min_program_len = len(selected[1].program)
-        max_program_len = len(selected[0].program)
+        min_program_len = len(selected[1].sequence)
+        max_program_len = len(selected[0].sequence)
 
     switch_index = random.randint(0, min_program_len)
 
-    program1 = Program(selected[0].program[0:switch_index])
-    program2 = Program(selected[1].program[switch_index:max_program_len])
+    #program1_seq = selected[0].sequence[0:switch_index]
+    #program2_seq = selected[1].sequence[switch_index:max_program_len]
 
+    swap1a = selected[0].sequence[0:switch_index]
+    swap1b = selected[1].sequence[switch_index:max_program_len]
+
+    swap2a = selected[1].sequence[0:switch_index]
+    swap2b = selected[0].sequence[switch_index:max_program_len]
+
+    program1_seq = swap1a + swap1b
+    program2_seq = swap2a + swap2b
+
+    program1_seq = mutate(program1_seq)
+    program2_seq = mutate(program2_seq)
+
+    program1 = Program(program1_seq)
+    program2 = Program(program2_seq)
+
+    # add new programs to return list
     new_programs.append(program1)
     new_programs.append(program2)
 
     return new_programs
+
+
+def mutate(sequence: str) -> str:
+    seq_len = len(sequence)
+    index = random.randint(0, seq_len)
+    valid_commands = "><+-"
+
+    rdm_int = random.randint(-3, -3) # TODO: add +2 to 3 for []
+    if rdm_int < 0:
+        return sequence
+
+    new_cmd = valid_commands[rdm_int]
+
+    # sequence = sequence.replace(sequence,)
+
+    return sequence[:index] + new_cmd + sequence[index + 1:]
 
 
 def generate_random_program(max_len: int) -> Program:
@@ -151,15 +187,14 @@ def generate_random_program(max_len: int) -> Program:
     if max_len == 0:
         max_len = 20
 
-    program_str = ""
+    sequence_str = ""
     # valid_commands = "><+-[]"
     valid_commands = "><+-"
     for i in range(random.randint(0, max_len)):
-        print(i)
-        program_str += valid_commands[random.randint(0, 3)]
+        sequence_str += valid_commands[random.randint(0, 3)]
         # program_str += valid_commands[random.randint(0, 5)]
 
-    return Program(program_str)
+    return Program(sequence_str)
 
 
 def create_program(fe: FitnessEvaluator, max_len: int) -> str:
@@ -174,12 +209,18 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     new_population: List[Program] = []
 
-    k = 100        # k represents the initial population size
+    k = 1000        # k represents the initial population size
     # N = 0.5        # N is top percentile for selection process
 
     converges = True
+    cutting = False
+    gen_no = 0
     while 1:
-
+        gen_no = gen_no + 1
+        print(gen_no)
+        if gen_no == 2000:
+            converges = True
+            gen_no = 0
 
         # generate initial random, score initial random, add to population
         if converges:
@@ -187,17 +228,17 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             # initialize empty population list
             population = []
             for i in range(k):
-                print(i)
                 # generate random program
                 program = generate_random_program(max_len)
                 # score newly generated random program and stop if 0
                 fitness_score = program.score_fitness(fe)
                 if fitness_score == 0:
-                    return program.program
+                    print("gen no (regen): " + str(gen_no))
+                    return program.sequence
 
                 population.append(program)
         # if no converge, just score loop and add to new pop
-        else:
+        elif cutting:
             # initialize empty population list
             for i in range(k):
                 # generate random program
@@ -205,7 +246,8 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
                 # score newly generated random program and stop if 0
                 fitness_score = new_population[i].score_fitness(fe)
                 if fitness_score == 0:
-                    return new_population[i].program
+                    print("gen no: " + str(gen_no))
+                    return new_population[i].sequence
 
                 population[i] = new_population[i]
 
@@ -215,16 +257,42 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
         while len(population) != len(new_population):
             # select 2 programs in top N percentile
-            selected = random.choices(population, k=2)
-            new_programs = crossover(selected)
-            # add the new programs to the next_pop list until full
-            new_population.append(new_programs[0])
-            new_population.append(new_programs[1])
+            n = k//10
+
+            weights = []
+            for i in range(len(population)):
+                weights.append(10 - population[i].score)
+
+            selected = random.choices(population, weights=weights, k=n)
+
+            for i in range(0, n, 2):
+                n_p = []
+                n_p.append(selected[i])
+                n_p.append(selected[i+1])
+
+                new_programs = crossover(n_p)
+
+                score1 = new_programs[0].score_fitness(fe)
+                score2 = new_programs[1].score_fitness(fe)
+
+                if score1 == 0 or score2 == 0:
+                    if score1 == 0:
+                        return new_programs[0].sequence
+                    else:
+                        return new_programs[1].sequence
+
+                # add the new programs to the next_pop list until full
+                new_population.append(new_programs[0])
+                new_population.append(new_programs[1])
+
+
+        for i in range(k):
+            population[i] = new_population[i]
 
 
 def main() -> None:  # optional driver
     # array = (-1, 2, -3, 4)
-    array = (-7, 7, 5, 2)
+    array = (1, 3, 2, 2, 0, 1, 0)
     max_len = 0  # no BF loop required
 
     # only attempt when non-loop programs work
