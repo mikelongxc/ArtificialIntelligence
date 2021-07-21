@@ -162,7 +162,7 @@ def generate_random_program(max_len: int) -> Program:
     return Program(program_str)
 
 
-def _create_program(fe: FitnessEvaluator, max_len: int) -> str:
+def create_program(fe: FitnessEvaluator, max_len: int) -> str:
     """
     Return a program string no longer than max_len that, when interpreted,
     populates a memory array that exactly matches a target array.
@@ -172,46 +172,10 @@ def _create_program(fe: FitnessEvaluator, max_len: int) -> str:
 
     # mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
 
-    population = []
-
-    k = 500        # k represents the initial population size
-    # n = 0.5        # N is top percentile for selection process
-
-    for i in range(k):
-        print(i)
-        # generate random program
-        program = generate_random_program(max_len)
-        # score newly generated random program and stop if 0
-        fitness_score = program.score_fitness(fe)
-        if fitness_score == 0:
-            break
-
-        population.append(program)
-
-    # select 2 programs in top N percentile
-    random.choices(population, k=2)
-    # l = random.choices(population, k=2)
-    # print(l[0].score, l[1].score)
-
-
-    # return "+++[>++++<-]"
-    return "+++"
-
-
-def create_program(fe: FitnessEvaluator, max_len: int) -> str:
-    """
-    Return a program string no longer than max_len that, when interpreted,
-    populates a memory array that exactly matches a target array.
-
-    Use fe.evaluate(program) to get a program's fitness score (zero is best).
-    """
-
-    mut_prob = {"<": 0.8, ">": 0.8, "+": 0.6, "-": 0.6, "[": 0.1, "]": 0.1}
-
     new_population: List[Program] = []
 
     k = 100        # k represents the initial population size
-    N = 0.5        # N is top percentile for selection process
+    # N = 0.5        # N is top percentile for selection process
 
     converges = True
     while 1:
@@ -223,6 +187,7 @@ def create_program(fe: FitnessEvaluator, max_len: int) -> str:
             # initialize empty population list
             population = []
             for i in range(k):
+                print(i)
                 # generate random program
                 program = generate_random_program(max_len)
                 # score newly generated random program and stop if 0
