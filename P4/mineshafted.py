@@ -81,11 +81,14 @@ class Cell:
         self.clue_val = clue_val
         # domain is the list of tuples. [-x: guess no mine, +x: guess mine]
         self.domain: List[Tuple[int, ...]] = []
+        self.is_mine = False
 
         # generates from outside. bm.get_adjacent
         self.adjacent = adjacent
         self.finished = False
         self.discovered = discovered
+
+        self.domain_blueprint: List[int] = []
 
     def __eq__(self, other):
         if other.index == self.index:
@@ -160,11 +163,23 @@ def get_adjacentt(size, index):
                 # yield (node[0] + i, node[1] + j)
 
 
-def get_domain(cell: Cell) -> List[List[int]]:
-    adjacent = cell.adjacent
+def get_domain(cell: Cell, adjacent: List[int]) -> List[List[int]]:
     num_adj = len(adjacent)
-    return [[n * m for n, m in zip(adjacent, combo)]
-            for combo in itertools.product([1, -1], repeat=num_adj)]
+
+    unreduced = [[n * m for n, m in zip(adjacent, arc)]
+            for arc in itertools.product([1, -1], repeat=num_adj)]
+
+    reduced = []
+    clue = cell.clue_val
+    for i in range(len(unreduced)):
+        num_mines = 0
+        for j in range(len(unreduced[i])):
+            if unreduced[i][j] > 0:
+                num_mines += 1
+        if num_mines == clue:
+            reduced.append(unreduced[i])
+
+    return reduced
 
 
 def sweep_mines(bm: BoardManager) -> List[List[int]]:
@@ -183,6 +198,10 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
 
     # for speed
     found_a_0 = False
+    #arcs: Set[Tuple[int, ...]]
+
+    arcs_set = set()
+    arcs_ordered: List[Tuple[int, ...]] = []
 
     # gen empty board for later return TODO
     board = []
@@ -219,6 +238,7 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
                 n_cell = Cell(n_index, bm.get_adjacent(n_index), True, clue)
                 state.add_cell(n_cell)
                 state.finish(cell0)
+                found_a_0 = False
 
         # 3. choose next cell if newly discovered is 0
         for i in range(len_cells):
@@ -235,11 +255,62 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
 
         # 4. gen. domains of each unfinished cell
         for i in range(len_cells):
-            if not state.cells[i].finished:
-                for j in range(len(state.cells[i].adjacent)):
-                # TODO remove or create new adj list???
-                # reduce adj list based on finished cells
-                # generate domain based on adj list
+            if not state.cells[i].finished and state.cells[i].discovered:
+                old_adj = state.cells[i].adjacent
+                new_adj = [] # TODO
+                arc_adj = []
+                for j in range(len(old_adj)):
+                    # TODO remove or create new adj list???
+                    if not state.cells[old_adj[j]].discovered:
+                        new_adj.append(old_adj[j])
+                    """elif state.cells[old_adj[j]].discovered \
+                        and not state.cells[old_adj[j]].finished:
+                            arc_adj.append(old_adj[j])"""
+
+                state.cells[i].domain_blueprint = new_adj
+
+                # get domain
+                state.cells[i].domain = get_domain(state.cells[i], new_adj)
+
+                """for k in range(len(arc_adj)):
+                    new_arc = (i, k)"""
+
+        # determine an arc
+        for i in range(len_cells):
+            arc_true = False
+            if not state.cells[i].finished and state.cells[i].discovered:
+                for j in range(len_cells):
+                    arc_true = False
+                    if i != j and state.cells[j].discovered and not state.cells[j].finished:
+                        for k in range(len(state.cells[i].domain_blueprint)):
+                            for l in range(len(state.cells[j].domain_blueprint)):
+                                if state.cells[i].domain_blueprint[k] == state.cells[j].domain_blueprint[l]:
+                                    arc_true = True
+                                    break
+                            if arc_true:
+                                break
+                        if arc_true:
+                            arcs_set.add((i, j))
+                            arcs_set.add((j, i))
+
+                            if len(arcs_ordered) < len(arcs_set):
+                                arcs_ordered.append((i, j))
+                                arcs_ordered.append((j, i))
+
+
+
+
+
+
+
+
+
+
+
+        # 5. find arcs between multiple cells
+
+        # x. determine which cell is safe. cell0 = . reset loop to explore
+
                 print()
 
 
