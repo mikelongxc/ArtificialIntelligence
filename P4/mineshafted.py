@@ -1,11 +1,11 @@
-# Name:         
+# Name:         Michael Long
 # Course:       CSC 480
 # Instructor:   Daniel Kauffman
 # Assignment:   Mine Shafted
 # Term:         Summer 2021
 
 import itertools
-from typing import Callable, Generator, List, Tuple
+from typing import Callable, Generator, List, Tuple, Set
 
 
 class BoardManager:  # do not modify
@@ -72,7 +72,70 @@ class BoardManager:  # do not modify
                 raise RuntimeError
             index = (yield clue)
 
+class Cell:
 
+    def __init__(self, index: int, adjacent: List[int], clue_val: int = None):
+        self.index = index
+        self.clue_val = clue_val
+        # domain is the list of tuples. [-x: guess no mine, +x: guess mine]
+        self.domain: List[Tuple[int, ...]] = []
+
+        # generates from outside. bm.get_adjacent
+        self.adjacent = adjacent
+        self.finished = False
+
+    def finish(self):
+        self.finished = True
+
+
+class Mineshafted:
+
+    # keeps list of arcs
+
+    def __init__(self):
+        print("cock")
+        self.arcs = []
+
+    def main(self):
+        print("X")
+
+
+class State:
+
+    def __init__(self, cells: List[Cell] = None):
+        self.cells = cells
+
+    def __repr__(self):
+        return "state obj."
+
+    def add_cell(self, cell: Cell):
+        self.cells.append(cell)
+
+
+def explore(bm: BoardManager):
+
+    index = 0
+    clue = bm.move(index)
+
+
+def get_adjacentt(size, index):
+    print("Test")
+    node = (0, 0)
+    dir_vector = [-1, 0, 1]
+    for i in dir_vector:
+        for j in dir_vector:
+            if i == j == 0:
+                continue
+            if 0 <= node[0] + i < size[0] and 0 <= node[1] + j < size[1]:
+                print((node[0]+i, node[1]+j))
+                # yield (node[0] + i, node[1] + j)
+
+
+def get_domain(cell: Cell) -> List[List[int]]:
+    adjacent = cell.adjacent
+    num_adj = len(adjacent)
+    return [[n * m for n, m in zip(adjacent, combo)]
+            for combo in itertools.product([1, -1], repeat=num_adj)]
 
 
 def sweep_mines(bm: BoardManager) -> List[List[int]]:
@@ -89,11 +152,78 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
     [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
     """
 
+    # for speed
+    found_a_0 = False
+
+    # 1. init: gen cell 0
+    cell0 = Cell(0, bm.get_adjacent(0), 0,)
+    # gen state
+    state = State([])
+    # add cell 0 to state
+    state.add_cell(cell0)
+
+
+    ct = 0
+    while 1:
+
+        if cell0.clue_val == 0:
+            # 2. discover adj.
+            for i in range(len(cell0.adjacent)):
+                new_index = cell0.adjacent[i]
+                clue = bm.move(new_index)
+                new_cell = Cell(new_index, bm.get_adjacent(new_index), clue)
+                state.add_cell(new_cell)
+                cell0.finish()
+
+        # 3. choose next cell if newly discovered is 0
+        for i in range(len(state.cells)):
+            if not state.cells[i].finished and state.cells[i].clue_val == 0:
+                cell0 = state.cells[i]
+                found_a_0 = True
+                break
+
+        if found_a_0:
+            continue
+
+        # cell: reduce adj list
+        # cell: create domain
+
+        # 4. gen. domains
+        for i in range(len(state.cells)):
+            if not state.cells[i].finished:
+                # reduce adj list based on finished cells
+                # generate domain based on adj list
+                print()
+
+
+
+        ct += 1
+
+
+
+
+    return [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
 
 
 
 def main() -> None:  # optional driver
+
+    board = [[0, 0, 1, -1, 2, 1, 1, 0, 0],\
+             [0, 1, 2, 2, 2, -1, 1, 1, 1],\
+             [0, 1, -1, 1, 1, 1, 1, 1, -1],\
+             [0, 1, 1, 1, 0, 0, 0, 1, 1],\
+             [0, 0, 0, 0, 0, 1, 1, 1, 0],\
+             [0, 0, 0, 0, 1, 2, -1, 2, 1],\
+             [1, 1, 1, 0, 1, -1, 3, -1, 1],\
+             [2, -1, 1, 0, 1, 1, 2, 2, 2],\
+             [-1, 2, 1, 0, 0, 0, 0, 1, -1]]
+
+    board = [[0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 1, -1, 3, 2],
+             [0, 1, 2, -1, -1], [0, 0, 1, 2, 2]]
+
     board = [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
+
+
     bm = BoardManager(board)
     assert sweep_mines(bm) == board
 
