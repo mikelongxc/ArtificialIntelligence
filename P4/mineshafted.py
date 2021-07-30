@@ -74,7 +74,9 @@ class BoardManager:  # do not modify
 
 class Cell:
 
-    def __init__(self, index: int, adjacent: List[int], clue_val: int = None):
+    def __init__(self, index: int, adjacent: List[int],\
+                 discovered: int, clue_val: int = None):
+
         self.index = index
         self.clue_val = clue_val
         # domain is the list of tuples. [-x: guess no mine, +x: guess mine]
@@ -83,6 +85,15 @@ class Cell:
         # generates from outside. bm.get_adjacent
         self.adjacent = adjacent
         self.finished = False
+        self.discovered = discovered
+
+    def __eq__(self, other):
+        if other.index == self.index:
+            return False
+        return True
+
+    def __repr__(self):
+        return str((self.index,  self.finished, self.clue_val))
 
     def finish(self):
         self.finished = True
@@ -106,10 +117,28 @@ class State:
         self.cells = cells
 
     def __repr__(self):
-        return "state obj."
+        return str(self.cells)
+
+    def oldadd_cell(self, cell: Cell):
+        """
+        adds UNIQUE element to list of cells
+        """
+        duplicate = False
+        l = len(self.cells)
+        for i in range(l):
+            idx = self.cells[i].index
+            if idx == cell.index:
+                duplicate = True
+        if not duplicate:
+            self.cells.append(cell)
 
     def add_cell(self, cell: Cell):
-        self.cells.append(cell)
+        if not self.cells[cell.index].finished:
+            self.cells[cell.index] = cell
+
+    def finish(self, cell):
+        self.cells[cell.index].finished = True
+
 
 
 def explore(bm: BoardManager):
@@ -155,10 +184,26 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
     # for speed
     found_a_0 = False
 
-    # 1. init: gen cell 0
-    cell0 = Cell(0, bm.get_adjacent(0), 0,)
-    # gen state
+    # gen empty board for later return TODO
+    board = []
+    size = bm.size
+    for r in range(size[0]):
+        board.append([])
+        for c in range(size[1]):
+            board[r].append(None)
+
+    # gen empty list for State TODO move to state class
     state = State([])
+    for r in range(size[0] * size[1]):
+        state.cells.append(Cell(r, bm.get_adjacent(r), False))
+
+    len_cells = len(state.cells)
+
+
+
+    # 1. init: gen cell 0
+    cell0 = Cell(0, bm.get_adjacent(0), True, 0)
+
     # add cell 0 to state
     state.add_cell(cell0)
 
@@ -166,17 +211,17 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
     ct = 0
     while 1:
 
-        if cell0.clue_val == 0:
+        if cell0.clue_val == 0 and not cell0.finished:
             # 2. discover adj.
             for i in range(len(cell0.adjacent)):
-                new_index = cell0.adjacent[i]
-                clue = bm.move(new_index)
-                new_cell = Cell(new_index, bm.get_adjacent(new_index), clue)
-                state.add_cell(new_cell)
-                cell0.finish()
+                n_index = cell0.adjacent[i]
+                clue = bm.move(n_index)
+                n_cell = Cell(n_index, bm.get_adjacent(n_index), True, clue)
+                state.add_cell(n_cell)
+                state.finish(cell0)
 
         # 3. choose next cell if newly discovered is 0
-        for i in range(len(state.cells)):
+        for i in range(len_cells):
             if not state.cells[i].finished and state.cells[i].clue_val == 0:
                 cell0 = state.cells[i]
                 found_a_0 = True
@@ -188,9 +233,11 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
         # cell: reduce adj list
         # cell: create domain
 
-        # 4. gen. domains
-        for i in range(len(state.cells)):
+        # 4. gen. domains of each unfinished cell
+        for i in range(len_cells):
             if not state.cells[i].finished:
+                for j in range(len(state.cells[i].adjacent)):
+                # TODO remove or create new adj list???
                 # reduce adj list based on finished cells
                 # generate domain based on adj list
                 print()

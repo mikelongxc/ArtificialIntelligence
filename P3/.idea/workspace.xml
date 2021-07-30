@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce57bbc0-dd07-41b8-b070-9bef35a74474" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../P4/.idea/P4.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../P4/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../P4/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../P4/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../P4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P4/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../P4/mineshafted.py" beforeDir="false" afterPath="$PROJECT_DIR$/../P4/mineshafted.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/biogimmickry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="227" column="40" lean-forward="true" selection-start-line="227" selection-start-column="40" selection-end-line="227" selection-end-column="40" />
+            <state relative-caret-position="15">
+              <caret line="150" column="34" selection-start-line="150" selection-start-column="34" selection-end-line="150" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -129,6 +125,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="5" y="23" width="1435" height="877" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13797909" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -152,8 +149,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/biogimmickry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="227" column="40" lean-forward="true" selection-start-line="227" selection-start-column="40" selection-end-line="227" selection-end-column="40" />
+        <state relative-caret-position="15">
+          <caret line="150" column="34" selection-start-line="150" selection-start-column="34" selection-end-line="150" selection-end-column="34" />
         </state>
       </provider>
     </entry>
