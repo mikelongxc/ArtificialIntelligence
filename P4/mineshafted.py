@@ -5,7 +5,7 @@
 # Term:         Summer 2021
 
 import itertools
-from typing import Callable, Generator, List, Tuple
+from typing import Callable, Generator, List, Tuple, Set
 
 
 class BoardManager:  # do not modify
@@ -199,7 +199,6 @@ class Mineshafted:
 
                 self.board[index // self.board_size[1]]\
                     [index % self.board_size[1]] = clue
-
                 continue
 
             # 3. choose next cell if one of the newly discovered was 0
@@ -224,7 +223,7 @@ class Mineshafted:
 
             # 7. choose next cell values and mine locations based on reduced
             new_safe = set()
-            for i in range(self.len_cells):
+            """for i in range(self.len_cells):
                 for j in range(len(self.state.cells[i].domain)):
                     if len(self.state.cells[i].domain) < 2:
                         for n in range(len(self.state.cells[i].domain[j])):
@@ -235,12 +234,27 @@ class Mineshafted:
                                 print()
                                 # TODO: store in board. convert to 2d?
                                 width = self.board_size[1]
-                                self.board[idx // width][idx % width] = -1
+                                self.board[idx // width][idx % width] = -1"""
+            self.choose_safe_cells(new_safe)
 
             if self.board_filled(self.board):
                 break
 
         return self.board
+
+    def choose_safe_cells(self, new_safe: Set[int]):
+        for i in range(self.len_cells):
+            for j in range(len(self.state.cells[i].domain)):
+                if len(self.state.cells[i].domain) < 2:
+                    for n in range(len(self.state.cells[i].domain[j])):
+                        idx = self.state.cells[i].domain[j][n]
+                        if self.state.cells[i].domain[j][n] < 0:
+                            new_safe.add(idx)
+                        else:
+                            print()
+                            # TODO: store in board. convert to 2d?
+                            width = self.board_size[1]
+                            self.board[idx // width][idx % width] = -1
 
     def board_filled(self, board: List[List[int]]) -> bool:
         for i in range(len(board)):
@@ -402,7 +416,7 @@ def copy_domain(domain: List[List[int]]) -> List[List[int]]:
     return new_domain
 
 
-def copy_arcs(arcs: List[Tuple[int, ...]]) -> List[Tuple[int]]:
+def copy_arcs(arcs: List[Tuple[int, ...]]) -> List[Tuple[int, ...]]:
     new_arcs = []
     for i in range(len(arcs)):
         new_arcs.append(arcs[i] + tuple())
