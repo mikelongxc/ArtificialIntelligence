@@ -131,7 +131,8 @@ class State:
         self.cells[cell.index].finished = True
 
 
-def get_domain(cell: Cell, adjacent: List[int], known_mines: List[int]) -> List[List[int]]:
+def get_domain(cell: Cell, adjacent: List[int], known_mines: List[int]) \
+        -> List[List[int]]:
     num_adj = len(adjacent)
 
     saved_popped_indexes = []
@@ -276,7 +277,7 @@ class Mineshafted:
         for i in range(self.len_cells):
             for j in range(len(self.state.cells[i].domain)):
                 if len(self.state.cells[i].domain) < 2:
-                    self.state.finish(self.state.cells[i]) # TODO invalidates board1 and board2
+                    self.state.finish(self.state.cells[i])
                     for n in range(len(self.state.cells[i].domain[j])):
                         idx = self.state.cells[i].domain[j][n]
                         if self.state.cells[i].domain[j][n] < 0:
@@ -328,7 +329,8 @@ class Mineshafted:
                         new_adj.append(old_adj[j])
                 self.state.cells[i].domain_blueprint = new_adj
                 # from reduced adjacency list, get domain
-                domain = get_domain(self.state.cells[i], new_adj, self.known_mines)
+                domain = get_domain\
+                    (self.state.cells[i], new_adj, self.known_mines)
                 self.state.cells[i].domain = domain
 
     def determine_arcs(self):
@@ -492,7 +494,7 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
 
 def main() -> None:  # optional driver
 
-    board4 = [[0, 0, 1, -1, 2, 1, 1, 0, 0], \
+    """board4 = [[0, 0, 1, -1, 2, 1, 1, 0, 0], \
              [0, 1, 2, 2, 2, -1, 1, 1, 1], \
              [0, 1, -1, 1, 1, 1, 1, 1, -1], \
              [0, 1, 1, 1, 0, 0, 0, 1, 1], \
@@ -528,7 +530,7 @@ def main() -> None:  # optional driver
               [1, 2, -1, 1, 0, 0, 0, 0, 0],
               [0, 1, 1, 1, 0, 0, 0, 1, 1],
               [0, 1, 1, 1, 0, 0, 1, 2, -1],
-              [0, 1, -1, 1, 0, 0, 1, -1, 2]] # UNSOLVABLE
+              [0, 1, -1, 1, 0, 0, 1, -1, 2]] # UNSOLVABLE"""
 
 
 
@@ -547,12 +549,12 @@ def main() -> None:  # optional driver
     test(board)
 
 
-def test(board: List[List[int]]):
+def test(board: List[List[int]]) -> None:
     bm = BoardManager(board)
     assert sweep_mines(bm) == board
 
 
-def test_all():
+def test_all() -> None:
     board4 = [[0, 0, 1, -1, 2, 1, 1, 0, 0], \
               [0, 1, 2, 2, 2, -1, 1, 1, 1], \
               [0, 1, -1, 1, 1, 1, 1, 1, -1], \
