@@ -418,7 +418,7 @@ class Mineshafted:
 def reduced_equal(a: List[List[int]], b: List[List[int]]) -> bool:
     for i in range(len(a)):
         if a[i] not in b:
-                return False
+            return False
     return True
 
 
@@ -542,9 +542,10 @@ def main() -> None:  # optional driver
               [0, 1, 1, 1, 0, 0, 1, 2, -1],
               [0, 1, -1, 1, 0, 0, 1, -1, 2]] # UNSOLVABLE"""
 
-    # board = [[0, 1, -1, 3, 2, 1], [0, 1, 2, -1, -1, 1], [0, 0, 1, 2, 2, 1]] #no
+    # NO:
+    # board = [[0, 1, -1, 3, 2, 1], [0, 1, 2, -1, -1, 1], [0, 0, 1, 2, 2, 1]]
 
-    # board = [[0, 1, 2, 2], [0, 1, -1, -1], [0, 1, 2, 2]]
+    board = [[0, 1, 2, 2], [0, 1, -1, -1], [0, 1, 2, 2]]
 
     # board = [[0, 1, 1], [1, 2, -1], [-1, 2, 1], [1, 1, 0]] # infinite
 
@@ -593,6 +594,8 @@ def test_all() -> None:
 
     board1 = [[0, 0, 0], [1, 1, 1], [1, -1, 2], [1, 2, -1]]  # solves
 
+    board5 = [[0, 1, 2, 2], [0, 1, -1, -1], [0, 1, 2, 2]] # solves
+
     print("testing board 1: ")
     test(board1)
     print("testing board 2: ")
@@ -601,6 +604,8 @@ def test_all() -> None:
     test(board3)
     print("testing board 4: ")
     test(board4)
+    print("testing board 4: ")
+    test(board5)
 
 
 if __name__ == "__main__":
