@@ -181,6 +181,7 @@ class Mineshafted:
 
         # init cell0, add to state
         cell0 = Cell(0, self.bm.get_adjacent(0), True, 0)
+        self.board[0][0] = 0
         self.state.add_cell(cell0)
 
         new_safe = set()
@@ -343,17 +344,27 @@ class Mineshafted:
             a_reduced = make_new_domain(a_domain, common)
             b_reduced = make_new_domain(b_domain, common)
 
+            reduced = False
+            saved_popped_indexes = []
             for i in range(len(a_reduced)):
                 # REDUCE if found
                 if a_reduced[i] not in b_reduced:
                     # pop invalid variable off of real location
-                    real_a_domain.pop(i)
+                    # real_a_domain.pop(i)
+                    saved_popped_indexes.append(i)
                     print("REDUCE")
                     # add arcs back (*, x)
-                    for j in range(len(arcs_copy)):
-                        if arcs_copy[j][1] == arc[0] \
-                                and arcs_copy[j][0] != arc[1]:
-                            self.arcs_ordered.append(tuple(arcs_copy[j]))
+                    reduced = True
+
+            if reduced:
+                for j in range(len(arcs_copy)):
+                    if arcs_copy[j][1] == arc[0] \
+                            and arcs_copy[j][0] != arc[1]:
+                        self.arcs_ordered.append(tuple(arcs_copy[j]))
+
+            saved_popped_indexes.reverse()
+            for i in range(len(saved_popped_indexes)):
+                real_a_domain.pop(saved_popped_indexes[i])
 
             self.state.cells[arc[0]].domain = real_a_domain
 
@@ -464,7 +475,7 @@ def main() -> None:  # optional driver
              [0, 1, 2, -1, -1],\
              [0, 0, 1, 2, 2]]
 
-    board = [[0, 1, -1], [2, 3, 1], [-1, -1, 1]]
+    # board = [[0, 1, -1], [2, 3, 1], [-1, -1, 1]]
 
     #board = [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
 
