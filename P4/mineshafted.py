@@ -211,10 +211,11 @@ class Mineshafted:
         self.state.add_cell(cell0)
 
         new_safe = set()
+        # reduced_safe = set()
 
         while 1:
-            # 2. discover adj. to cell0
 
+            # 2. discover adj. to cell0
             self.discover_adjacent(cell0)
 
             if len(new_safe) != 0:
@@ -250,11 +251,10 @@ class Mineshafted:
             self.determine_arcs()
 
             # 6. run constraint propagation (ac-3)
-            self.ac_3()
+            new_safe = self.ac_3()
 
             # 7. choose next cell values and mine locations based on reduced
-            new_safe = set()
-
+            #new_safe = set()
             self.choose_safe_cells(new_safe)
 
             if self.board_filled(self.board):
@@ -350,9 +350,10 @@ class Mineshafted:
                                 self.arcs_ordered.append((i, j))
                                 self.arcs_ordered.append((j, i))
 
-    def ac_3(self):
+    def ac_3(self) -> Set[int]:
 
         # mine_list = []
+        safe = set()
 
         arcs_copy = copy_arcs(self.arcs_ordered)
         while self.arcs_ordered:
@@ -408,11 +409,30 @@ class Mineshafted:
 
             self.state.cells[arc[0]].domain = real_a_domain
 
+            # check if any mines are known in domain
+            safe.update(check_safe(real_a_domain))
+
             # check for any possible mines (both indices are pos)
 
             # mine_list = mine_list + check_mines(real_A_domain)
             # if len(real_A_domain) > 1:
             #    mine_list = check_mines(real_A_domain)
+
+        return safe
+
+
+def check_safe(domain: List[List[int]]) -> Set[int]:
+    safe = set()
+    num = set()
+    for i in range(len(domain[0])):
+        for j in range(len(domain)):
+            num.add(domain[j][i])
+        if len(num) == 1:
+            new_cell_idx = num.pop()
+            if new_cell_idx < 0:
+                safe.add(new_cell_idx)
+        num.clear()
+    return safe
 
 
 def reduced_equal(a: List[List[int]], b: List[List[int]]) -> bool:
@@ -422,7 +442,7 @@ def reduced_equal(a: List[List[int]], b: List[List[int]]) -> bool:
     return True
 
 
-def check_mines(domain: List[List[int]]) -> List[int]:
+def oldheck_mines(domain: List[List[int]]) -> List[int]:
     """consistent_mines = False
     for i in range(len(domain) - 1):
         for j in range(len(domain[i])):
@@ -556,6 +576,8 @@ def main() -> None:  # optional driver
     # test_all()
 
     print("testing board: ")
+
+    board = [[0, 1, 1], [1, 2, -1], [-1, 2, 1], [1, 1, 0]]
 
     test(board)
 

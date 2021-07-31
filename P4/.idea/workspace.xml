@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mineshafted.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="58">
-              <caret line="395" column="41" selection-start-line="395" selection-start-column="41" selection-end-line="395" selection-end-column="41" />
+            <state relative-caret-position="360">
+              <caret line="373" selection-start-line="373" selection-end-line="373" />
               <folding>
                 <element signature="e#143#159#0" expanded="true" />
               </folding>
@@ -64,6 +64,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="4" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="877" />
@@ -148,8 +149,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
-    <editor active="true" />
+    <frame x="4" y="23" width="1440" height="877" extended-state="0" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.02638889" />
@@ -160,8 +160,8 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32009926" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4044665" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32009926" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4044665" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -175,8 +175,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/mineshafted.py</url>
-          <line>252</line>
-          <option name="timeStamp" value="122" />
+          <line>257</line>
+          <option name="timeStamp" value="128" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -233,8 +233,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mineshafted.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="395" column="41" selection-start-line="395" selection-start-column="41" selection-end-line="395" selection-end-column="41" />
+        <state relative-caret-position="360">
+          <caret line="373" selection-start-line="373" selection-end-line="373" />
           <folding>
             <element signature="e#143#159#0" expanded="true" />
           </folding>
