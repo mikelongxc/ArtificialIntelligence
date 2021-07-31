@@ -384,7 +384,7 @@ class Mineshafted:
                     reduced = True
 
             # if domains are equal AND length of them is 2+ combos:
-            if len(a_reduced) == len(b_reduced) and \
+            """if len(a_reduced) == len(b_reduced) and \
                     reduced_equal(a_reduced, b_reduced) and len(a_reduced) > 1:
                 for i in range(len(a_reduced)):
                     mine_ct = 0
@@ -393,7 +393,7 @@ class Mineshafted:
                             mine_ct += 1
                     if a.clue_val != mine_ct:
                         saved_popped_indexes.append(i)
-                        reduced = True
+                        reduced = True"""
 
             # add new arcs if was just reduced
             if reduced:
