@@ -127,12 +127,17 @@ class State:
         if not self.cells[cell.index].finished:
             self.cells[cell.index] = cell
 
-    def finish(self, cell):
+    def finish(self, cell: Cell):
         self.cells[cell.index].finished = True
 
 
-def get_domain(cell: Cell, adjacent: List[int]) -> List[List[int]]:
+def get_domain(cell: Cell, adjacent: List[int], known_mines: List[int]) -> List[List[int]]:
     num_adj = len(adjacent)
+
+    saved_popped_indexes = []
+
+    known_mines_set = set(known_mines)
+    known_mines = list(known_mines_set)
 
     unreduced = [[n * m for n, m in zip(adjacent, cell_combo)]
             for cell_combo in itertools.product([1, -1], repeat=num_adj)]
@@ -146,6 +151,24 @@ def get_domain(cell: Cell, adjacent: List[int]) -> List[List[int]]:
                 num_mines += 1
         if num_mines == clue:
             reduced.append(unreduced[i])
+
+    for i in range(len(known_mines)):
+        for j in range(len(reduced)):
+            for k in range(len(reduced[j])):
+                # if found +- of known mine
+                if reduced[j][k] == known_mines[i] \
+                        or -1 * reduced[j][k] == known_mines[i]:
+                    if reduced[j][k] != known_mines[i]:
+                        saved_popped_indexes.append(j)
+
+    if len(saved_popped_indexes) > 0:
+        temp = set(saved_popped_indexes)
+        saved_popped_indexes.sort()
+        saved_popped_indexes = list(temp)
+        saved_popped_indexes.sort()
+        saved_popped_indexes.reverse()
+        for i in range(len(saved_popped_indexes)):
+            reduced.pop(saved_popped_indexes[i])
 
     return reduced
 
@@ -162,6 +185,8 @@ class Mineshafted:
         self.arcs_ordered: List[Tuple[int, ...]] = []
 
         self.board_size = bm.size
+
+        self.known_mines = []
 
         # gen empty board for later return TODO
         self.board = []
@@ -200,6 +225,10 @@ class Mineshafted:
 
                 self.board[index // self.board_size[1]]\
                     [index % self.board_size[1]] = clue
+
+                if self.board_filled(self.board):
+                    return self.board
+
                 continue
 
             # 3. choose next cell if one of the newly discovered was 0
@@ -247,14 +276,20 @@ class Mineshafted:
         for i in range(self.len_cells):
             for j in range(len(self.state.cells[i].domain)):
                 if len(self.state.cells[i].domain) < 2:
+                    self.state.finish(self.state.cells[i]) # TODO invalidates board1 and board2
                     for n in range(len(self.state.cells[i].domain[j])):
                         idx = self.state.cells[i].domain[j][n]
                         if self.state.cells[i].domain[j][n] < 0:
                             new_safe.add(idx)
                         else:
-                            # store resulting mine in board
+                            # store resulting mine in board and save cell
+                            m = Cell(idx, self.bm.get_adjacent(idx), False, -1)
+                            m.is_mine = True
+                            self.state.add_cell(m)
+                            self.state.finish(m)
                             width = self.board_size[1]
                             self.board[idx // width][idx % width] = -1
+                            self.known_mines.append(idx)
 
     def board_filled(self, board: List[List[int]]) -> bool:
         for i in range(len(board)):
@@ -282,6 +317,7 @@ class Mineshafted:
 
     def generate_domains(self):
         # 4. gen. domains of each unfinished cell
+
         for i in range(self.len_cells):
             if not self.state.cells[i].finished\
                     and self.state.cells[i].discovered:
@@ -291,9 +327,9 @@ class Mineshafted:
                     if not self.state.cells[old_adj[j]].discovered:
                         new_adj.append(old_adj[j])
                 self.state.cells[i].domain_blueprint = new_adj
-                # get domain
-                self.state.cells[i].domain\
-                    = get_domain(self.state.cells[i], new_adj)
+                # from reduced adjacency list, get domain
+                domain = get_domain(self.state.cells[i], new_adj, self.known_mines)
+                self.state.cells[i].domain = domain
 
     def determine_arcs(self):
         # 5. determine arcs
@@ -304,8 +340,7 @@ class Mineshafted:
                 for j in range(self.len_cells):
                     arc_true = False
                     if i != j and self.state.cells[j].discovered \
-                            and not self.state.cells[
-                        j].finished:
+                            and not self.state.cells[j].finished:
                         for k in range(len(self.state.cells[i]\
                                                         .domain_blueprint)):
                             for l in range(
@@ -457,31 +492,103 @@ def sweep_mines(bm: BoardManager) -> List[List[int]]:
 
 def main() -> None:  # optional driver
 
-    board = [[0, 0, 1, -1, 2, 1, 1, 0, 0],\
-             [0, 1, 2, 2, 2, -1, 1, 1, 1],\
-             [0, 1, -1, 1, 1, 1, 1, 1, -1],\
-             [0, 1, 1, 1, 0, 0, 0, 1, 1],\
-             [0, 0, 0, 0, 0, 1, 1, 1, 0],\
-             [0, 0, 0, 0, 1, 2, -1, 2, 1],\
-             [1, 1, 1, 0, 1, -1, 3, -1, 1],\
-             [2, -1, 1, 0, 1, 1, 2, 2, 2],\
-             [-1, 2, 1, 0, 0, 0, 0, 1, -1]]
+    board4 = [[0, 0, 1, -1, 2, 1, 1, 0, 0], \
+             [0, 1, 2, 2, 2, -1, 1, 1, 1], \
+             [0, 1, -1, 1, 1, 1, 1, 1, -1], \
+             [0, 1, 1, 1, 0, 0, 0, 1, 1], \
+             [0, 0, 0, 0, 0, 1, 1, 1, 0], \
+             [0, 0, 0, 0, 1, 2, -1, 2, 1], \
+             [1, 1, 1, 0, 1, -1, 3, -1, 1], \
+             [2, -1, 1, 0, 1, 1, 2, 2, 2], \
+             [-1, 2, 1, 0, 0, 0, 0, 1, -1]] # solves
+
+    board3 = [[0, 0, 0, 0, 0], \
+             [0, 1, 1, 1, 0], \
+             [0, 1, -1, 3, 2], \
+             [0, 1, 2, -1, -1], \
+             [0, 0, 1, 2, 2]] # solves
+
+    board2 = [[0, 0, 0, 0, 0, 0, 2, -1, 2],
+              [1, 1, 0, 0, 0, 0, 3, -1, 3],
+              [-1, 1, 0, 0, 0, 0, 2, -1, 2],
+              [1, 1, 0, 0, 0, 0, 1, 1, 1],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [1, 2, 2, 1, 0, 1, 1, 2, 1],
+              [1, -1, -1, 1, 0, 1, -1, 2, -1],
+              [1, 2, 2, 1, 0, 1, 2, 4, 3],
+              [0, 0, 0, 0, 0, 0, 1, -1, -1]] # solves
+
+    board1 = [[0, 0, 0], [1, 1, 1], [1, -1, 2], [1, 2, -1]]  # solves
+
+    board = [[0, 1, -1, 2, 1, 1, 0, 1, -1],
+              [0, 1, 2, 3, -1, 1, 1, 2, 2],
+              [0, 0, 1, -1, 2, 1, 1, -1, 1],
+              [1, 1, 2, 1, 1, 0, 1, 1, 1],
+              [1, -1, 2, 1, 0, 0, 0, 0, 0],
+              [1, 2, -1, 1, 0, 0, 0, 0, 0],
+              [0, 1, 1, 1, 0, 0, 0, 1, 1],
+              [0, 1, 1, 1, 0, 0, 1, 2, -1],
+              [0, 1, -1, 1, 0, 0, 1, -1, 2]] # UNSOLVABLE
 
 
 
-    board = [[0, 0, 0, 0, 0],\
-             [0, 1, 1, 1, 0],\
-             [0, 1, -1, 3, 2],\
-             [0, 1, 2, -1, -1],\
-             [0, 0, 1, 2, 2]]
+    board = [[0, 1, -1, 3, 2, 1], [0, 1, 2, -1, -1, 1], [0, 0, 1, 2, 2, 1]] #no
 
-    # board = [[0, 1, -1], [2, 3, 1], [-1, -1, 1]]
+    board = [[0, 1, 2, 2], [0, 1, -1, -1], [0, 1, 2, 2]]
+
+    # board = [[0, 1, 1], [1, 2, -1], [-1, 2, 1], [1, 1, 0]] # infinite
+
+    # board = [[0, 1, -1], [2, 3, 1], [-1, -1, 1]] # UNSOLVABLE
 
     #board = [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
 
 
+    print("testing board: ")
+    test(board)
+
+
+def test(board: List[List[int]]):
     bm = BoardManager(board)
     assert sweep_mines(bm) == board
+
+
+def test_all():
+    board4 = [[0, 0, 1, -1, 2, 1, 1, 0, 0], \
+              [0, 1, 2, 2, 2, -1, 1, 1, 1], \
+              [0, 1, -1, 1, 1, 1, 1, 1, -1], \
+              [0, 1, 1, 1, 0, 0, 0, 1, 1], \
+              [0, 0, 0, 0, 0, 1, 1, 1, 0], \
+              [0, 0, 0, 0, 1, 2, -1, 2, 1], \
+              [1, 1, 1, 0, 1, -1, 3, -1, 1], \
+              [2, -1, 1, 0, 1, 1, 2, 2, 2], \
+              [-1, 2, 1, 0, 0, 0, 0, 1, -1]]  # solves
+
+    board3 = [[0, 0, 0, 0, 0], \
+              [0, 1, 1, 1, 0], \
+              [0, 1, -1, 3, 2], \
+              [0, 1, 2, -1, -1], \
+              [0, 0, 1, 2, 2]]  # solves
+
+    board2 = [[0, 0, 0, 0, 0, 0, 2, -1, 2],
+              [1, 1, 0, 0, 0, 0, 3, -1, 3],
+              [-1, 1, 0, 0, 0, 0, 2, -1, 2],
+              [1, 1, 0, 0, 0, 0, 1, 1, 1],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [1, 2, 2, 1, 0, 1, 1, 2, 1],
+              [1, -1, -1, 1, 0, 1, -1, 2, -1],
+              [1, 2, 2, 1, 0, 1, 2, 4, 3],
+              [0, 0, 0, 0, 0, 0, 1, -1, -1]]  # solves
+
+    board1 = [[0, 0, 0], [1, 1, 1], [1, -1, 2], [1, 2, -1]]  # solves
+
+    print("testing board 1: ")
+    test(board1)
+    print("testing board 2: ")
+    test(board2)
+    print("testing board 3: ")
+    test(board3)
+    print("testing board 4: ")
+    test(board4)
 
 
 if __name__ == "__main__":

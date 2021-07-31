@@ -17,11 +17,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mineshafted.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="477" column="4" selection-start-line="477" selection-start-column="4" selection-end-line="477" selection-end-column="48" />
+            <state relative-caret-position="277">
+              <caret line="393" selection-start-line="393" selection-end-line="393" />
               <folding>
                 <element signature="e#143#159#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Library/Caches/PyCharmCE2019.1/python_stubs/-1948461149/builtins.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="143">
+              <caret line="3674" column="8" selection-start-line="3674" selection-start-column="8" selection-end-line="3674" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -43,6 +52,7 @@
       <find>self.bm.move(0)</find>
       <find>Tuple</find>
       <find>print()</find>
+      <find>saved_popped_indexes</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -55,9 +65,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="275" />
-    <option name="y" value="25" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="13" />
+    <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="877" />
   </component>
@@ -141,11 +151,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
-    <editor active="true" />
+    <frame x="13" y="23" width="1440" height="877" extended-state="0" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22222222" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.02638889" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
@@ -153,8 +162,8 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2878412" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.43548387" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32754344" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.43424317" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -168,18 +177,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/mineshafted.py</url>
-          <line>182</line>
-          <option name="timeStamp" value="82" />
+          <line>269</line>
+          <option name="timeStamp" value="107" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/mineshafted.py</url>
-          <line>243</line>
-          <option name="timeStamp" value="87" />
+          <line>248</line>
+          <option name="timeStamp" value="111" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/mineshafted.py</url>
-          <line>358</line>
-          <option name="timeStamp" value="88" />
+          <line>167</line>
+          <option name="timeStamp" value="118" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -191,14 +200,21 @@
       </configuration>
     </watches-manager>
   </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>reduced[j][k]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>known_mines[i]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharmCE2019.1/python_stubs/-1948461149/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="4339" column="8" selection-start-line="4339" selection-start-column="8" selection-end-line="4339" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -220,10 +236,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharmCE2019.1/python_stubs/-1948461149/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="3674" column="8" selection-start-line="3674" selection-start-column="8" selection-end-line="3674" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mineshafted.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="477" column="4" selection-start-line="477" selection-start-column="4" selection-end-line="477" selection-end-column="48" />
+        <state relative-caret-position="277">
+          <caret line="393" selection-start-line="393" selection-end-line="393" />
           <folding>
             <element signature="e#143#159#0" expanded="true" />
           </folding>
