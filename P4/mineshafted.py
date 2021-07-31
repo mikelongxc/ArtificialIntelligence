@@ -5,7 +5,7 @@
 # Term:         Summer 2021
 
 import itertools
-from typing import Callable, Generator, List, Tuple, Set
+from typing import Callable, Generator, List, Tuple
 
 
 class BoardManager:  # do not modify
@@ -80,7 +80,7 @@ class Cell:
         self.index = index
         self.clue_val = clue_val
         # domain is the list of tuples. [-x: guess no mine, +x: guess mine]
-        self.domain: List[Tuple[int, ...]] = []
+        self.domain: List[List[int, ...]] = []
         self.is_mine = False
 
         # generates from outside. bm.get_adjacent
@@ -96,7 +96,7 @@ class Cell:
         return True
 
     def __repr__(self):
-        return str((self.index,  self.finished, self.clue_val))
+        return str((self.index, self.finished, self.clue_val))
 
     def finish(self):
         self.finished = True
@@ -167,7 +167,7 @@ class Mineshafted:
         self.board = []
         for r in range(self.board_size[0]):
             self.board.append([])
-            for c in range(self.board_size[1]):
+            for _ in range(self.board_size[1]):
                 self.board[r].append(None)
 
         # gen empty list for State TODO move to state class
@@ -237,7 +237,17 @@ class Mineshafted:
                                 width = self.board_size[1]
                                 self.board[idx // width][idx % width] = -1
 
+            if self.board_filled(self.board):
+                break
+
         return self.board
+
+    def board_filled(self, board: List[List[int]]) -> bool:
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                if not board[i][j] and board[i][j] != 0:
+                    return False
+        return True
 
     def discover_adjacent(self, cell0: Cell):
         """
@@ -302,29 +312,29 @@ class Mineshafted:
 
     def ac_3(self):
 
-        mine_list = []
+        # mine_list = []
 
         arcs_copy = copy_arcs(self.arcs_ordered)
         while self.arcs_ordered:
             arc = self.arcs_ordered.pop(0)
-            A = self.state.cells[arc[0]]
-            B = self.state.cells[arc[1]]
+            a = self.state.cells[arc[0]]
+            b = self.state.cells[arc[1]]
 
-            A_domain = A.domain.copy()
-            real_A_domain = copy_domain(A_domain)
-            B_domain = B.domain.copy()
+            a_domain = a.domain.copy()
+            real_a_domain = copy_domain(a_domain)
+            b_domain = b.domain.copy()
 
             common = \
-                list(set(A.domain_blueprint).intersection(B.domain_blueprint))
+                list(set(a.domain_blueprint).intersection(b.domain_blueprint))
 
-            A_reduced = make_new_domain(A_domain, common)
-            B_reduced = make_new_domain(B_domain, common)
+            a_reduced = make_new_domain(a_domain, common)
+            b_reduced = make_new_domain(b_domain, common)
 
-            for i in range(len(A_reduced)):
+            for i in range(len(a_reduced)):
                 # REDUCE if found
-                if A_reduced[i] not in B_reduced:
+                if a_reduced[i] not in b_reduced:
                     # pop invalid variable off of real location
-                    real_A_domain.pop(i)
+                    real_a_domain.pop(i)
                     print("REDUCE")
                     # add arcs back (*, x)
                     for j in range(len(arcs_copy)):
@@ -332,15 +342,13 @@ class Mineshafted:
                                 and arcs_copy[j][0] != arc[1]:
                             self.arcs_ordered.append(tuple(arcs_copy[j]))
 
-            self.state.cells[arc[0]].domain = real_A_domain
+            self.state.cells[arc[0]].domain = real_a_domain
 
             # check for any possible mines (both indices are pos)
 
             # mine_list = mine_list + check_mines(real_A_domain)
             # if len(real_A_domain) > 1:
             #    mine_list = check_mines(real_A_domain)
-
-        return
 
 
 def check_mines(domain: List[List[int]]) -> List[int]:
@@ -366,7 +374,8 @@ def check_mines(domain: List[List[int]]) -> List[int]:
     return mine_list
 
 
-def make_new_domain(domain: List[List[int]], common: List[int]) -> List[List[int]]:
+def make_new_domain(domain: List[List[int]], common: List[int]) \
+        -> List[List[int]]:
 
     new_domain: List[List[int]] = []
 
@@ -393,7 +402,7 @@ def copy_domain(domain: List[List[int]]) -> List[List[int]]:
     return new_domain
 
 
-def copy_arcs(arcs: List[Tuple[int, ...]]) -> List[List[int]]:
+def copy_arcs(arcs: List[Tuple[int, ...]]) -> List[Tuple[int]]:
     new_arcs = []
     for i in range(len(arcs)):
         new_arcs.append(arcs[i] + tuple())
