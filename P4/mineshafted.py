@@ -189,14 +189,14 @@ class Mineshafted:
 
         self.known_mines = []
 
-        # gen empty board for later return TODO
+        # gen empty board for later return
         self.board = []
         for r in range(self.board_size[0]):
             self.board.append([])
             for _ in range(self.board_size[1]):
                 self.board[r].append(None)
 
-        # gen empty list for State TODO move to state class
+        # gen empty list for State
         self.state = State([])
         for r in range(self.board_size[0] * self.board_size[1]):
             self.state.cells.append(Cell(r, bm.get_adjacent(r), False))
@@ -254,18 +254,7 @@ class Mineshafted:
 
             # 7. choose next cell values and mine locations based on reduced
             new_safe = set()
-            """for i in range(self.len_cells):
-                for j in range(len(self.state.cells[i].domain)):
-                    if len(self.state.cells[i].domain) < 2:
-                        for n in range(len(self.state.cells[i].domain[j])):
-                            idx = self.state.cells[i].domain[j][n]
-                            if self.state.cells[i].domain[j][n] < 0:
-                                new_safe.add(idx)
-                            else:
-                                print()
-                                # TODO: store in board. convert to 2d?
-                                width = self.board_size[1]
-                                self.board[idx // width][idx % width] = -1"""
+
             self.choose_safe_cells(new_safe)
 
             if self.board_filled(self.board):
@@ -313,7 +302,7 @@ class Mineshafted:
                 self.state.finish(cell0)
                 self.found_a_0 = False
 
-                self.board[n_index // self.board_size[1]] \
+                self.board[n_index // self.board_size[1]]\
                     [n_index % self.board_size[1]] = clue
 
     def generate_domains(self):
@@ -383,6 +372,7 @@ class Mineshafted:
 
             reduced = False
             saved_popped_indexes = []
+            # reduced if A is inconsistent with B
             for i in range(len(a_reduced)):
                 # REDUCE if found
                 if a_reduced[i] not in b_reduced:
@@ -393,6 +383,19 @@ class Mineshafted:
                     # add arcs back (*, x)
                     reduced = True
 
+            # if domains are equal AND length of them is 2+ combos:
+            if len(a_reduced) == len(b_reduced) and \
+                    reduced_equal(a_reduced, b_reduced) and len(a_reduced) > 1:
+                for i in range(len(a_reduced)):
+                    mine_ct = 0
+                    for j in range(len(a_reduced[i])):
+                        if a_reduced[i][j] > 0:
+                            mine_ct += 1
+                    if a.clue_val != mine_ct:
+                        saved_popped_indexes.append(i)
+                        reduced = True
+
+            # add new arcs if was just reduced
             if reduced:
                 for j in range(len(arcs_copy)):
                     if arcs_copy[j][1] == arc[0] \
@@ -410,6 +413,13 @@ class Mineshafted:
             # mine_list = mine_list + check_mines(real_A_domain)
             # if len(real_A_domain) > 1:
             #    mine_list = check_mines(real_A_domain)
+
+
+def reduced_equal(a: List[List[int]], b: List[List[int]]) -> bool:
+    for i in range(len(a)):
+        if a[i] not in b:
+                return False
+    return True
 
 
 def check_mines(domain: List[List[int]]) -> List[int]:
@@ -532,11 +542,9 @@ def main() -> None:  # optional driver
               [0, 1, 1, 1, 0, 0, 1, 2, -1],
               [0, 1, -1, 1, 0, 0, 1, -1, 2]] # UNSOLVABLE"""
 
+    # board = [[0, 1, -1, 3, 2, 1], [0, 1, 2, -1, -1, 1], [0, 0, 1, 2, 2, 1]] #no
 
-
-    board = [[0, 1, -1, 3, 2, 1], [0, 1, 2, -1, -1, 1], [0, 0, 1, 2, 2, 1]] #no
-
-    board = [[0, 1, 2, 2], [0, 1, -1, -1], [0, 1, 2, 2]]
+    # board = [[0, 1, 2, 2], [0, 1, -1, -1], [0, 1, 2, 2]]
 
     # board = [[0, 1, 1], [1, 2, -1], [-1, 2, 1], [1, 1, 0]] # infinite
 
@@ -544,8 +552,10 @@ def main() -> None:  # optional driver
 
     #board = [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
 
+    # test_all()
 
     print("testing board: ")
+
     test(board)
 
 
