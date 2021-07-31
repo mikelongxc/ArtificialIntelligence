@@ -251,8 +251,7 @@ class Mineshafted:
                         if self.state.cells[i].domain[j][n] < 0:
                             new_safe.add(idx)
                         else:
-                            print()
-                            # TODO: store in board. convert to 2d?
+                            # store resulting mine in board
                             width = self.board_size[1]
                             self.board[idx // width][idx % width] = -1
 
@@ -457,12 +456,17 @@ def main() -> None:  # optional driver
              [2, -1, 1, 0, 1, 1, 2, 2, 2],\
              [-1, 2, 1, 0, 0, 0, 0, 1, -1]]
 
+
+
+    board = [[0, 0, 0, 0, 0],\
+             [0, 1, 1, 1, 0],\
+             [0, 1, -1, 3, 2],\
+             [0, 1, 2, -1, -1],\
+             [0, 0, 1, 2, 2]]
+
     board = [[0, 1, -1], [2, 3, 1], [-1, -1, 1]]
 
-    board = [[0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 1, -1, 3, 2],
-             [0, 1, 2, -1, -1], [0, 0, 1, 2, 2]]
-
-    board = [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
+    #board = [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
 
 
     bm = BoardManager(board)
