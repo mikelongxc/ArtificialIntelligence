@@ -334,9 +334,10 @@ class GameTree: # not a real tree structure, just manages the game
 
     def find_best_move(self) -> None:
         self._generate_root_child_states()
+        
+        # for x in range(1000):
+        while 1:
 
-        # while 1:
-        for x in range(1000):
             # select
             best_ucb_node = self._find_max_ucb(self.frontier)
             self.frontier.remove(best_ucb_node)
