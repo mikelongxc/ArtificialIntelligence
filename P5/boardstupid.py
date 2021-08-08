@@ -262,7 +262,7 @@ class Node:
     def get_ucb(self) -> float:
         if self.t == 0:
             return self.c
-        return self.w / self.n + (self.c * (math.log(self.t, 2) / self.n))
+        return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
 
     # explored. expanded. frontier?
 
@@ -335,12 +335,15 @@ class GameTree: # not a real tree structure, just manages the game
     def find_best_move(self) -> None:
         self._generate_root_child_states()
 
-        while 1:
-        # for _ in range(1000):
+        # while 1:
+        for x in range(1000):
             # select
             best_ucb_node = self._find_max_ucb(self.frontier)
             self.frontier.remove(best_ucb_node)
             self.decrement_frontier_length()
+
+            if len(self.frontier) < 1:
+                return
 
             util = self._expand(best_ucb_node)
 
@@ -437,8 +440,11 @@ class GameTree: # not a real tree structure, just manages the game
         while not util:
             util = traverse_state.util
             next_moves = traverse_state.moves
+            if len(next_moves) == 0:
+                break
 
-            random_move = random.randint(0, len(next_moves) - 1)
+            random_index = random.randint(0, len(next_moves) - 1)
+            random_move = next_moves[random_index]
             traverse_state = traverse_state.traverse(random_move)
 
         return util
@@ -499,8 +505,9 @@ def find_best_move(state: GameState) -> None:
 
 def main() -> None:
 
-    test()
-    # play_game()
+    # test()
+
+    play_game()
 
 def test() -> None:
     """board = ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -528,6 +535,11 @@ def play_game() -> None:
     """
     board = tuple(tuple(0 for _ in range(i, i + 16))
                   for i in range(0, 64, 16))
+    board = ((0, 0, 0, 0,
+              0, 0, None, None,
+              0, None, 0, None,
+              0, None, None, 0),) \
+            + ((None,) * 16,) * 3
     state = GameState(board, 1)
     while state.util is None:
         # human move
