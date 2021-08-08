@@ -508,9 +508,11 @@ def main() -> None:  # optional driver
 
     board = [[0, 1, 1], [0, 2, -1], [0, 2, -1], [0, 1, 1]]
 
+    board = [[0, 1, 1, 1, 0], [0, 1, -1, 1, 0], [1, 2, 1, 1, 0], [-1,     2, 2, 2, 1], [1, 2, -1, -1, 1], [0, 1, 2, 2, 1]]
+
     test(board)
 
-    test_all()
+    # test_all()
 
 
 def test(board: List[List[int]]) -> None:
