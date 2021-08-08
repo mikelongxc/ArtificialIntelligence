@@ -226,7 +226,7 @@ class StateNode:
         if util == 1:
             self.w += 1
         elif util == 0:
-            self.w += 0.3
+            self.w += 0.5
         self.n += 1
         self.t += 1
 
@@ -334,7 +334,7 @@ class GameTree: # not a real tree structure, just manages the game
 
     def find_best_move(self) -> None:
         self._generate_root_child_states()
-        
+
         # for x in range(1000):
         while 1:
 
