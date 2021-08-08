@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce57bbc0-dd07-41b8-b070-9bef35a74474" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P5/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../P5/boardstupid.py" beforeDir="false" afterPath="$PROJECT_DIR$/../P5/boardstupid.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,7 +15,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/biogimmickry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
+            <state relative-caret-position="-1048">
               <caret line="193" column="19" selection-start-line="193" selection-start-column="19" selection-end-line="193" selection-end-column="46" />
             </state>
           </provider>
@@ -150,7 +148,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/biogimmickry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
+        <state relative-caret-position="-1048">
           <caret line="193" column="19" selection-start-line="193" selection-start-column="19" selection-end-line="193" selection-end-column="46" />
         </state>
       </provider>

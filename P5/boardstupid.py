@@ -350,7 +350,7 @@ class GameTree: # not a real tree structure, just manages the game
             last_frontier_state = self.frontier[frontier_len - 1]
 
             node = last_frontier_state
-            while not not node.parent:
+            while not node.parent:
                 node.update_wins_and_attempts(util)
 
                 # if node is a child of the root
@@ -460,9 +460,9 @@ class GameTree: # not a real tree structure, just manages the game
         traverse_state = sel_state.traverse(child.index)
         while not util:
             util = traverse_state.util
-            if not not util:
+            """if not not util:
                 # print() # TODO rm
-                x = util
+                x = util"""
             next_moves = traverse_state.moves
             random_move = random.randint(0, len(next_moves) - 1)
             traverse_state = traverse_state.traverse(random_move)
@@ -520,14 +520,14 @@ def main() -> None:
     # play_game()
 
 def test() -> None:
-    board = ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    """board = ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
                 (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
                 (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-    board = ((   0,    0,    0,    0,
-                 0,    0, None, None,
-                 0, None,    0, None,
-                 0, None, None,    0),) \
+                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))"""
+    board = ((0, 0, 0, 0,
+                 0, 0, None, None,
+                 0, None, 0, None,
+                 0, None, None, 0),) \
             + ((None,) * 16,) * 3
     state = GameState(board, 1)
     print(state.display)
