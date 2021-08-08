@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b7a46085-bb25-4410-9387-34f4348b72c9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/boardstupid.py" beforeDir="false" afterPath="$PROJECT_DIR$/boardstupid.py" afterDir="false" />
-    </list>
+    <list default="true" id="b7a46085-bb25-4410-9387-34f4348b72c9" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +13,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/boardstupid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="525" column="68" selection-start-line="525" selection-start-column="68" selection-end-line="525" selection-end-column="68" />
+            <state relative-caret-position="124">
+              <caret line="337" column="16" selection-start-line="337" selection-start-column="16" selection-end-line="337" selection-end-column="16" />
               <folding>
                 <element signature="e#131#142#0" expanded="true" />
                 <element signature="e#9854#11305#1" />
@@ -156,7 +154,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>348</line>
+          <line>349</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
@@ -191,8 +189,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/boardstupid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="525" column="68" selection-start-line="525" selection-start-column="68" selection-end-line="525" selection-end-column="68" />
+        <state relative-caret-position="124">
+          <caret line="337" column="16" selection-start-line="337" selection-start-column="16" selection-end-line="337" selection-end-column="16" />
           <folding>
             <element signature="e#131#142#0" expanded="true" />
             <element signature="e#9854#11305#1" />

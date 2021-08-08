@@ -346,8 +346,8 @@ class GameTree: # not a real tree structure, just manages the game
 
             frontier_len = len(self.frontier)
 
-            if frontier_len == 0:
-                print()
+            """if frontier_len == 0:
+                print()"""
             last_frontier_state = self.frontier[frontier_len - 1]
 
             node = last_frontier_state
