@@ -226,7 +226,7 @@ class StateNode:
         if util == 1:
             self.w += 1
         elif util == 0:
-            self.w += 0.75
+            self.w += 0.3
         self.n += 1
         self.t += 1
 
