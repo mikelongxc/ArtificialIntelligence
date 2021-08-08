@@ -348,10 +348,11 @@ class GameTree: # not a real tree structure, just manages the game
 
             """if frontier_len == 0:
                 print()"""
+
             last_frontier_state = self.frontier[frontier_len - 1]
 
             node = last_frontier_state
-            while not node.parent:
+            while node.parent:
                 node.update_wins_and_attempts(util)
 
                 # if node is a child of the root
@@ -402,21 +403,6 @@ class GameTree: # not a real tree structure, just manages the game
 
         return util
 
-    def _OLDselect(self, root_children: List[Node]) -> None:
-        # TODO: intensive calculation, only calculate 'ucb' instead of Nodes?
-
-        best_ucb_node = None
-        child_list = root_children
-        cur_state = self.state
-
-        while best_ucb_node.get_ucb() != 0:
-            best_ucb_node = self._find_max_ucb(child_list)
-            # update child list to be node w best UCB |_generate_child_list|
-            cur_state = cur_state.traverse(best_ucb_node.get_ucb())
-            child_list = self._generate_child_list(cur_state)
-
-        # TODO: how to keep track of 1/1 nodes if generate new each time???
-
     def _select(self) -> StateNode: #todo rm?
         # rdm = random.randint(0, self.frontier_len - 1)
         best_ucb_node = self._find_max_ucb(self.old_frontier)
@@ -439,17 +425,6 @@ class GameTree: # not a real tree structure, just manages the game
         self.root_children = root_children
         return root_children
 
-    def _generate_child_list(self, state: GameState) -> List[Node]:
-        root_children: List[Node] = []
-
-        for index in state.moves:
-            new_move = Node(index, True)  # TODO, F/EE?
-            self.old_frontier.append(new_move)
-            self.update_frontier_length()
-            root_children.append(new_move)
-
-        return root_children
-
     def _simulate(self, child: StateNode, sel_state: GameState) -> int:
         # TODO: time can be improved from state logic
         """
@@ -461,12 +436,11 @@ class GameTree: # not a real tree structure, just manages the game
         traverse_state = sel_state.traverse(child.index)
         while not util:
             util = traverse_state.util
-            """if not not util:
-                # print() # TODO rm
-                x = util"""
             next_moves = traverse_state.moves
+
             random_move = random.randint(0, len(next_moves) - 1)
             traverse_state = traverse_state.traverse(random_move)
+
         return util
 
     def _find_max_ucb(self, ls: List[StateNode]) -> StateNode:
@@ -513,6 +487,14 @@ def find_best_move(state: GameState) -> None:
     """
     g = GameTree(state)
     g.find_best_move()
+
+    """moves = state.moves
+    x = state.traverse(moves[0])
+    print(x.player)
+    y = x.traverse(x.moves[0])
+    print(y.player)
+
+    print()"""
 
 
 def main() -> None:

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b7a46085-bb25-4410-9387-34f4348b72c9" name="Default Changelist" comment="" />
+    <list default="true" id="b7a46085-bb25-4410-9387-34f4348b72c9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../P3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P3/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boardstupid.py" beforeDir="false" afterPath="$PROJECT_DIR$/boardstupid.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,12 +17,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/boardstupid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="337" column="16" selection-start-line="337" selection-start-column="16" selection-end-line="337" selection-end-column="16" />
+            <state relative-caret-position="304">
+              <caret line="438" column="12" lean-forward="true" selection-start-line="438" selection-start-column="12" selection-end-line="438" selection-end-column="12" />
               <folding>
                 <element signature="e#131#142#0" expanded="true" />
                 <element signature="e#9854#11305#1" />
-                <element signature="e#11064#11343#0" />
               </folding>
             </state>
           </provider>
@@ -29,6 +32,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>print</find>
+      <find>print()</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -139,7 +143,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287841" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.40818858" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.20347394" />
       <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.27915633" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -154,14 +158,25 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>349</line>
-          <option name="timeStamp" value="38" />
+          <line>495</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/boardstupid.py</url>
+          <line>489</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/boardstupid.py</url>
+          <line>400</line>
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="self.frontier" />
+        <watch expression="self.state.selected" />
       </configuration>
     </watches-manager>
   </component>
@@ -187,14 +202,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydevd_bundle/pydevd_comm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="382" selection-start-line="382" selection-end-line="382" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/boardstupid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="337" column="16" selection-start-line="337" selection-start-column="16" selection-end-line="337" selection-end-column="16" />
+        <state relative-caret-position="304">
+          <caret line="438" column="12" lean-forward="true" selection-start-line="438" selection-start-column="12" selection-end-line="438" selection-end-column="12" />
           <folding>
             <element signature="e#131#142#0" expanded="true" />
             <element signature="e#9854#11305#1" />
-            <element signature="e#11064#11343#0" />
           </folding>
         </state>
       </provider>
