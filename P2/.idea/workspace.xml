@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7116ff54-dcce-4762-b8ba-fc40eb3f872b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../P3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P3/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P5/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P5/boardstupid.py" beforeDir="false" afterPath="$PROJECT_DIR$/../P5/boardstupid.py" afterDir="false" />
-    </list>
+    <list default="true" id="7116ff54-dcce-4762-b8ba-fc40eb3f872b" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,7 +211,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="23" width="1435" height="877" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.022996515" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
