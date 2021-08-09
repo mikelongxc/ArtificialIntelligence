@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/boardstupid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="254">
-              <caret line="400" column="66" selection-start-line="400" selection-start-column="66" selection-end-line="400" selection-end-column="66" />
+            <state relative-caret-position="-1189">
+              <caret line="347" column="50" selection-start-line="347" selection-start-column="50" selection-end-line="347" selection-end-column="50" />
               <folding>
                 <element signature="e#131#142#0" expanded="true" />
                 <element signature="e#9854#11305#1" />
@@ -151,7 +151,7 @@
       <window_info anchor="bottom" id="Event Log" sideWeight="0.50069445" side_tool="true" weight="0.30024815" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287841" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.30024815" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.1650124" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.29156327" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -166,18 +166,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>501</line>
+          <line>504</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>495</line>
+          <line>498</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>397</line>
-          <option name="timeStamp" value="71" />
+          <line>441</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/boardstupid.py</url>
+          <line>347</line>
+          <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -219,8 +224,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/boardstupid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="400" column="66" selection-start-line="400" selection-start-column="66" selection-end-line="400" selection-end-column="66" />
+        <state relative-caret-position="-1189">
+          <caret line="347" column="50" selection-start-line="347" selection-start-column="50" selection-end-line="347" selection-end-column="50" />
           <folding>
             <element signature="e#131#142#0" expanded="true" />
             <element signature="e#9854#11305#1" />

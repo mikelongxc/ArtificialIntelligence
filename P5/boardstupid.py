@@ -345,7 +345,7 @@ class GameTree: # not a real tree structure, just manages the game
             self.decrement_frontier_length()
 
             if len(self.frontier) < 1:
-                return
+                self._generate_root_child_states()
 
             util = self._expand(best_ucb_node)
 
@@ -425,6 +425,7 @@ class GameTree: # not a real tree structure, just manages the game
             root_children.append(new_move)
 
         self.root_children = root_children
+
         return root_children
 
     def _simulate(self, child: StateNode, sel_state: GameState) -> int:
@@ -437,6 +438,8 @@ class GameTree: # not a real tree structure, just manages the game
         util = None
         traverse_state = sel_state.traverse(child.index)
         while not util:
+            if util == 0:
+                print()
             util = traverse_state.util
             next_moves = traverse_state.moves
             if len(next_moves) == 0:
@@ -504,9 +507,9 @@ def find_best_move(state: GameState) -> None:
 
 def main() -> None:
 
-    # test()
+    test()
 
-    play_game()
+    #play_game()
 
 def test() -> None:
     """board = ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -518,6 +521,16 @@ def test() -> None:
                  0, None, 0, None,
                  0, None, None, 0),) \
             + ((None,) * 16,) * 3
+
+    board = ((0, 0, 0, 0,
+              0, 0, None, None,
+              0, None, 0, None,
+              0, None, None, 0),
+             (0, 0, 0, 0,
+              0, 0, None, None,
+              0, None, 0, None,
+              0, None, None, 0),) \
+            + ((None,) * 16,) * 2
     state = GameState(board, 1)
     print(state.display)
     find_best_move(state)
@@ -539,6 +552,17 @@ def play_game() -> None:
               0, None, 0, None,
               0, None, None, 0),) \
             + ((None,) * 16,) * 3
+
+    board = ((0, 0, 0, 0,
+              0, 0, None, None,
+              0, None, 0, None,
+              0, None, None, 0),
+             (0, 0, 0, 0,
+              0, 0, None, None,
+              None, None, 0, None,
+              None, None, None, 0),) \
+            + ((None,) * 16,) * 2
+
     state = GameState(board, 1)
     while state.util is None:
         # human move
