@@ -213,7 +213,7 @@ class StateNode:
         self.n = 0
         self.t = 0
 
-        self.c = 0.3 ** 0.5
+        self.c = 0.5 ** 0.5
 
     def get_ucb(self, t: int) -> float:
         if self.t == 0 or self.n == 0:
@@ -293,8 +293,37 @@ class GameTree: # not a real tree structure, just manages the game
 
             frontier_len = len(self.frontier)
 
-            """if frontier_len == 0:
-                print()"""
+            last_frontier_state = self.frontier[frontier_len - 1]
+
+            node = last_frontier_state
+            while node.parent:
+                node.update_wins_and_attempts(util, self.root_player)
+
+                # if node is a child of the root
+                if not node.parent.parent:
+                    self._state_selection()
+
+                node = node.parent
+
+        # once initial exploring has been done, start exploring best nodes
+
+        # choose node with best win ratio to be selected
+        # add root children back to frontier
+        self._add_list_to_frontier(self.root_children)
+
+        while 1:
+
+            # select
+            best_ucb_node = self._find_max_ucb(self.frontier)
+            self.frontier.remove(best_ucb_node)
+            self.decrement_frontier_length()
+
+            if len(self.frontier) < 1:
+                break
+
+            util = self._expand(best_ucb_node)
+
+            frontier_len = len(self.frontier)
 
             last_frontier_state = self.frontier[frontier_len - 1]
 
@@ -308,7 +337,9 @@ class GameTree: # not a real tree structure, just manages the game
 
                 node = node.parent
 
-            self._update_t()
+    def _add_list_to_frontier(self, ls: List[StateNode]):
+        for i in range(len(ls)):
+            self.frontier.append(ls[i])
 
     def _update_t(self):
         self.t += 1
@@ -332,6 +363,8 @@ class GameTree: # not a real tree structure, just manages the game
                 cur_node = ls[i]
 
         self.state.selected = cur_node.index
+
+        return cur_node
 
     def _expand(self, best_ucb_node: StateNode):
 
