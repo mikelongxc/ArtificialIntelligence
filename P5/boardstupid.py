@@ -213,7 +213,7 @@ class StateNode:
         self.n = 0
         self.t = 0
 
-        self.c = 0.9 ** 0.5
+        self.c = 0.2 ** 0.5
 
     def get_ucb(self, t: int) -> float:
         if self.t == 0 or self.n == 0:
@@ -473,15 +473,15 @@ def test() -> int:
                  0, None, None, 0),) \
             + ((None,) * 16,) * 3
 
-    """board = ((0, 0, 0, 0,
+    board = ((0, 0, 0, 0,
               0, 0, None, None,
               0, None, 0, None,
               0, None, None, 0),
              (0, 0, 0, 0,
               0, 0, None, None,
-              0, None, 0, None,
-              0, None, None, 0),) \
-            + ((None,) * 16,) * 2"""
+              None, None, 0, None,
+              None, None, None, 0),) \
+            + ((None,) * 16,) * 2
 
     state = GameState(board, 1)
     # print(state.display)
