@@ -227,7 +227,7 @@ class StateNode:
 
     def update_wins_and_attempts(self, util: int, player: int):
 
-        self.t = self.parent.n
+        # self.t = self.parent.n
 
         if player == 1:
             if util == 1:
