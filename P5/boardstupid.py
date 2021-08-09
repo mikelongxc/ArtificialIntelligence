@@ -215,7 +215,7 @@ class StateNode:
 
         self.c = 0.5 ** 0.5
 
-    def get_ucb(self, t: int) -> float:
+    def get_ucb(self) -> float:
         if self.t == 0 or self.n == 0:
             return self.c
         return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
@@ -226,9 +226,9 @@ class StateNode:
         return 0
 
     def update_wins_and_attempts(self, util: int, player: int):
-
-        # self.t = self.parent.n
-
+        """
+        update according to state.player (-1 or 1)
+        """
         if player == 1:
             if util == 1:
                 self.w += 1
@@ -248,41 +248,23 @@ class GameTree: # not a real tree structure, just manages the game
 
     def __init__(self, state: GameState):
         self.traverse_queue = []
-        self.t = 0
 
         self.root_children: List[StateNode] = []
         self.explored: List[StateNode] = []
 
         self.frontier: List[StateNode] = []
 
-        self.frontier_len = 0
-
         self.state = state
 
         self.root_player = self.state.player
-
-        self.debug = None
-
-    def update_frontier_length(self, optional: int = None) -> int:
-        if not optional:
-            self.frontier_len += 1
-        else:
-            self.frontier_len = optional
-
-        return self.frontier_len
-
-    def decrement_frontier_length(self) -> None:
-        self.frontier_len -= 1
 
     def find_best_move(self) -> None:
 
         self._generate_root_child_states()
 
-        # for x in range(1000):
         while 1:
             self._search()
             self._add_list_to_frontier(self.root_children)
-
 
     def _search(self):
         while 1:
@@ -290,7 +272,6 @@ class GameTree: # not a real tree structure, just manages the game
             # select
             best_ucb_node = self._find_max_ucb(self.frontier)
             self.frontier.remove(best_ucb_node)
-            self.decrement_frontier_length()
 
             if len(self.frontier) < 1:
                 break
@@ -315,12 +296,8 @@ class GameTree: # not a real tree structure, just manages the game
         for i in range(len(ls)):
             self.frontier.append(ls[i])
 
-    def _update_t(self):
-        self.t += 1
-
     def _state_selection(self):
         """
-
         :return: best root child
         """
 
@@ -355,7 +332,6 @@ class GameTree: # not a real tree structure, just manages the game
                 StateNode(random_index, next_move_state, best_ucb_node, False)
 
             self.frontier.append(next_child)
-            self.update_frontier_length()
 
             # 3. sim
             util = self._simulate(next_child, selected_state)
@@ -374,7 +350,6 @@ class GameTree: # not a real tree structure, just manages the game
             move_state = self.state.traverse(index)
             new_move = StateNode(index, move_state, root, True)
             self.frontier.append(new_move)
-            self.update_frontier_length()
             root_children.append(new_move)
 
         self.root_children = root_children
@@ -391,10 +366,8 @@ class GameTree: # not a real tree structure, just manages the game
         util = None
         traverse_state = sel_state.traverse(child.index)
         while not util:
-            if util == 0:
-                print()
             util = traverse_state.util
-            self.debug = traverse_state
+
             next_moves = traverse_state.moves
             len_next_moves = len(next_moves)
             if len_next_moves == 0:
@@ -410,11 +383,11 @@ class GameTree: # not a real tree structure, just manages the game
         ls_len = len(ls)
         rdm_idx = random.randint(0, ls_len - 1)
 
-        cur_max = ls[rdm_idx].get_ucb(self.t)
+        cur_max = ls[rdm_idx].get_ucb()
         cur_node = ls[rdm_idx]
 
         for i in range(ls_len):
-            ucb = ls[i].get_ucb(self.t)
+            ucb = ls[i].get_ucb()
             if ucb > cur_max:
                 cur_max = ucb
                 cur_node = ls[i]
@@ -450,7 +423,7 @@ def find_best_move(state: GameState) -> None:
 
 def main() -> None:
 
-    x = 0
+    x = 1
 
     if x == 0:
         sample()
