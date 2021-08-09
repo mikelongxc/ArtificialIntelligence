@@ -17,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/boardstupid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="442" column="36" lean-forward="true" selection-start-line="442" selection-start-column="36" selection-end-line="442" selection-end-column="36" />
+            <state relative-caret-position="-492">
+              <caret line="345" column="38" lean-forward="true" selection-start-line="345" selection-start-column="38" selection-end-line="345" selection-end-column="38" />
               <folding>
                 <element signature="e#131#142#0" expanded="true" />
                 <element signature="e#9854#11305#1" />
@@ -42,6 +42,7 @@
     <findStrings>
       <find>print</find>
       <find>print()</find>
+      <find>.traverse</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -148,11 +149,11 @@
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
       <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" sideWeight="0.50069445" side_tool="true" weight="0.30024815" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287841" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30024815" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.29156327" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49930555" weight="0.30024815" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.29156327" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -166,18 +167,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>502</line>
+          <line>506</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>496</line>
+          <line>500</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>443</line>
-          <option name="timeStamp" value="70" />
+          <line>395</line>
+          <option name="timeStamp" value="71" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -219,8 +220,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/boardstupid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="442" column="36" lean-forward="true" selection-start-line="442" selection-start-column="36" selection-end-line="442" selection-end-column="36" />
+        <state relative-caret-position="-492">
+          <caret line="345" column="38" lean-forward="true" selection-start-line="345" selection-start-column="38" selection-end-line="345" selection-end-column="38" />
           <folding>
             <element signature="e#131#142#0" expanded="true" />
             <element signature="e#9854#11305#1" />

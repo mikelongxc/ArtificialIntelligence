@@ -260,7 +260,7 @@ class Node:
         return self.W / self.N
 
     def get_ucb(self) -> float:
-        if self.t == 0:
+        if self.t == 0 or self.n == 0:
             return self.c
         return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
 
@@ -333,6 +333,7 @@ class GameTree: # not a real tree structure, just manages the game
             # print()"""
 
     def find_best_move(self) -> None:
+
         self._generate_root_child_states()
 
         # for x in range(1000):
@@ -390,12 +391,16 @@ class GameTree: # not a real tree structure, just manages the game
     def _expand(self, best_ucb_node: StateNode):
 
         selected_state = best_ucb_node.state
+        util = selected_state.util
 
-        if not selected_state.util:
+        if not util and util != 0:
             selected_moves = selected_state.moves
             random_index = random.randint(0, len(selected_moves) - 1)
-            next_move_state = selected_state.traverse(random_index)
+            random_move = selected_moves[random_index]
+
+            next_move_state = selected_state.traverse(random_move) # TODO just change
             next_child = StateNode(random_index, next_move_state, best_ucb_node)
+
             self.frontier.append(next_child)
             self.update_frontier_length()
 
@@ -406,13 +411,6 @@ class GameTree: # not a real tree structure, just manages the game
             util = selected_state.util
 
         return util
-
-    def _select(self) -> StateNode: #todo rm?
-        # rdm = random.randint(0, self.frontier_len - 1)
-        best_ucb_node = self._find_max_ucb(self.old_frontier)
-        self.old_frontier.remove(best_ucb_node)
-
-        return best_ucb_node
 
     def _generate_root_child_states(self) -> List[StateNode]:
         root_children: List[StateNode] = []
