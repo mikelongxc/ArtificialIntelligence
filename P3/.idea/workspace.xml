@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce57bbc0-dd07-41b8-b070-9bef35a74474" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P5/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../P5/boardstupid.py" beforeDir="false" afterPath="$PROJECT_DIR$/../P5/boardstupid.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -126,6 +124,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1375" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />

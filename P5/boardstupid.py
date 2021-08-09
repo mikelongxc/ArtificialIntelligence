@@ -398,7 +398,7 @@ class GameTree: # not a real tree structure, just manages the game
             random_index = random.randint(0, len(selected_moves) - 1)
             random_move = selected_moves[random_index]
 
-            next_move_state = selected_state.traverse(random_move) # TODO just change
+            next_move_state = selected_state.traverse(random_move)
             next_child = StateNode(random_index, next_move_state, best_ucb_node)
 
             self.frontier.append(next_child)
