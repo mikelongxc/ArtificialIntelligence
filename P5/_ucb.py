@@ -292,10 +292,6 @@ class GameTree: # not a real tree structure, just manages the game
 
                 node = node.parent
 
-
-
-            # x = 1
-
     def _set_t_values(self):
         for i in range(len(self.frontier)):
             self.frontier[i].t += 1

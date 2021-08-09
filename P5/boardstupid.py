@@ -213,19 +213,22 @@ class StateNode:
         self.n = 0
         self.t = 0
 
-        self.c = 1
+        self.c = 1 ** 0.5
 
-    def get_ucb(self) -> float:
+    def get_ucb(self, t: int) -> float:
         if self.t == 0 or self.n == 0:
             return self.c
         return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
 
     def get_win_ratio(self) -> float:
-        if self.t != 0:
-            return self.w / self.t
+        if self.n != 0:
+            return self.w / self.n
         return 0
 
     def update_wins_and_attempts(self, util: int, player: int):
+
+        self.t = self.parent.n
+
         if player == 1:
             if util == 1:
                 self.w += 1
@@ -244,6 +247,7 @@ class GameTree: # not a real tree structure, just manages the game
 
     def __init__(self, state: GameState):
         self.traverse_queue = []
+        self.t = 0
 
         self.root_children: List[StateNode] = []
         self.explored: List[StateNode] = []
@@ -278,12 +282,11 @@ class GameTree: # not a real tree structure, just manages the game
 
             # select
             best_ucb_node = self._find_max_ucb(self.frontier)
-            # self._set_t_values()
             self.frontier.remove(best_ucb_node)
             self.decrement_frontier_length()
 
             if len(self.frontier) < 1:
-                return
+                break
 
             util = self._expand(best_ucb_node)
 
@@ -296,8 +299,6 @@ class GameTree: # not a real tree structure, just manages the game
 
             node = last_frontier_state
             while node.parent:
-                # TODO: adjusting MIN/MAX accordingly
-                x = node.state.player
                 node.update_wins_and_attempts(util, self.root_player)
 
                 # if node is a child of the root
@@ -306,11 +307,10 @@ class GameTree: # not a real tree structure, just manages the game
 
                 node = node.parent
 
-            # x = 1
+            self._update_t()
 
-    def _set_t_values(self):
-        for i in range(len(self.frontier)):
-            self.frontier[i].t += 1
+    def _update_t(self):
+        self.t += 1
 
     def _state_selection(self):
         """
@@ -388,10 +388,11 @@ class GameTree: # not a real tree structure, just manages the game
             util = traverse_state.util
             self.debug = traverse_state
             next_moves = traverse_state.moves
-            if len(next_moves) == 0:
+            len_next_moves = len(next_moves)
+            if len_next_moves == 0:
                 break
 
-            random_index = random.randint(0, len(next_moves) - 1)
+            random_index = random.randint(0, len_next_moves - 1)
             random_move = next_moves[random_index]
             traverse_state = traverse_state.traverse(random_move)
 
@@ -401,12 +402,13 @@ class GameTree: # not a real tree structure, just manages the game
         ls_len = len(ls)
         rdm_idx = random.randint(0, ls_len - 1)
 
-        cur_max = ls[rdm_idx].get_ucb()
+        cur_max = ls[rdm_idx].get_ucb(self.t)
         cur_node = ls[rdm_idx]
 
         for i in range(ls_len):
-            if ls[i].get_ucb() > cur_max:
-                cur_max = ls[i].get_ucb()
+            ucb = ls[i].get_ucb(self.t)
+            if ucb > cur_max:
+                cur_max = ucb
                 cur_node = ls[i]
 
         return cur_node
@@ -455,7 +457,7 @@ def test() -> None:
                  0, None, None, 0),) \
             + ((None,) * 16,) * 3
 
-    board = ((0, 0, 0, 0,
+    """board = ((0, 0, 0, 0,
               0, 0, None, None,
               0, None, 0, None,
               0, None, None, 0),
@@ -463,7 +465,8 @@ def test() -> None:
               0, 0, None, None,
               0, None, 0, None,
               0, None, None, 0),) \
-            + ((None,) * 16,) * 2
+            + ((None,) * 16,) * 2"""
+
     state = GameState(board, 1)
     print(state.display)
     find_best_move(state)

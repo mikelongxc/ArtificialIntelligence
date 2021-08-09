@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b7a46085-bb25-4410-9387-34f4348b72c9" name="Default Changelist" comment="" />
+    <list default="true" id="b7a46085-bb25-4410-9387-34f4348b72c9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/_ucb.py" beforeDir="false" afterPath="$PROJECT_DIR$/_ucb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boardstupid.py" beforeDir="false" afterPath="$PROJECT_DIR$/boardstupid.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,10 +23,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/boardstupid50.py">
+        <entry file="file://$PROJECT_DIR$/boardstupid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="549">
-              <caret line="302" column="48" lean-forward="true" selection-start-line="302" selection-start-column="48" selection-end-line="302" selection-end-column="48" />
+            <state relative-caret-position="-1062">
+              <caret line="217" column="39" lean-forward="true" selection-start-line="217" selection-start-column="39" selection-end-line="217" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -58,10 +61,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/oldfuncs.py" />
-        <option value="$PROJECT_DIR$/boardstupid.py" />
         <option value="$PROJECT_DIR$/venv/boardstupidd.py" />
         <option value="$PROJECT_DIR$/venv/boardstupid50.py" />
         <option value="$PROJECT_DIR$/boardstupid50.py" />
+        <option value="$PROJECT_DIR$/_ucb.py" />
+        <option value="$PROJECT_DIR$/boardstupid.py" />
       </list>
     </option>
   </component>
@@ -114,7 +118,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.boardstupid50">
+  <component name="RunManager" selected="Python.boardstupid">
     <configuration name="boardstupid" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="P5" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -180,9 +184,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.boardstupid" />
         <item itemvalue="Python.boardstupid50" />
         <item itemvalue="Python.boardstupidd" />
-        <item itemvalue="Python.boardstupid" />
       </list>
     </recent_temporary>
   </component>
@@ -213,7 +217,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287841" />
       <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.26923078" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.19602978" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.12406948" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -286,16 +290,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/boardstupid.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="316" column="37" selection-start-line="316" selection-start-column="37" selection-end-line="316" selection-end-column="37" />
-          <folding>
-            <element signature="e#143#154#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/boardstupidd.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
@@ -316,6 +310,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/boardstupid50.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="451" lean-forward="true" selection-start-line="451" selection-end-line="451" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/oldfuncs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="585">
@@ -323,10 +324,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/boardstupid50.py">
+    <entry file="file://$PROJECT_DIR$/_ucb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="302" column="48" lean-forward="true" selection-start-line="302" selection-start-column="48" selection-end-line="302" selection-end-column="48" />
+        <state relative-caret-position="-3004">
+          <caret line="293" selection-start-line="293" selection-end-line="293" />
+          <folding>
+            <element signature="e#143#154#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boardstupid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1062">
+          <caret line="217" column="39" lean-forward="true" selection-start-line="217" selection-start-column="39" selection-end-line="217" selection-end-column="39" />
         </state>
       </provider>
     </entry>
