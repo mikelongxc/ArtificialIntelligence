@@ -213,7 +213,7 @@ class StateNode:
         self.n = 0
         self.t = 0
 
-        self.c = 0.75
+        self.c = 0.9
 
     def get_ucb(self) -> float:
         if self.t == 0 or self.n == 0:
