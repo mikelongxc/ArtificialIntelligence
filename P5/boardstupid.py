@@ -213,7 +213,7 @@ class StateNode:
         self.n = 0
         self.t = 0
 
-        self.c = 0.75 ** 0.5
+        self.c = 0.9 ** 0.5
 
     def get_ucb(self, t: int) -> float:
         if self.t == 0 or self.n == 0:
@@ -453,7 +453,7 @@ def main() -> None:
         play_game()
 
 
-def sample():
+def sample() -> None:
     samples = []
     for _ in range(50):
         sel = test()
