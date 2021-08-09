@@ -213,7 +213,7 @@ class StateNode:
         self.n = 0
         self.t = 0
 
-        self.c = 1 ** 0.5
+        self.c = 0.5 ** 0.5
 
     def get_ucb(self, t: int) -> float:
         if self.t == 0 or self.n == 0:
@@ -239,6 +239,7 @@ class StateNode:
                 self.w += 1
             elif util == 0:
                 self.w += 0.5
+
         self.n += 1
         self.t += 1
 
@@ -442,11 +443,26 @@ def find_best_move(state: GameState) -> None:
 
 def main() -> None:
 
-    test()
+    x = 0
 
-    # play_game()
+    if x == 0:
+        sample()
+    elif x == 1:
+        test()
+    elif x == 2:
+        play_game()
 
-def test() -> None:
+
+def sample():
+    samples = []
+    for _ in range(50):
+        sel = test()
+        if sel == 0:
+            samples.append(sel)
+    print(len(samples))
+
+
+def test() -> int:
     """board = ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
                 (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
                 (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -468,9 +484,11 @@ def test() -> None:
             + ((None,) * 16,) * 2"""
 
     state = GameState(board, 1)
-    print(state.display)
+    # print(state.display)
     find_best_move(state)
-    print(state.selected)
+    # print(state.selected)
+
+    return state.selected
 
 
 def play_game() -> None:
