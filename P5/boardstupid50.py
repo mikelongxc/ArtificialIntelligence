@@ -207,19 +207,16 @@ class StateNode:
         self.index = index
         self.state = state
 
-        self.explored_moves: List[StateNode] = []
-        self.explored_moves_idx: List[int] = []
-
         self.root_child = root_child
 
         self.w = 0
         self.n = 0
         self.t = 0
 
-        self.c = 2 ** 0.5
+        self.c = 1
 
     def get_ucb(self) -> float:
-        if self.n == 0:
+        if self.t == 0 or self.n == 0:
             return self.c
         return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
 
@@ -228,11 +225,17 @@ class StateNode:
             return self.w / self.t
         return 0
 
-    def update_wins_and_attempts(self, util: int):
-        if util == 1:
-            self.w += 1
-        elif util == 0:
-            self.w += 0.5
+    def update_wins_and_attempts(self, util: int, player: int):
+        if player == 1:
+            if util == 1:
+                self.w += 1
+            elif util == 0:
+                self.w += 0.5
+        elif player == -1:
+            if util == -1:
+                self.w += 1
+            elif util == 0:
+                self.w += 0.5
         self.n += 1
         self.t += 1
 
@@ -240,6 +243,7 @@ class StateNode:
 class GameTree: # not a real tree structure, just manages the game
 
     def __init__(self, state: GameState):
+        self.traverse_queue = []
 
         self.root_children: List[StateNode] = []
         self.explored: List[StateNode] = []
@@ -249,6 +253,8 @@ class GameTree: # not a real tree structure, just manages the game
         self.frontier_len = 0
 
         self.state = state
+
+        self.root_player = self.state.player
 
         self.debug = None
 
@@ -266,13 +272,15 @@ class GameTree: # not a real tree structure, just manages the game
     def find_best_move(self) -> None:
 
         self._generate_root_child_states()
-        iter = 0
+
         # for x in range(1000):
         while 1:
-            iter += 1
-            print(iter)
+
             # select
-            best_ucb_node = self._ucb()
+            best_ucb_node = self._find_max_ucb(self.frontier)
+            # self._set_t_values()
+            self.frontier.remove(best_ucb_node)
+            self.decrement_frontier_length()
 
             if len(self.frontier) < 1:
                 return
@@ -280,11 +288,17 @@ class GameTree: # not a real tree structure, just manages the game
             util = self._expand(best_ucb_node)
 
             frontier_len = len(self.frontier)
-            node = self.frontier[frontier_len - 1] # last f. state (most recent)
+
+            """if frontier_len == 0:
+                print()"""
+
+            last_frontier_state = self.frontier[frontier_len - 1]
+
+            node = last_frontier_state
             while node.parent:
                 # TODO: adjusting MIN/MAX accordingly
                 x = node.state.player
-                node.update_wins_and_attempts(util)
+                node.update_wins_and_attempts(util, self.root_player)
 
                 # if node is a child of the root
                 if not node.parent.parent:
@@ -292,58 +306,11 @@ class GameTree: # not a real tree structure, just manages the game
 
                 node = node.parent
 
-
-
             # x = 1
 
     def _set_t_values(self):
         for i in range(len(self.frontier)):
             self.frontier[i].t += 1
-
-    def _ucb(self) -> StateNode:
-
-        # 1. from root children list, choose best ucb
-        best_ucb_node = self._find_max_ucb(self.root_children)
-        state = best_ucb_node.state
-        c = best_ucb_node.c
-
-        # if this node has already been traveled through, check explored set
-        while len(best_ucb_node.explored_moves) > 0:
-
-            all_prev_moves = best_ucb_node.state.moves
-            prev_index = best_ucb_node.index
-            prev_node = best_ucb_node
-            # choose best child ucb on current node (+ rootchild)
-            best_ucb_node = self._find_max_ucb(best_ucb_node.explored_moves)
-
-            # if node was bad, gen new random one from prev (w/out move)
-            if best_ucb_node.get_ucb() < c:
-                best_ucb_node = self.new_random_node(prev_node)
-
-        return best_ucb_node
-
-    def new_random_node(self, parent: StateNode) -> StateNode:
-        parent_moves = list(parent.state.moves)
-        parent_explored = parent.explored_moves
-        parent_explored_idx = parent.explored_moves_idx
-
-        for i in range(len(parent_explored_idx)):
-            try:
-                parent_moves.remove(parent_explored_idx[i])
-            except:
-                pass
-
-        if len(parent_moves) < 1:
-            print()
-
-        rdm_moves_idx = random.randint(0, len(parent_moves) - 1)
-        random_move = parent_moves[rdm_moves_idx]
-
-        next_state = parent.state.traverse(random_move)
-
-        new_node = StateNode(random_move, next_state, parent, False)
-
-        return new_node
 
     def _state_selection(self):
         """
@@ -378,10 +345,6 @@ class GameTree: # not a real tree structure, just manages the game
             next_move_state = selected_state.traverse(random_move)
             next_child = \
                 StateNode(random_index, next_move_state, best_ucb_node, False)
-
-            # add expanded node to already explored for ucb selection
-            best_ucb_node.explored_moves.append(next_child)
-            best_ucb_node.explored_moves_idx.append(random_index)
 
             self.frontier.append(next_child)
             self.update_frontier_length()
@@ -442,9 +405,8 @@ class GameTree: # not a real tree structure, just manages the game
         cur_node = ls[rdm_idx]
 
         for i in range(ls_len):
-            ucb = ls[i].get_ucb()
-            if ucb > cur_max:
-                cur_max = ucb
+            if ls[i].get_ucb() > cur_max:
+                cur_max = ls[i].get_ucb()
                 cur_node = ls[i]
 
         return cur_node
@@ -491,13 +453,9 @@ def find_best_move(state: GameState) -> None:
 
 def main() -> None:
 
-    option = 1
+    test()
 
-    if option == 1:
-        test()
-    elif option == 2:
-        play_game()
-
+    # play_game()
 
 def test() -> None:
     """board = ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -510,7 +468,7 @@ def test() -> None:
                  0, None, None, 0),) \
             + ((None,) * 16,) * 3
 
-    """board = ((0, 0, 0, 0,
+    board = ((0, 0, 0, 0,
               0, 0, None, None,
               0, None, 0, None,
               0, None, None, 0),
@@ -518,12 +476,11 @@ def test() -> None:
               0, 0, None, None,
               0, None, 0, None,
               0, None, None, 0),) \
-            + ((None,) * 16,) * 2"""
+            + ((None,) * 16,) * 2
     state = GameState(board, 1)
     print(state.display)
     find_best_move(state)
-    print("SELECTED: " + str(state.selected))
-    # assert state.selected == 0
+    print(state.selected)
 
 
 def play_game() -> None:
@@ -542,7 +499,7 @@ def play_game() -> None:
               0, None, None, 0),) \
             + ((None,) * 16,) * 3
 
-    """board = ((0, 0, 0, 0,
+    board = ((0, 0, 0, 0,
               0, 0, None, None,
               0, None, 0, None,
               0, None, None, 0),
@@ -550,7 +507,7 @@ def play_game() -> None:
               0, 0, None, None,
               None, None, 0, None,
               None, None, None, 0),) \
-            + ((None,) * 16,) * 2"""
+            + ((None,) * 16,) * 2
 
     state = GameState(board, 1)
     while state.util is None:
