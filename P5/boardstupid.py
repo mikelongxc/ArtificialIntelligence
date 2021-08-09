@@ -265,9 +265,7 @@ class StateNode:
     def get_ucb(self) -> float:
         if self.t == 0 or self.n == 0:
             return self.c
-        return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
-
-    # explored. expanded. frontier?"""
+        return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))"""
 
 
 class GameTree: # not a real tree structure, just manages the game
@@ -349,7 +347,8 @@ class GameTree: # not a real tree structure, just manages the game
             self.decrement_frontier_length()
 
             if len(self.frontier) < 1:
-                self._generate_root_child_states()
+                return
+                # self._generate_root_child_states()
 
             util = self._expand(best_ucb_node)
 
@@ -516,9 +515,9 @@ def find_best_move(state: GameState) -> None:
 
 def main() -> None:
 
-    test()
+    # test()
 
-    #play_game()
+    play_game()
 
 def test() -> None:
     """board = ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),

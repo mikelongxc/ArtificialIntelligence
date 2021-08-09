@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7a46085-bb25-4410-9387-34f4348b72c9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../P2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P3/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boardstupid.py" beforeDir="false" afterPath="$PROJECT_DIR$/boardstupid.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/boardstupid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="426" column="45" selection-start-line="426" selection-start-column="41" selection-end-line="426" selection-end-column="45" />
+            <state relative-caret-position="220">
+              <caret line="519" column="6" selection-start-line="519" selection-start-column="6" selection-end-line="519" selection-end-column="6" />
               <folding>
                 <element signature="e#131#142#0" expanded="true" />
                 <element signature="e#9854#11305#1" />
@@ -142,7 +140,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="23" width="1440" height="877" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12291667" />
@@ -153,7 +150,7 @@
       <window_info anchor="bottom" id="Event Log" sideWeight="0.50069445" side_tool="true" weight="0.30024815" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287841" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.1650124" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.235732" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.29156327" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -168,22 +165,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>513</line>
+          <line>514</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>507</line>
+          <line>508</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>450</line>
+          <line>451</line>
           <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/boardstupid.py</url>
-          <line>351</line>
+          <line>352</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
@@ -226,8 +223,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/boardstupid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="426" column="45" selection-start-line="426" selection-start-column="41" selection-end-line="426" selection-end-column="45" />
+        <state relative-caret-position="220">
+          <caret line="519" column="6" selection-start-line="519" selection-start-column="6" selection-end-line="519" selection-end-column="6" />
           <folding>
             <element signature="e#131#142#0" expanded="true" />
             <element signature="e#9854#11305#1" />
