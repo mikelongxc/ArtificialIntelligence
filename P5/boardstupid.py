@@ -234,40 +234,6 @@ class StateNode:
         self.t += 1
 
 
-"""class Node:
-
-    def __init__(self, index: int, frontier: bool = None):
-        self.index = index
-        self.frontier = frontier
-        self.parent = None
-
-        self.w = 0
-        self.n = 0
-        self.t = 0
-
-        self.c = 2 ** 0.5
-
-    def __repr__(self) -> str:
-        return str(self.index) + ", " + str(self.get_ucb())
-
-    def __hash__(self) -> int:
-        return self.index
-
-    def update_wins_and_attempts(self, util: int):
-        if util == 1:
-            self.w += 1
-        self.n += 1
-        self.t += 1
-
-    def get_win_ratio(self) -> float:
-        return self.W / self.N
-
-    def get_ucb(self) -> float:
-        if self.t == 0 or self.n == 0:
-            return self.c
-        return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))"""
-
-
 class GameTree: # not a real tree structure, just manages the game
 
     def __init__(self, state: GameState):
