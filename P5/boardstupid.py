@@ -200,11 +200,14 @@ class GameState:
 
 class StateNode:
 
-    def __init__(self, index: int, state: GameState, parent: 'StateNode'):
+    def __init__(self, index: int, state: GameState,\
+                 parent: 'StateNode', root_child: bool):
 
         self.parent = parent
         self.index = index
         self.state = state
+
+        self.root_child = root_child
 
         self.w = 0
         self.n = 0
@@ -213,9 +216,9 @@ class StateNode:
         self.c = 2 ** 0.5
 
     def get_ucb(self) -> float:
-        if self.t == 0:
+        if self.t == 0 or self.n == 0:
             return self.c
-        return self.w / self.n + (self.c * (math.log(self.t, 2) / self.n))
+        return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
 
     def get_win_ratio(self) -> float:
         if self.t != 0:
@@ -231,7 +234,7 @@ class StateNode:
         self.t += 1
 
 
-class Node:
+"""class Node:
 
     def __init__(self, index: int, frontier: bool = None):
         self.index = index
@@ -264,7 +267,7 @@ class Node:
             return self.c
         return self.w / self.n + (self.c * (math.log(self.t, 2.87) / self.n))
 
-    # explored. expanded. frontier?
+    # explored. expanded. frontier?"""
 
 
 class GameTree: # not a real tree structure, just manages the game
@@ -341,6 +344,7 @@ class GameTree: # not a real tree structure, just manages the game
 
             # select
             best_ucb_node = self._find_max_ucb(self.frontier)
+            self._set_t_values()
             self.frontier.remove(best_ucb_node)
             self.decrement_frontier_length()
 
@@ -367,6 +371,10 @@ class GameTree: # not a real tree structure, just manages the game
                 node = node.parent
 
             # x = 1
+
+    def _set_t_values(self):
+        for i in range(len(self.frontier)):
+            self.frontier[i].t += 1
 
     def _state_selection(self):
         """
@@ -399,7 +407,8 @@ class GameTree: # not a real tree structure, just manages the game
             random_move = selected_moves[random_index]
 
             next_move_state = selected_state.traverse(random_move)
-            next_child = StateNode(random_index, next_move_state, best_ucb_node)
+            next_child = \
+                StateNode(random_index, next_move_state, best_ucb_node, False)
 
             self.frontier.append(next_child)
             self.update_frontier_length()
@@ -415,11 +424,11 @@ class GameTree: # not a real tree structure, just manages the game
     def _generate_root_child_states(self) -> List[StateNode]:
         root_children: List[StateNode] = []
 
-        root = StateNode(-1, self.state, None)
+        root = StateNode(-1, self.state, None, False)
 
         for index in self.state.moves:
             move_state = self.state.traverse(index)
-            new_move = StateNode(index, move_state, root)
+            new_move = StateNode(index, move_state, root, True)
             self.frontier.append(new_move)
             self.update_frontier_length()
             root_children.append(new_move)
