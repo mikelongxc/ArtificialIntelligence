@@ -238,7 +238,6 @@ class GameTree: # not a real tree structure, just manages the game
 
     def __init__(self, state: GameState):
         self.traverse_queue = []
-        self.old_frontier: List[Node] = []
 
         self.root_children: List[StateNode] = []
         self.explored: List[StateNode] = []
@@ -308,7 +307,7 @@ class GameTree: # not a real tree structure, just manages the game
 
             # select
             best_ucb_node = self._find_max_ucb(self.frontier)
-            self._set_t_values()
+            # self._set_t_values()
             self.frontier.remove(best_ucb_node)
             self.decrement_frontier_length()
 
