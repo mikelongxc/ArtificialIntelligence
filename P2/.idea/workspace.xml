@@ -13,7 +13,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tiledriver.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
+            <state relative-caret-position="2715">
               <caret line="182" column="8" selection-start-line="182" selection-start-column="8" selection-end-line="182" selection-end-column="59" />
               <folding>
                 <element signature="e#144#156#0" expanded="true" />
@@ -78,7 +78,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="54" />
     <option name="y" value="23" />
     <option name="width" value="1435" />
@@ -90,18 +90,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane" />
       <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="P2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="P2" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -210,8 +200,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="23" width="1435" height="877" extended-state="0" />
-    <editor active="true" />
+    <frame x="5" y="23" width="1435" height="877" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.022996515" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -251,7 +240,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tiledriver.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
+        <state relative-caret-position="2715">
           <caret line="182" column="8" selection-start-line="182" selection-start-column="8" selection-end-line="182" selection-end-column="59" />
           <folding>
             <element signature="e#144#156#0" expanded="true" />

@@ -13,7 +13,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/biogimmickry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1048">
+            <state relative-caret-position="2880">
               <caret line="193" column="19" selection-start-line="193" selection-start-column="19" selection-end-line="193" selection-end-column="46" />
             </state>
           </provider>
@@ -37,9 +37,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="54" />
     <option name="y" value="23" />
-    <option name="width" value="1440" />
+    <option name="width" value="1435" />
     <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -48,17 +49,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="P3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="P3" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -120,10 +111,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
-    <editor active="true" />
+    <frame x="5" y="23" width="1435" height="877" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1375" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13728224" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -145,7 +135,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/biogimmickry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1048">
+        <state relative-caret-position="2880">
           <caret line="193" column="19" selection-start-line="193" selection-start-column="19" selection-end-line="193" selection-end-column="46" />
         </state>
       </provider>
