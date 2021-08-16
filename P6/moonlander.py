@@ -81,12 +81,50 @@ class ModuleState:  # do not modify class
                            actions=self.actions)
 
 
+class QState:
+
+    def __init__(self, state: ModuleState):
+        """
+        serves as a wrapper class for ModuleState.
+
+        for hash, eq in QTable
+
+        """
+        self.state = state
+
+        self.altitude = state.altitude
+        self.velocity = state.velocity
+        self.fuel = state.fuel
+
+        self.actions = state.actions
+
+    def __eq__(self, other) -> bool:
+        # TODO: binning
+        # TODO: repr by fuel???
+        is_equal = 0
+
+        if self._float_eq(self.altitude, other.altitude):
+            is_equal += 1
+        if self._float_eq(self.velocity, other.velocity):
+            is_equal += 1
+        if self._float_eq(self.fuel, other.fuel):
+            is_equal += 1
+
+        return True if is_equal == 3 else False
+
+    def _float_eq(self, o1: float, o2: float):
+        epsilon = 0.001
+
+        if abs(o1 - o2) < epsilon:
+            return True
+
+        return False
+
+
 class QTable:
 
     def __init__(self):
         self.tab = [[1, 3, 4], [9, 8, 1]]
-
-        pass
 
     def get(self, x: Tuple[ModuleState, int]) -> float:
 
@@ -130,12 +168,13 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
     """
 
     state.set_actions(5)
-    a1 = state.use_fuel(0)
+    """a1 = state.use_fuel(0)
     b = state.use_fuel(1)
     c = state.use_fuel(4)
-    d = state.use_fuel(8)
+    d = state.use_fuel(8)"""
 
-    #return None
+    r = random.randint(0, 1)
+    print(r)
 
     # q = Moonlander(state)
     # return q.learn_q()
