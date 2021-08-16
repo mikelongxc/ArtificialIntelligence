@@ -81,6 +81,39 @@ class ModuleState:  # do not modify class
                            actions=self.actions)
 
 
+class QTable:
+
+    def __init__(self):
+        self.tab = [[1, 3, 4], [9, 8, 1]]
+
+        pass
+
+    def get(self, x: Tuple[ModuleState, int]) -> float:
+
+        return self.tab[0][0]
+
+
+class Moonlander:
+
+    def __init__(self, state: ModuleState):
+        self.state = state
+        self.alpha = 0.5
+        self.epsilon = 0.001
+        self.gamma = 0.5        # learning rate
+
+    def learn_q(self) -> None: #Callable[[ModuleState, int], float]:
+        """
+        use state.set_actions first
+
+        :return: a q function
+
+        self.state.
+            fuel, altitude, velocity, actions, use_fuel
+        """
+
+        for _ in range(1000):
+
+            pass
 
 
 def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
@@ -91,18 +124,38 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
     Optional: Use |state.set_actions| to set the size of the action set. Higher
     values offer more control (sensitivity to differences in rate changes), but
     require larger Q-tables and thus more training time.
+
+    :return: a Q function callable
+
     """
 
+    state.set_actions(5)
+    a1 = state.use_fuel(0)
+    b = state.use_fuel(1)
+    c = state.use_fuel(4)
+    d = state.use_fuel(8)
 
+    #return None
+
+    # q = Moonlander(state)
+    # return q.learn_q()
+
+    table = QTable()
+
+    return lambda s, a: table.get((s, a))
 
 
 def main() -> None:
+
     fuel: int = 100
     altitude: float = 50.0
 
     gforces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                "Earth": 1.0, "Jupiter": 2.528}
+
     transition = lambda g, r: g * (2 * r - 1)  # example transition function
+
+    #   #   #
 
     state = ModuleState(fuel, altitude, gforces["Moon"], transition)
     q = learn_q(state)
