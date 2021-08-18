@@ -457,7 +457,7 @@ class Moonlander:
 
         # REWARD if landing softly # TODO: jupiter, g forces, gravity HERE!!!
         # pluto (4 to 4.5)
-        if s.state.altitude < 22 and -1 > s.state.velocity > -4.5:
+        if s.state.altitude < 22 and -1 > s.state.velocity > -4.4:
             return 0.01
 
         """#
@@ -530,7 +530,7 @@ def main() -> None:
 
     x = 0
     g = "Pluto"
-    trials = 1
+    trials = 25
 
     if x == 0:
         tests(print_all=False, print_fail=True, trials=trials)
@@ -550,7 +550,7 @@ def tests(print_all: bool, print_fail: bool, trials: int) -> None:
     # (altitude)
     # fa: List[int] = [10, 25, 50, 75, 100]
     fa: List[int] = [50, 75, 100]
-    # fa = [50]
+    fa = [75]
     fuel: int = 1000
     g = "Moon"
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
