@@ -370,7 +370,7 @@ class Moonlander:
                 s = original
 
             # self.alpha -= 0.0001
-            self.decay_alpha(i)
+            # self.decay_alpha(i)
 
             # self.q_table.print_table()
 
@@ -405,10 +405,10 @@ class Moonlander:
         _reward_s = self.reward(s)
 
         # TODO f next state is terminal:
-        """if terminal_state_util(next_s.velocity, next_s.altitude) == 1:
+        if terminal_state_util(next_s.velocity, next_s.altitude) == 1:
             _reward_s = 1
         elif terminal_state_util(next_s.velocity, next_s.altitude) == -1:
-            _reward_s = -1"""
+            _reward_s = -1
 
         """if _reward_s == 1:
             u = 1
@@ -439,8 +439,15 @@ class Moonlander:
         if s.state.altitude > self.max_altitude:
             return -0.05
 
+        if s.altitude > 10 and s.velocity > 0:
+            return -0.05
+
+        # TODO this just makes it hover at a different velocity
+        # if s.altitude > 9.99 and s.velocity > -0.001:
+        #    return -0.03
+
         # REWARD if landing softly
-        if s.state.altitude < 22 and s.state.velocity > -4:
+        if s.state.altitude < 22 and s.state.velocity > -3:
             return 0.01
 
         """#
@@ -512,7 +519,7 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 def main() -> None:
 
     fuel: int = 1000
-    altitude: float = 100.0
+    altitude: float = 10.0
 
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                "Earth": 1.0, "Jupiter": 2.528}
@@ -530,6 +537,8 @@ def main() -> None:
         # state = state.use_fuel(policy(state, q))
         state = state.use_fuel(policy(state))
         print(state)
+
+    print(state)
 
 
 def policy(state: ModuleState, \

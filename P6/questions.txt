@@ -1,0 +1,211 @@
+/Users/mlong/cs/CSC_480/P6/venv/bin/python /Users/mlong/cs/CSC_480/P6/moonlander.py
+    Fuel: 1000 l
+Altitude:  100.00 m
+Velocity:    0.00 m/s
+
+    Fuel:  997 l
+Altitude:  100.41 m
+Velocity:    0.81 m/s
+
+    Fuel:  997 l
+Altitude:  100.41 m
+Velocity:   -0.81 m/s
+
+    Fuel:  997 l
+Altitude:   98.78 m
+Velocity:   -2.44 m/s
+
+    Fuel:  997 l
+Altitude:   95.53 m
+Velocity:   -4.06 m/s
+
+    Fuel:  995 l
+Altitude:   91.47 m
+Velocity:   -4.06 m/s
+
+    Fuel:  995 l
+Altitude:   86.60 m
+Velocity:   -5.68 m/s
+
+    Fuel:  992 l
+Altitude:   81.33 m
+Velocity:   -4.87 m/s
+
+    Fuel:  992 l
+Altitude:   75.64 m
+Velocity:   -6.50 m/s
+
+    Fuel:  988 l
+Altitude:   69.96 m
+Velocity:   -4.87 m/s
+
+    Fuel:  984 l
+Altitude:   65.90 m
+Velocity:   -3.25 m/s
+
+    Fuel:  980 l
+Altitude:   63.46 m
+Velocity:   -1.62 m/s
+
+    Fuel:  976 l
+Altitude:   62.65 m
+Velocity:    0.00 m/s
+
+    Fuel:  973 l
+Altitude:   63.06 m
+Velocity:    0.81 m/s
+
+    Fuel:  969 l
+Altitude:   64.68 m
+Velocity:    2.44 m/s
+
+    Fuel:  965 l
+Altitude:   67.93 m
+Velocity:    4.06 m/s
+
+    Fuel:  961 l
+Altitude:   72.80 m
+Velocity:    5.68 m/s
+
+    Fuel:  957 l
+Altitude:   79.30 m
+Velocity:    7.31 m/s
+
+    Fuel:  956 l
+Altitude:   86.20 m
+Velocity:    6.50 m/s
+
+    Fuel:  953 l
+Altitude:   93.10 m
+Velocity:    7.31 m/s
+
+    Fuel:  952 l
+Altitude:  100.00 m
+Velocity:    6.50 m/s
+
+    Fuel:  952 l
+Altitude:  105.68 m
+Velocity:    4.87 m/s
+
+    Fuel:  952 l
+Altitude:  109.74 m
+Velocity:    3.25 m/s
+
+    Fuel:  952 l
+Altitude:  112.18 m
+Velocity:    1.62 m/s
+
+    Fuel:  952 l
+Altitude:  112.99 m
+Velocity:    0.00 m/s
+
+    Fuel:  949 l
+Altitude:  113.40 m
+Velocity:    0.81 m/s
+
+    Fuel:  949 l
+Altitude:  113.40 m
+Velocity:   -0.81 m/s
+
+    Fuel:  949 l
+Altitude:  111.77 m
+Velocity:   -2.44 m/s
+
+    Fuel:  949 l
+Altitude:  108.53 m
+Velocity:   -4.06 m/s
+
+    Fuel:  949 l
+Altitude:  103.65 m
+Velocity:   -5.68 m/s
+
+    Fuel:  949 l
+Altitude:   97.16 m
+Velocity:   -7.31 m/s
+
+    Fuel:  948 l
+Altitude:   89.44 m
+Velocity:   -8.12 m/s
+
+    Fuel:  948 l
+Altitude:   80.51 m
+Velocity:   -9.74 m/s
+
+    Fuel:  947 l
+Altitude:   70.36 m
+Velocity:  -10.56 m/s
+
+    Fuel:  943 l
+Altitude:   60.62 m
+Velocity:   -8.93 m/s
+
+    Fuel:  943 l
+Altitude:   50.88 m
+Velocity:  -10.56 m/s
+
+    Fuel:  939 l
+Altitude:   41.14 m
+Velocity:   -8.93 m/s
+
+    Fuel:  935 l
+Altitude:   33.02 m
+Velocity:   -7.31 m/s
+
+    Fuel:  932 l
+Altitude:   26.11 m
+Velocity:   -6.50 m/s
+
+    Fuel:  928 l
+Altitude:   20.43 m
+Velocity:   -4.87 m/s
+
+    Fuel:  924 l
+Altitude:   16.37 m
+Velocity:   -3.25 m/s
+
+    Fuel:  920 l
+Altitude:   13.94 m
+Velocity:   -1.62 m/s
+
+    Fuel:  918 l
+Altitude:   12.31 m
+Velocity:   -1.62 m/s
+
+    Fuel:  916 l
+Altitude:   10.69 m
+Velocity:   -1.62 m/s
+
+    Fuel:  914 l
+Altitude:    9.06 m
+Velocity:   -1.62 m/s
+
+    Fuel:  913 l
+Altitude:    7.03 m
+Velocity:   -2.44 m/s
+
+    Fuel:  909 l
+Altitude:    5.41 m
+Velocity:   -0.81 m/s
+
+    Fuel:  907 l
+Altitude:    4.60 m
+Velocity:   -0.81 m/s
+
+    Fuel:  906 l
+Altitude:    3.38 m
+Velocity:   -1.62 m/s
+
+    Fuel:  904 l
+Altitude:    1.76 m
+Velocity:   -1.62 m/s
+
+    Fuel:  902 l
+Altitude:    0.13 m
+Velocity:   -1.62 m/s
+
+----------------
+ Remaining Fuel:  899 l
+Impact Velocity:   -0.81 m/s
+
+
+Process finished with exit code 0
