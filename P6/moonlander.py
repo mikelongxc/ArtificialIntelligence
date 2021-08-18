@@ -308,7 +308,7 @@ class Moonlander:
 
     def __init__(self, state: ModuleState):
         self.state = state
-        self.alpha = 0.75           # learning rate
+        self.alpha = 0.85           # learning rate
         self.alpha_decay = 0.999
         self.epsilon = 0.001
         self.gamma = 0.95        # discounting factor
@@ -337,7 +337,7 @@ class Moonlander:
 
         # learning iteration:
         # for each update of a qstate, update neighboring states based on cur
-        for x in range(5000):
+        for x in range(10000):
 
             # for each action in state: # TODO ???? how to choose action?
             for i in range(len(s.actions)):
@@ -519,27 +519,7 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 
 def main() -> None:
 
-    fuel: int = 1000
-    altitude: float = 100.0
-
-    g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
-               "Earth": 1.0, "Jupiter": 2.528}
-
-    transition = lambda g, r: g * (2 * r - 1)  # example transition function
-
-    #   #   #
-
-    state = ModuleState(fuel, altitude, g_forces["Moon"], transition)
-    q = learn_q(state)
-    policy = lambda s: max(state.actions, key=lambda a: q(s, a))
-
-    print(state)
-    while state.altitude > 0:
-        # state = state.use_fuel(policy(state, q))
-        state = state.use_fuel(policy(state))
-        print(state)
-
-    print(state)
+    tests()
 
 
 def policy(state: ModuleState, \
@@ -548,6 +528,46 @@ def policy(state: ModuleState, \
     fz = lambda a: q(state, a)
     val = max(state.actions, key=fz)
     return val
+
+
+def tests() -> None:
+    # (altitude)
+    fa: List[int] = [10, 25, 50, 75, 100]
+    fuel: int = 1000
+
+    for altitude in fa:
+        ct = 0
+        print("----testing altitude: " + str(altitude) + "m")
+        for _ in range(5):
+            ct += test(fuel, altitude)
+        print("         success count: " + str(ct))
+
+
+def test(fuel: int, altitude: float) -> int:
+    g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
+                "Earth": 1.0, "Jupiter": 2.528}
+    transition = lambda g, r: g * (2 * r - 1)  # example transition function
+
+    state = ModuleState(fuel, altitude, g_forces["Moon"], transition)
+    q = learn_q(state)
+    policy = lambda s: max(state.actions, key=lambda a: q(s, a))
+
+    # print(state)
+    # print("beginning individual test")
+    while state.altitude > 0:
+        # state = state.use_fuel(policy(state, q))
+        state = state.use_fuel(policy(state))
+        # print(state)
+
+    if state.velocity > -1:
+        return 1
+    else:
+        return 0
+
+
+
+
+
 
 
 if __name__ == "__main__":
