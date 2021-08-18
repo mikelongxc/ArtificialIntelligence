@@ -455,8 +455,8 @@ class Moonlander:
         if s.altitude > 20 and s.state.velocity == 0:
             return -0.1
 
-        # REWARD if landing softly
-        if s.state.altitude < 22 and -1 > s.state.velocity > -3:
+        # REWARD if landing softly # TODO: jupiter, g forces, gravity HERE!!!
+        if s.state.altitude < 22 and -1 > s.state.velocity > -4:
             return 0.01
 
         """#
@@ -527,11 +527,12 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 
 def main() -> None:
 
-    x = 1
-    g = "Jupiter"
+    x = 0
+    g = "Pluto"
+    trials = 5
 
     if x == 0:
-        tests(False, True)
+        tests(False, False, trials)
     else:
         test(1000, 50.0, True, False, g)
 
@@ -544,20 +545,27 @@ def policy(state: ModuleState, \
     return val
 
 
-def tests(print_all: bool, print_fail: bool) -> None:
+def tests(print_all: bool, print_fail: bool, trials: int) -> None:
     # (altitude)
     # fa: List[int] = [10, 25, 50, 75, 100]
     fa: List[int] = [50, 75, 100]
-    fa = [50]
+    fa = [75]
     fuel: int = 1000
-    g = "Jupiter"
+    g = "Moon"
+    g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
+                "Earth": 1.0, "Jupiter": 2.528}
 
     for altitude in fa:
         ct = 0
-        print("----testing altitude: " + str(altitude) + "m")
-        for _ in range(50):
-            ct += test(fuel, altitude, print_all, print_fail, g)
-        print("         success count: " + str(ct))
+        print()
+        print("# T E S T I N G      A L T I T U D E : " + str(altitude) + "m")
+
+        for gs in g_forces:
+            ct = 0
+            for _ in range(trials):
+                ct += test(fuel, altitude, print_all, print_fail, gs)
+            print("         [" + gs + "]    success count:   "\
+                  + str(ct) + " / " + str(trials))
 
 
 def test(fuel: int, altitude: float,\
@@ -580,12 +588,12 @@ def test(fuel: int, altitude: float,\
         state = state.use_fuel(policy(state))
         hist += str(state)
         hist += "\n"
-        print(state) if print_all else print()
+        print(state) if print_all else None
 
     if state.velocity > -1:
         return 1
     else:
-        print(hist) if print_fail else print()
+        print(hist) if print_fail else None
         return 0
 
 
