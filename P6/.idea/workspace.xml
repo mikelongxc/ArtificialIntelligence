@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/moonlander.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="281" column="11" selection-start-line="281" selection-start-column="11" selection-end-line="281" selection-end-column="11" />
+            <state relative-caret-position="-1335">
+              <caret line="402" selection-start-line="402" selection-end-line="402" />
               <folding>
                 <element signature="e#144#157#0" expanded="true" />
               </folding>
@@ -145,7 +145,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3569405" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.41501418" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.09348442" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -159,28 +159,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/moonlander.py</url>
-          <line>545</line>
+          <line>549</line>
           <option name="timeStamp" value="79" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/moonlander.py</url>
-          <line>431</line>
-          <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/moonlander.py</url>
-          <line>434</line>
-          <option name="timeStamp" value="108" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/moonlander.py</url>
-          <line>436</line>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/moonlander.py</url>
-          <line>290</line>
-          <option name="timeStamp" value="118" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -202,8 +182,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/moonlander.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="281" column="11" selection-start-line="281" selection-start-column="11" selection-end-line="281" selection-end-column="11" />
+        <state relative-caret-position="-1335">
+          <caret line="402" selection-start-line="402" selection-end-line="402" />
           <folding>
             <element signature="e#144#157#0" expanded="true" />
           </folding>

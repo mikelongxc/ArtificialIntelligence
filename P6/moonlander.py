@@ -277,7 +277,7 @@ def bin_velocity(base_velocity: float) -> float:
 
     if -0.5 < base_velocity < 0.5:
         velocity = 1
-    elif -1.5 < base_velocity < 1.5:
+    elif -1.7 < base_velocity < 1.7:
         velocity = 2
     elif -3 < base_velocity < 2:
         velocity = 3
@@ -313,7 +313,8 @@ class Moonlander:
     def __init__(self, state: ModuleState):
         self.state = state
         self.alpha = 0.75           # learning rate
-        self.epsilon = 0.0001
+        self.alpha_decay = 0.999
+        self.epsilon = 0.001
         self.gamma = 0.95        # discounting factor
         self.default_reward_value = -0.01
 
@@ -340,7 +341,7 @@ class Moonlander:
 
         # learning iteration:
         # for each update of a qstate, update neighboring states based on cur
-        for x in range(5000):
+        for x in range(50000):
 
             # for each action in state: # TODO ???? how to choose action?
             for i in range(len(s.actions)):
@@ -361,7 +362,7 @@ class Moonlander:
             # iterate over util list
 
             saved_idx = [0]
-            u = self.max_util_of_state(s, saved_idx)
+            self.max_util_of_state(s, saved_idx)
 
             s = QState(s.state.use_fuel(saved_idx[0]))
 
@@ -372,7 +373,8 @@ class Moonlander:
             if s.altitude == 0:
                 s = original
 
-            self.alpha -= 0.02
+            # self.alpha -= 0.0001
+            self.decay_alpha(i)
 
             # self.q_table.print_table()
 
@@ -382,6 +384,9 @@ class Moonlander:
 
         # q func to return. basically just returning a table
         return lambda st, ac: self.q_table.get((st, ac))
+
+    def decay_alpha(self, i: int):
+        self.alpha = self.alpha * self.alpha_decay
 
     def update_q_value(self, sa_pair: Tuple[QState, int]):
         """
@@ -395,7 +400,6 @@ class Moonlander:
         a = sa_pair[1]
 
         next_s = QState(s.state.use_fuel(a))
-
 
         # TODO: check if next_state is terminal, add better reward
         if s.altitude <= 0.01:
