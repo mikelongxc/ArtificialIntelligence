@@ -337,7 +337,7 @@ class Moonlander:
 
         # learning iteration:
         # for each update of a qstate, update neighboring states based on cur
-        for x in range(10000):
+        for x in range(50000):
 
             # for each action in state: # TODO ???? how to choose action?
             for i in range(len(s.actions)):
