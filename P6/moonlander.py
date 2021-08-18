@@ -450,6 +450,10 @@ class Moonlander:
         # if s.altitude > 9.99 and s.velocity > -0.001:
         #    return -0.03
 
+        # make sure it's not hovering above a certain altitude
+        if s.altitude > 20 and s.state.velocity == 0:
+            return -0.01
+
         # REWARD if landing softly
         if s.state.altitude < 22 and s.state.velocity > -3:
             return 0.01
@@ -522,12 +526,12 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 
 def main() -> None:
 
-    x = 0
+    x = 1
 
     if x == 0:
-        tests(False)
+        tests(False, True)
     else:
-        test(1000, 100.0, True)
+        test(1000, 100.0, True, True)
 
 
 def policy(state: ModuleState, \
@@ -538,7 +542,7 @@ def policy(state: ModuleState, \
     return val
 
 
-def tests(print_all: bool) -> None:
+def tests(print_all: bool, print_fail: bool) -> None:
     # (altitude)
     # fa: List[int] = [10, 25, 50, 75, 100]
     fa: List[int] = [50, 75, 100]
@@ -548,17 +552,17 @@ def tests(print_all: bool) -> None:
     for altitude in fa:
         ct = 0
         print("----testing altitude: " + str(altitude) + "m")
-        for _ in range(25):
-            ct += test(fuel, altitude, print_all)
+        for _ in range(50):
+            ct += test(fuel, altitude, print_all, print_fail)
         print("         success count: " + str(ct))
 
 
-def test(fuel: int, altitude: float, print_all: bool) -> int:
+def test(fuel: int, altitude: float, print_all: bool, print_fail: bool) -> int:
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                 "Earth": 1.0, "Jupiter": 2.528}
     transition = lambda g, r: g * (2 * r - 1)  # example transition function
 
-    state = ModuleState(fuel, altitude, g_forces["Moon"], transition)
+    state = ModuleState(fuel, altitude, g_forces["Mars"], transition)
     q = learn_q(state)
     policy = lambda s: max(state.actions, key=lambda a: q(s, a))
 
@@ -576,7 +580,7 @@ def test(fuel: int, altitude: float, print_all: bool) -> int:
     if state.velocity > -1:
         return 1
     else:
-        # print(hist)
+        print(hist) if print_fail else None
         return 0
 
 
