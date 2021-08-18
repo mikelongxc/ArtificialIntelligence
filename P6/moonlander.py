@@ -4,7 +4,6 @@
 # Assignment:   Moonlander II
 # Term:         Summer 2021
 
-import random
 from typing import Callable, Tuple, List
 
 
@@ -471,13 +470,15 @@ def test(fuel: int, altitude: float,\
         state = state.use_fuel(policy(state))
         # TODO DEBUG COMMENT # BELOW
         # hist += str(state) + "\n"
-        print(state) if print_all else None
+        if print_all:
+            print(state)
 
     hist += str(state) + "\n"
     if state.velocity > -1:
         return 1
     else:
-        print(hist) if print_fail else None
+        if print_fail:
+            print(hist)
         return 0
 
 
