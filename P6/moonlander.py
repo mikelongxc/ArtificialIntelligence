@@ -204,7 +204,6 @@ class QTable:
         if s not in self.state_dict:
             self.state_dict.update({s: table_index})
 
-
     def _init_table(self):
         for i in range(self.num_states):
             self.table.append([])
@@ -271,7 +270,7 @@ def bin_velocity(base_velocity: float) -> float:
     velocity = base_velocity
     # positive velocities
 
-    if -0.5 < base_velocity < 0.5:
+    if -0.4 < base_velocity < 0.6:
         velocity = 1
     elif -1.7 < base_velocity < 1.7:
         velocity = 2
@@ -443,22 +442,19 @@ class Moonlander:
         if s.state.altitude > self.max_altitude:
             return -0.05
 
-        # PENATLY if height is high and velocity is slow
-        if s.altitude > 10 and s.velocity >= -1:
-            return -0.05
+        """# PENATLY if height is high and velocity is slow
+        # .05 = rocket. .01 = floater
+        if s.altitude > 26 and s.velocity >= -1:
+            return -0.04"""
 
         # TODO this just makes it hover at a different velocity
         # if s.altitude > 9.99 and s.velocity > -0.001:
         #    return -0.03
 
-        # make sure it's not hovering above a certain altitude
-        if s.altitude > 20 and s.state.velocity == 0:
-            return -0.05
-
         # REWARD if landing softly # TODO: jupiter, g forces, gravity HERE!!!
         # pluto (4 to 4.5)
-        if s.state.altitude < 22 and -1 > s.state.velocity > -4.4:
-            return 0.01
+        """if s.state.altitude < 22 and -1 > s.state.velocity > -4.4:
+            return 0.01"""
 
         """#
         if s.state.altitude < 25 and -3 < s.state.velocity > -5:
@@ -529,8 +525,8 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 def main() -> None:
 
     x = 0
-    g = "Pluto"
-    trials = 25
+    g = "Earth"
+    trials = 1
 
     if x == 0:
         tests(print_all=False, print_fail=True, trials=trials)
@@ -550,7 +546,8 @@ def tests(print_all: bool, print_fail: bool, trials: int) -> None:
     # (altitude)
     # fa: List[int] = [10, 25, 50, 75, 100]
     fa: List[int] = [50, 75, 100]
-    fa = [75]
+    # fa = [10, 25]
+    # fa = [75]
     fuel: int = 1000
     g = "Moon"
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
@@ -587,6 +584,7 @@ def test(fuel: int, altitude: float,\
     while state.altitude > 0:
         # state = state.use_fuel(policy(state, q))
         state = state.use_fuel(policy(state))
+        # TODO DEBUG COMMENT # BELOW
         # hist += str(state) + "\n"
         print(state) if print_all else None
 
