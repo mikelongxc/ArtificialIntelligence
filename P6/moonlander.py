@@ -100,8 +100,6 @@ class QState:
 
         self.hash_value = 0
 
-        # TODO: place bin args here??? based on given state nah,.
-
     def __eq__(self, other) -> bool:
         return self.hash_value == other.hash_value
 
@@ -111,11 +109,7 @@ class QState:
         return str(rp)
 
     def __hash__(self):
-        if self.hash_value != 0:
-            return self.hash_value
-        else: # TODO change
-            print("ERROR ERROR ERROR ERROR ERROR")
-            return -1
+        return self.hash_value
 
     def update_hash(self, hashed: int) -> None:
         self.hash_value = hashed
@@ -156,7 +150,6 @@ class QTable:
         # either adds state or just return indices
         lookup_idx = self.try_add_state_to_table(s)
 
-        # lookup_idx = self.state_dict.get(s)
         self.table[lookup_idx][a] = u
 
     def s_in_dict(self, s: QState) -> bool:
@@ -203,12 +196,6 @@ class QTable:
         table_index = 0
         if s not in self.state_dict:
             self.state_dict.update({s: table_index})
-
-    def _init_table(self):
-        for i in range(self.num_states):
-            self.table.append([])
-            for _ in range(len(self.actions)):
-                self.table[i].append(0)
 
     def lookup_index(self, s: QState) -> int:
         # TODO mmm
@@ -311,50 +298,27 @@ class Moonlander:
         s = QState(self.state)
 
         # learning iteration:
-        # for each update of a qstate, update neighboring states based on cur
-        for x in range(10000):
+        for _ in range(10000):
 
-            # for each action in state: # TODO ???? how to choose action?
+            # for each action in state:
             for i in range(len(s.actions)):
                 sa_pair = (s, s.actions[i])
-
                 # get q (u) val
                 self.update_q_value(sa_pair)
 
-
-            # iterate over util list
-
             saved_idx = [0]
+
             self.max_util_of_state(s, saved_idx)
 
             s = QState(s.state.use_fuel(saved_idx[0]))
 
-            # TODO a1
-            """if x % 1000 == 0 and x != 0:
-                self.max_util_of_state(original, saved_idx)
-                s = QState(original.state.use_fuel(saved_idx[0]))"""
-
             if s.altitude == 0:
                 s = original
 
-            # self.alpha -= 0.000000000001
             self.epsilon -= 0.01
-            # .001 gave me 25/25 on 50 and 100
-
-            # self.alpha -= 0.0001
-            # self.decay_alpha(i)
-
-            # self.q_table.print_table()
-
-        #
-
-        #
 
         # q func to return. basically just returning a table
         return lambda st, ac: self.q_table.get((st, ac))
-
-    def decay_alpha(self, i: int):
-        self.alpha = self.alpha * self.alpha_decay
 
     def update_q_value(self, sa_pair: Tuple[QState, int]):
         """
@@ -368,28 +332,18 @@ class Moonlander:
 
         next_s = QState(s.state.use_fuel(a))
 
-        # TODO: check if next_state is terminal, add better reward
-
         # # # EQUATION
         p1 = (1 - alpha) * self.q_table.get(sa_pair)
         _reward_s = self.reward(s)
 
-        # TODO f next state is terminal:
         if terminal_state_util(next_s.velocity, next_s.altitude) == 1:
             _reward_s = 1
         elif terminal_state_util(next_s.velocity, next_s.altitude) == -1:
             _reward_s = -1
 
-        """if _reward_s == 1:
-            u = 1
-            print()
-        elif _reward_s == -1:
-            u = -1"""
-        # else:
         _max_util_of_successor = self.max_util_of_state(next_s, [-1])
         p2 = alpha * (_reward_s + (gamma * _max_util_of_successor))
         u = p1 + p2
-        # # #
 
         # update in table
         self.q_table.update(sa_pair, u)
@@ -397,9 +351,6 @@ class Moonlander:
         return u
 
     def reward(self, s: QState) -> float:
-        if s.state.altitude <= 0.001 or not s.state.altitude:
-            # print()
-            pass
 
         if not s.state.altitude and s.state.velocity > -1:
             return 1
@@ -410,32 +361,6 @@ class Moonlander:
         if s.state.altitude > self.max_altitude:
             return -0.05
 
-        """# PENATLY if height is high and velocity is slow
-        # .05 = rocket. .01 = floater
-        if s.altitude > 26 and s.velocity >= -1:
-            return -0.04"""
-
-        # TODO this just makes it hover at a different velocity
-        # if s.altitude > 9.99 and s.velocity > -0.001:
-        #    return -0.03
-
-        # REWARD if landing softly # TODO: jupiter, g forces, gravity HERE!!!
-        # pluto (4 to 4.5)
-        """if s.state.altitude < 22 and -1 > s.state.velocity > -4.4:
-            return 0.01"""
-
-        """#
-        if s.state.altitude < 25 and -3 < s.state.velocity > -5:
-            return 0.5
-
-        if s.state.velocity > 0.5:
-            return -1"""
-
-        # .001% (epsilon) chance
-        # if random.random() < self.epsilon:
-        #    return -1 * self.default_reward_value
-
-        # return default reward
         return self.default_reward_value
 
     def max_util_of_state(self, next_s: QState, saved_idx: List[int]) -> float:
@@ -448,13 +373,6 @@ class Moonlander:
         # find where next_s row is in q_table (lookup)
         row = self.q_table.lookup_index(next_s)
 
-        # TODO random start if values are equal???
-        rdm_start = random.randint(0, len(next_s.actions) - 1)
-
-        if random.random() < self.epsilon:
-            return self.q_table.table[row][rdm_start]
-
-        # TODO random start if values are equal???
         rdm_start = 0
 
         # check each
@@ -517,7 +435,6 @@ def tests(print_all: bool, print_fail: bool, trials: int) -> None:
     # fa = [10, 25]
     # fa = [75]
     fuel: int = 1000
-    g = "Moon"
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                 "Earth": 1.0, "Jupiter": 2.528}
 
