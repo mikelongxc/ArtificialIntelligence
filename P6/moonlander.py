@@ -371,7 +371,8 @@ class Moonlander:
                 s = original
 
             # self.alpha -= 0.000000000001
-            self.epsilon -= 0.001
+            self.epsilon -= 0.01
+            # .001 gave me 25/25 on 50 and 100
 
             # self.alpha -= 0.0001
             # self.decay_alpha(i)
@@ -541,13 +542,13 @@ def tests(print_all: bool) -> None:
     # (altitude)
     # fa: List[int] = [10, 25, 50, 75, 100]
     fa: List[int] = [50, 75, 100]
-    fa = [100]
+    fa = [50]
     fuel: int = 1000
 
     for altitude in fa:
         ct = 0
         print("----testing altitude: " + str(altitude) + "m")
-        for _ in range(5):
+        for _ in range(25):
             ct += test(fuel, altitude, print_all)
         print("         success count: " + str(ct))
 
