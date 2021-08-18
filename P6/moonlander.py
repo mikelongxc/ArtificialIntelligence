@@ -362,9 +362,10 @@ class Moonlander:
 
             s = QState(s.state.use_fuel(saved_idx[0]))
 
-            if x % 1000 == 0 and x != 0:
+            # TODO a1
+            """if x % 1000 == 0 and x != 0:
                 self.max_util_of_state(original, saved_idx)
-                s = QState(original.state.use_fuel(saved_idx[0]))
+                s = QState(original.state.use_fuel(saved_idx[0]))"""
 
             if s.altitude == 0:
                 s = original
