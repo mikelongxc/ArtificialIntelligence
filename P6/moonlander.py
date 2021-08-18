@@ -453,10 +453,11 @@ class Moonlander:
 
         # make sure it's not hovering above a certain altitude
         if s.altitude > 20 and s.state.velocity == 0:
-            return -0.1
+            return -0.05
 
         # REWARD if landing softly # TODO: jupiter, g forces, gravity HERE!!!
-        if s.state.altitude < 22 and -1 > s.state.velocity > -4:
+        # pluto (4 to 4.5)
+        if s.state.altitude < 22 and -1 > s.state.velocity > -4.5:
             return 0.01
 
         """#
@@ -529,10 +530,10 @@ def main() -> None:
 
     x = 0
     g = "Pluto"
-    trials = 5
+    trials = 1
 
     if x == 0:
-        tests(False, False, trials)
+        tests(print_all=False, print_fail=True, trials=trials)
     else:
         test(1000, 50.0, True, False, g)
 
@@ -549,7 +550,7 @@ def tests(print_all: bool, print_fail: bool, trials: int) -> None:
     # (altitude)
     # fa: List[int] = [10, 25, 50, 75, 100]
     fa: List[int] = [50, 75, 100]
-    fa = [75]
+    # fa = [50]
     fuel: int = 1000
     g = "Moon"
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
@@ -586,10 +587,10 @@ def test(fuel: int, altitude: float,\
     while state.altitude > 0:
         # state = state.use_fuel(policy(state, q))
         state = state.use_fuel(policy(state))
-        hist += str(state)
-        hist += "\n"
+        # hist += str(state) + "\n"
         print(state) if print_all else None
 
+    hist += str(state) + "\n"
     if state.velocity > -1:
         return 1
     else:
