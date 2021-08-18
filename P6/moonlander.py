@@ -311,7 +311,7 @@ class Moonlander:
         self.alpha = 0.85           # learning rate
         self.alpha_decay = 0.999
         self.epsilon = 0.001
-        self.gamma = 0.95        # discounting factor
+        self.gamma = 0.9        # discounting factor
         self.default_reward_value = -0.01
 
         self.max_altitude = state.altitude
@@ -370,6 +370,9 @@ class Moonlander:
             if s.altitude == 0:
                 s = original
 
+            # self.alpha -= 0.000000000001
+            self.epsilon -= 0.001
+
             # self.alpha -= 0.0001
             # self.decay_alpha(i)
 
@@ -398,8 +401,6 @@ class Moonlander:
         next_s = QState(s.state.use_fuel(a))
 
         # TODO: check if next_state is terminal, add better reward
-        if s.altitude <= 0.01:
-            print()
 
         # # # EQUATION
         p1 = (1 - alpha) * self.q_table.get(sa_pair)
@@ -429,7 +430,8 @@ class Moonlander:
 
     def reward(self, s: QState) -> float:
         if s.state.altitude <= 0.001 or not s.state.altitude:
-            print()
+            # print()
+            pass
 
         if not s.state.altitude and s.state.velocity > -1:
             return 1
@@ -519,7 +521,12 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 
 def main() -> None:
 
-    tests()
+    x = 0
+
+    if x == 0:
+        tests(False)
+    else:
+        test(1000, 100.0, True)
 
 
 def policy(state: ModuleState, \
@@ -530,20 +537,22 @@ def policy(state: ModuleState, \
     return val
 
 
-def tests() -> None:
+def tests(print_all: bool) -> None:
     # (altitude)
-    fa: List[int] = [10, 25, 50, 75, 100]
+    # fa: List[int] = [10, 25, 50, 75, 100]
+    fa: List[int] = [50, 75, 100]
+    fa = [100]
     fuel: int = 1000
 
     for altitude in fa:
         ct = 0
         print("----testing altitude: " + str(altitude) + "m")
         for _ in range(5):
-            ct += test(fuel, altitude)
+            ct += test(fuel, altitude, print_all)
         print("         success count: " + str(ct))
 
 
-def test(fuel: int, altitude: float) -> int:
+def test(fuel: int, altitude: float, print_all: bool) -> int:
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                 "Earth": 1.0, "Jupiter": 2.528}
     transition = lambda g, r: g * (2 * r - 1)  # example transition function
@@ -552,22 +561,22 @@ def test(fuel: int, altitude: float) -> int:
     q = learn_q(state)
     policy = lambda s: max(state.actions, key=lambda a: q(s, a))
 
+    hist = ""
+
     # print(state)
     # print("beginning individual test")
     while state.altitude > 0:
         # state = state.use_fuel(policy(state, q))
         state = state.use_fuel(policy(state))
-        # print(state)
+        hist += str(state)
+        hist += "\n"
+        print(state) if print_all else None
 
     if state.velocity > -1:
         return 1
     else:
+        # print(hist)
         return 0
-
-
-
-
-
 
 
 if __name__ == "__main__":
