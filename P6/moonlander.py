@@ -337,7 +337,7 @@ class Moonlander:
 
         # learning iteration:
         # for each update of a qstate, update neighboring states based on cur
-        for x in range(50000):
+        for x in range(5000):
 
             # for each action in state: # TODO ???? how to choose action?
             for i in range(len(s.actions)):
@@ -520,7 +520,7 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 def main() -> None:
 
     fuel: int = 1000
-    altitude: float = 10.0
+    altitude: float = 100.0
 
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                "Earth": 1.0, "Jupiter": 2.528}
