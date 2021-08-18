@@ -103,18 +103,12 @@ class QState:
         # TODO: place bin args here??? based on given state nah,.
 
     def __eq__(self, other) -> bool:
-        # TODO: binning
-        # TODO: repr by fuel???
-        is_equal = 0
+        return self.hash_value == other.hash_value
 
-        if self._float_eq(self.altitude, other.altitude):
-            is_equal += 1
-        if self._float_eq(self.velocity, other.velocity):
-            is_equal += 1
-        if self._float_eq(self.fuel, other.fuel):
-            is_equal += 1
-
-        return True if is_equal == 3 else False
+    def __repr__(self):
+        rp = (bin_velocity(self.velocity), \
+              bin_altitude(self.altitude), self.fuel)
+        return str(rp)
 
     def __hash__(self):
         if self.hash_value != 0:
@@ -138,73 +132,75 @@ class QState:
 class QTable:
 
     def __init__(self, actions: Tuple[int, ...]):
-        self.table = [[]]
+        self.table = []
         self.state_dict = {}
         self.actions = actions
         self.num_states = 1000
 
-        self._init_table()
+    def get(self, sa_pair: Tuple[ModuleState, int]) -> float:
 
-    def get(self, sa_pair: Tuple[QState, int]) -> float:
-        # TODO: retrieval of bin
-        # TODO: NOTE NOTE NOTE (s, a) IS NOT THE SAME AS (alt, vel)
         s = sa_pair[0]
         a = sa_pair[1]
-        altitude = s.altitude
-        velocity = s.velocity
-        hashed = get_table_hash(velocity, altitude)
 
-        s.update_hash(hashed)
+        qs = QState(s)
 
-        u = self.state_dict.get(s)
+        idx = self.try_add_state_to_table(qs)
 
-        if not u and u != 0:
-            return 0
-
-        return u
+        return self.table[idx][a]
 
     def update(self, sa_pair: Tuple[QState, int], u: float):
-        """
-
-        :param s: state to find (row)
-        :param a: action to find (col)
-
-        :param u: utility given to update (s,a) in table
-
-        :return:
-        """
-
-        # use dict to register index-row of state
-
-        # bin velocities by 5
-        # bin altitudes by 5
-
-        # just get a hash based on the velocity and altitude
 
         s = sa_pair[0]
         a = sa_pair[1]
 
-        velocity = s.velocity
-        altitude = s.altitude
+        # either adds state or just return indices
+        lookup_idx = self.try_add_state_to_table(s)
 
-        # get hash value, update hash
-        hashed = get_table_hash(velocity, altitude)
-        s.update_hash(hashed)
-
-        # add to dict with table index
-
-        # TODO: how to determine place in table itself?
-        # TODO: at what point is a state added and indexed?
-
-        # if not in dict, store in dict
-        if s not in self.state_dict:
-            self.state_dict.update({s: 0})
-
-        lookup_idx = self.state_dict.get(s)
+        # lookup_idx = self.state_dict.get(s)
         self.table[lookup_idx][a] = u
 
+    def s_in_dict(self, s: QState) -> bool:
+        hashed = get_table_hash(s.velocity, s.altitude)
+        s.update_hash(hashed)
 
-        pass
+        if s in self.state_dict:
+            return True
+        return False
+
+    def try_add_state_to_table(self, s: QState) -> int:
+        """
+
+        :param s:
+        :return:  INDEX GIVEN BY DICT
+        """
+        s_already_exists = False
+        idx = None
+
+        if self.s_in_dict(s):
+            s_already_exists = True
+            idx = self.state_dict.get(s)
+
+        if not s_already_exists:
+            actions = s.actions
+            empty_util = []
+
+            # INIT Q
+            for i in range(len(actions)):
+                empty_util.append(0)
+
+            self.table.append(empty_util)
+
+            last_idx = len(self.table) - 1
+
+            self.state_dict.update({s: last_idx})
+
+            idx = last_idx
+
+        if not idx and idx != 0:
+            print("ERROR")
+            exit(1)
+
+        return idx
 
     def register_new_state(self, s: QState):
 
@@ -222,22 +218,92 @@ class QTable:
     def lookup_index(self, s: QState) -> int:
         # TODO mmm
         # if newly discovered, add to table
-        if s not in self.state_dict:
-            self.update()
-        else:
-            idx = self.state_dict.get(s)
+
+        idx = self.try_add_state_to_table(s)
+
+        # TODO: add known util if terminal to q-table
 
         return idx
 
-    def splitter(self):
-        alt_ps = [0.05, 0]
+    def print_table(self):
+        for x in self.table:
+            print(*x, sep=' ')
 
 
-def get_table_hash(velocity: float, altitude: float) -> int:
+def terminal_state_util(velocity: float, altitude: float):
+    if altitude <= 0.0001 and velocity > -1:
+        return 1
+    elif altitude <= 0.0001 and velocity < -1:
+        return -1
+
+    return 0
+
+
+def bin_altitude(base_altitude: float) -> float:
+    altitude = base_altitude
+    # round to int if bigger than 5
+    if base_altitude >= 100:
+        altitude = 100
+    elif base_altitude > 25:
+        altitude = int(5 * round(base_altitude / 5))
+    elif base_altitude > 10:
+        altitude = int(2 * round(base_altitude / 2))
+    elif base_altitude > 5:
+        altitude = int(base_altitude)
+    elif base_altitude > 0:
+        altitude = round(base_altitude, 1)
+
+    return altitude
+
+
+def old_bin_velocity(base_velocity: float) -> float:
+    velocity = base_velocity
+    # positive velocities
+    if base_velocity > 1:
+        velocity = int(base_velocity)
+    elif base_velocity > -1:
+        velocity = round(base_velocity, 1)
+    elif base_velocity > -30:
+        velocity = int(2 * round(base_velocity / 2))
+    elif base_velocity > -10000:
+        velocity = int(5 * round(base_velocity / 5))
+
+    return velocity
+
+
+def bin_velocity(base_velocity: float) -> float:
+    velocity = base_velocity
+    # positive velocities
+
+    if -0.5 < base_velocity < 0.5:
+        velocity = 1
+    elif -1.5 < base_velocity < 1.5:
+        velocity = 2
+    elif -3 < base_velocity < 2:
+        velocity = 3
+    elif -5 < base_velocity < 3:
+        velocity = 4
+    elif -7 < base_velocity < 7:
+        velocity = 5
+    elif base_velocity < -7 or base_velocity > 7:
+        velocity = 6
+
+    return velocity
+
+
+def get_table_hash(base_velocity: float, base_altitude: float) -> int:
+
+    # round to int if bigger than 5
+    altitude = bin_altitude(base_altitude)
+
+    # TODO: don't bin lower velocities if altitude too high
+    velocity = bin_velocity(base_velocity)
+
+    #if altitude > 100:
+    #    velocity = 4
 
     # before putting in tuple, bin velocity based on values
-
-    vel_alt_tup = (int(velocity), int(altitude))
+    vel_alt_tup = (velocity, altitude)
 
     return hash(vel_alt_tup)
 
@@ -246,10 +312,10 @@ class Moonlander:
 
     def __init__(self, state: ModuleState):
         self.state = state
-        self.alpha = 0.5
-        self.epsilon = 0.001
-        self.gamma = 0.5        # learning rate
-        self.default_reward_value = -0.04
+        self.alpha = 0.75           # learning rate
+        self.epsilon = 0.0001
+        self.gamma = 0.95        # discounting factor
+        self.default_reward_value = -0.01
 
         self.max_altitude = state.altitude
 
@@ -269,11 +335,12 @@ class Moonlander:
         # q_table = QTable() # ALREADY INITIALIZED
 
         # state wrapper for binning by alt and vel
+        original = QState(self.state)
         s = QState(self.state)
 
         # learning iteration:
         # for each update of a qstate, update neighboring states based on cur
-        for _ in range(10000):
+        for x in range(5000):
 
             # for each action in state: # TODO ???? how to choose action?
             for i in range(len(s.actions)):
@@ -284,6 +351,8 @@ class Moonlander:
 
                 #
 
+            if x == 999999:
+                print()
 
                 # TODO: decay epsilon exponentially. start at 1
 
@@ -296,13 +365,23 @@ class Moonlander:
 
             s = QState(s.state.use_fuel(saved_idx[0]))
 
+            if x % 1000 == 0 and x != 0:
+                self.max_util_of_state(original, saved_idx)
+                s = QState(original.state.use_fuel(saved_idx[0]))
+
+            if s.altitude == 0:
+                s = original
+
+            self.alpha -= 0.02
+
+            # self.q_table.print_table()
 
         #
 
         #
 
         # q func to return. basically just returning a table
-        return lambda s, a: self.q_table.get((s, a))
+        return lambda st, ac: self.q_table.get((st, ac))
 
     def update_q_value(self, sa_pair: Tuple[QState, int]):
         """
@@ -316,19 +395,32 @@ class Moonlander:
         a = sa_pair[1]
 
         next_s = QState(s.state.use_fuel(a))
-        actions = next_s.state.actions
 
-        # first part of eqn
+
+        # TODO: check if next_state is terminal, add better reward
+        if s.altitude <= 0.01:
+            print()
+
+        # # # EQUATION
         p1 = (1 - alpha) * self.q_table.get(sa_pair)
-
-        # second part of eqn
         _reward_s = self.reward(s)
-        _max_util_of_successor = self.max_util_of_state(next_s, [0])
 
+        # TODO f next state is terminal:
+        """if terminal_state_util(next_s.velocity, next_s.altitude) == 1:
+            _reward_s = 1
+        elif terminal_state_util(next_s.velocity, next_s.altitude) == -1:
+            _reward_s = -1"""
+
+        """if _reward_s == 1:
+            u = 1
+            print()
+        elif _reward_s == -1:
+            u = -1"""
+        # else:
+        _max_util_of_successor = self.max_util_of_state(next_s, [-1])
         p2 = alpha * (_reward_s + (gamma * _max_util_of_successor))
-
-        # calc both together
         u = p1 + p2
+        # # #
 
         # update in table
         self.q_table.update(sa_pair, u)
@@ -336,27 +428,63 @@ class Moonlander:
         return u
 
     def reward(self, s: QState) -> float:
+        if s.state.altitude <= 0.001 or not s.state.altitude:
+            print()
+
         if not s.state.altitude and s.state.velocity > -1:
             return 1
         elif not s.state.altitude and s.state.velocity <= -1:
             return -1
 
-        # .001% (epsilon) chance
-        if random.random() < self.epsilon:
-            return -1 * self.default_reward_value
+        # PENALTY: if height is above max
+        if s.state.altitude > self.max_altitude:
+            return -0.05
 
+        # REWARD if landing softly
+        if s.state.altitude < 22 and s.state.velocity > -4:
+            return 0.01
+
+        """#
+        if s.state.altitude < 25 and -3 < s.state.velocity > -5:
+            return 0.5
+
+        if s.state.velocity > 0.5:
+            return -1"""
+
+        # .001% (epsilon) chance
+        # if random.random() < self.epsilon:
+        #    return -1 * self.default_reward_value
+
+        # return default reward
         return self.default_reward_value
 
     def max_util_of_state(self, next_s: QState, saved_idx: List[int]) -> float:
 
+        if saved_idx[0] == -1:
+            util = terminal_state_util(next_s.velocity, next_s.altitude)
+            if util != 0:
+                return util
+
         # find where next_s row is in q_table (lookup)
         row = self.q_table.lookup_index(next_s)
 
+        # TODO random start if values are equal???
+        rdm_start = random.randint(0, len(next_s.actions) - 1)
+
+        if random.random() < self.epsilon:
+            return self.q_table.table[row][rdm_start]
+
+        # TODO random start if values are equal???
+        rdm_start = 0
+
         # check each
-        cur_max = self.q_table.table[row][0]
-        saved_idx[0] = 0
+        cur_max_real = self.q_table.table[row][rdm_start]
+        cur_max = round(cur_max_real, 10)
+
+        saved_idx[0] = rdm_start
         for i in range(len(self.q_table.table[row])):
-            if self.q_table.table[row][i] < cur_max:
+            next_val_real = self.q_table.table[row][i]
+            if round(next_val_real, 10) > cur_max:
                 cur_max = self.q_table.table[row][i]
                 saved_idx[0] = i
 
@@ -375,6 +503,8 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
     :return: a Q function callable
 
     """
+    print("simulating LM")
+    state.set_actions(5)
 
     q = Moonlander(state)
     return q.learn_q()
@@ -383,7 +513,7 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 def main() -> None:
 
     fuel: int = 100
-    altitude: float = 50.0
+    altitude: float = 25.0
 
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                "Earth": 1.0, "Jupiter": 2.528}
@@ -398,8 +528,22 @@ def main() -> None:
 
     print(state)
     while state.altitude > 0:
+        # state = state.use_fuel(policy(state, q))
         state = state.use_fuel(policy(state))
         print(state)
+
+
+def policy(state: ModuleState, \
+           q: Callable[[ModuleState, int], float]):
+
+    f = lambda a: q(state, a)
+    y = f(0)
+    y1 = f(0)
+    y2 = f(0)
+    y3 = f(0)
+    y4 = f(0)
+    val = max(state.actions, key=lambda a: q(state, a))
+    return val
 
 
 if __name__ == "__main__":
