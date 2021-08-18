@@ -234,7 +234,7 @@ def terminal_state_util(velocity: float, altitude: float) -> int:
     return 0
 
 
-def bin_altitude(base_altitude: float) -> float:
+def successful_bin_altitude(base_altitude: float) -> float:
     altitude = base_altitude
     # round to int if bigger than 5
     if base_altitude >= 100:
@@ -251,39 +251,15 @@ def bin_altitude(base_altitude: float) -> float:
     return altitude
 
 
-def older_bin_velocity(base_velocity: float) -> float:
-    velocity = base_velocity
-    # positive velocities
-    if base_velocity > 1:
-        velocity = int(base_velocity)
-    elif base_velocity > -1:
-        velocity = round(base_velocity, 1)
-    elif base_velocity > -30:
-        velocity = int(2 * round(base_velocity / 2))
-    elif base_velocity > -10000:
-        velocity = int(5 * round(base_velocity / 5))
+def bin_altitude(base_altitude: float) -> float:
+    altitude = base_altitude
 
-    return velocity
+    if base_altitude > 2.0:
+        altitude = int(altitude)
+    elif base_altitude < 2.0:
+        altitude = round(base_altitude * 2) / 2
 
-
-def oldbin_velocity(base_velocity: float) -> float:
-    velocity = base_velocity
-    # positive velocities
-
-    if -0.4 < base_velocity < 0.6:
-        velocity = 1
-    elif -1.7 < base_velocity < 1.7:
-        velocity = 2
-    elif -3 < base_velocity < 2:
-        velocity = 3
-    elif -5 < base_velocity < 3:
-        velocity = 4
-    elif -7 < base_velocity < 7:
-        velocity = 5
-    elif base_velocity < -7 or base_velocity > 7:
-        velocity = 6
-
-    return velocity
+    return altitude
 
 
 def bin_velocity(base_velocity: float) -> float:
@@ -299,16 +275,9 @@ def bin_velocity(base_velocity: float) -> float:
 
 def get_table_hash(base_velocity: float, base_altitude: float) -> int:
 
-    # round to int if bigger than 5
     altitude = bin_altitude(base_altitude)
-
-    # TODO: don't bin lower velocities if altitude too high
     velocity = bin_velocity(base_velocity)
 
-    #if altitude > 100:
-    #    velocity = 4
-
-    # before putting in tuple, bin velocity based on values
     vel_alt_tup = (velocity, altitude)
 
     return hash(vel_alt_tup)
@@ -338,10 +307,6 @@ class Moonlander:
             fuel, altitude, velocity, actions, use_fuel
         """
 
-        # init q table. init all values with 0
-        # q_table = QTable() # ALREADY INITIALIZED
-
-        # state wrapper for binning by alt and vel
         original = QState(self.state)
         s = QState(self.state)
 
@@ -356,14 +321,6 @@ class Moonlander:
                 # get q (u) val
                 self.update_q_value(sa_pair)
 
-                #
-
-            if x == 999999:
-                print()
-
-                # TODO: decay epsilon exponentially. start at 1
-
-            # TODO: need some way to change the state
 
             # iterate over util list
 
