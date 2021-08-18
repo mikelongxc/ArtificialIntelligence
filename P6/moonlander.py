@@ -251,7 +251,7 @@ def bin_altitude(base_altitude: float) -> float:
     return altitude
 
 
-def old_bin_velocity(base_velocity: float) -> float:
+def older_bin_velocity(base_velocity: float) -> float:
     velocity = base_velocity
     # positive velocities
     if base_velocity > 1:
@@ -266,7 +266,7 @@ def old_bin_velocity(base_velocity: float) -> float:
     return velocity
 
 
-def bin_velocity(base_velocity: float) -> float:
+def oldbin_velocity(base_velocity: float) -> float:
     velocity = base_velocity
     # positive velocities
 
@@ -282,6 +282,17 @@ def bin_velocity(base_velocity: float) -> float:
         velocity = 5
     elif base_velocity < -7 or base_velocity > 7:
         velocity = 6
+
+    return velocity
+
+
+def bin_velocity(base_velocity: float) -> float:
+    velocity = base_velocity
+
+    if velocity > -4:
+        velocity = round(base_velocity * 2) / 2
+    else:
+        velocity = int(base_velocity)
 
     return velocity
 
