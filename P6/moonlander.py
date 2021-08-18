@@ -115,7 +115,7 @@ class QState:
             return self.hash_value
         else: # TODO change
             print("ERROR ERROR ERROR ERROR ERROR")
-            exit(1)
+            return -1
 
     def update_hash(self, hashed: int) -> None:
         self.hash_value = hashed
@@ -185,7 +185,7 @@ class QTable:
             empty_util = []
 
             # INIT Q
-            for i in range(len(actions)):
+            for _ in range(len(actions)):
                 empty_util.append(0)
 
             self.table.append(empty_util)
@@ -195,10 +195,6 @@ class QTable:
             self.state_dict.update({s: last_idx})
 
             idx = last_idx
-
-        if not idx and idx != 0:
-            print("ERROR")
-            exit(1)
 
         return idx
 
@@ -212,7 +208,7 @@ class QTable:
     def _init_table(self):
         for i in range(self.num_states):
             self.table.append([])
-            for j in range(len(self.actions)):
+            for _ in range(len(self.actions)):
                 self.table[i].append(0)
 
     def lookup_index(self, s: QState) -> int:
@@ -230,7 +226,7 @@ class QTable:
             print(*x, sep=' ')
 
 
-def terminal_state_util(velocity: float, altitude: float):
+def terminal_state_util(velocity: float, altitude: float) -> int:
     if altitude <= 0.0001 and velocity > -1:
         return 1
     elif altitude <= 0.0001 and velocity < -1:
@@ -394,7 +390,6 @@ class Moonlander:
         :return: Q(s, a) <-
         """
         alpha = self.alpha
-        epsilon = self.epsilon
         gamma = self.gamma
         s = sa_pair[0]
         a = sa_pair[1]
@@ -507,7 +502,7 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
     :return: a Q function callable
 
     """
-    print("simulating LM")
+    # print("simulating LM")
     state.set_actions(5)
 
     q = Moonlander(state)
@@ -517,7 +512,7 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 def main() -> None:
 
     fuel: int = 100
-    altitude: float = 25.0
+    altitude: float = 100.0
 
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                "Earth": 1.0, "Jupiter": 2.528}
@@ -538,15 +533,10 @@ def main() -> None:
 
 
 def policy(state: ModuleState, \
-           q: Callable[[ModuleState, int], float]):
+           q: Callable[[ModuleState, int], float]) -> int:
 
-    f = lambda a: q(state, a)
-    y = f(0)
-    y1 = f(0)
-    y2 = f(0)
-    y3 = f(0)
-    y4 = f(0)
-    val = max(state.actions, key=lambda a: q(state, a))
+    fz = lambda a: q(state, a)
+    val = max(state.actions, key=fz)
     return val
 
 
