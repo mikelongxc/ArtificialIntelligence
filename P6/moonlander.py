@@ -443,7 +443,8 @@ class Moonlander:
         if s.state.altitude > self.max_altitude:
             return -0.05
 
-        if s.altitude > 10 and s.velocity > 0:
+        # PENATLY if height is high and velocity is slow
+        if s.altitude > 10 and s.velocity >= -1:
             return -0.05
 
         # TODO this just makes it hover at a different velocity
@@ -452,10 +453,10 @@ class Moonlander:
 
         # make sure it's not hovering above a certain altitude
         if s.altitude > 20 and s.state.velocity == 0:
-            return -0.01
+            return -0.1
 
         # REWARD if landing softly
-        if s.state.altitude < 22 and s.state.velocity > -3:
+        if s.state.altitude < 22 and -1 > s.state.velocity > -3:
             return 0.01
 
         """#
@@ -527,11 +528,12 @@ def learn_q(state: ModuleState) -> Callable[[ModuleState, int], float]:
 def main() -> None:
 
     x = 1
+    g = "Jupiter"
 
     if x == 0:
         tests(False, True)
     else:
-        test(1000, 100.0, True, True)
+        test(1000, 50.0, True, False, g)
 
 
 def policy(state: ModuleState, \
@@ -548,21 +550,24 @@ def tests(print_all: bool, print_fail: bool) -> None:
     fa: List[int] = [50, 75, 100]
     fa = [50]
     fuel: int = 1000
+    g = "Jupiter"
 
     for altitude in fa:
         ct = 0
         print("----testing altitude: " + str(altitude) + "m")
         for _ in range(50):
-            ct += test(fuel, altitude, print_all, print_fail)
+            ct += test(fuel, altitude, print_all, print_fail, g)
         print("         success count: " + str(ct))
 
 
-def test(fuel: int, altitude: float, print_all: bool, print_fail: bool) -> int:
+def test(fuel: int, altitude: float,\
+         print_all: bool, print_fail: bool, g: str) -> int:
+
     g_forces = {"Pluto": 0.063, "Moon": 0.1657, "Mars": 0.378, "Venus": 0.905,
                 "Earth": 1.0, "Jupiter": 2.528}
     transition = lambda g, r: g * (2 * r - 1)  # example transition function
 
-    state = ModuleState(fuel, altitude, g_forces["Mars"], transition)
+    state = ModuleState(fuel, altitude, g_forces[g], transition)
     q = learn_q(state)
     policy = lambda s: max(state.actions, key=lambda a: q(s, a))
 
@@ -575,12 +580,12 @@ def test(fuel: int, altitude: float, print_all: bool, print_fail: bool) -> int:
         state = state.use_fuel(policy(state))
         hist += str(state)
         hist += "\n"
-        print(state) if print_all else None
+        print(state) if print_all else print()
 
     if state.velocity > -1:
         return 1
     else:
-        print(hist) if print_fail else None
+        print(hist) if print_fail else print()
         return 0
 
 
