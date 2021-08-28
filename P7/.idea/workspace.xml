@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="27dc34b9-f246-46fd-ad94-5ee5470c840c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/P7.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/knowop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P5/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P5/questions.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P6/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../P6/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P6/questions.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../P6/values from 22 and 3 reward.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/knowop.py" beforeDir="false" afterPath="$PROJECT_DIR$/knowop.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/knowop.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="333">
-              <caret line="196" lean-forward="true" selection-start-line="196" selection-end-line="196" />
+            <state relative-caret-position="326">
+              <caret line="193" column="8" lean-forward="true" selection-start-line="193" selection-start-column="8" selection-end-line="193" selection-end-column="8" />
               <folding>
                 <element signature="e#138#149#0" expanded="true" />
               </folding>
@@ -163,13 +154,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/knowop.py</url>
-          <line>218</line>
+          <line>237</line>
           <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/knowop.py</url>
-          <line>190</line>
-          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -177,8 +163,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/knowop.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="196" lean-forward="true" selection-start-line="196" selection-end-line="196" />
+        <state relative-caret-position="326">
+          <caret line="193" column="8" lean-forward="true" selection-start-line="193" selection-start-column="8" selection-end-line="193" selection-end-column="8" />
           <folding>
             <element signature="e#138#149#0" expanded="true" />
           </folding>

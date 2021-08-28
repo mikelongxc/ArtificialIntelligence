@@ -178,6 +178,28 @@ def create_samples(f: Callable[..., int], n_args: int, n_bits: int,
 
 #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 
+class KnowOp:
+
+    def __init__(self, samples: Dict[Tuple[int, ...], Tuple[int, ...]],
+                  i_size: int, o_size: int):
+
+        self.samples = samples
+        self.i_size = i_size
+        self.o_size = o_size
+
+        #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
+
+        self.learning_rate = 0.01
+
+    def train_network(self) -> List[Layer]:
+
+        o_layer = Layer((self.o_size, self.i_size), True)
+
+        layers: List[Layer] = []
+        layers.append(o_layer)
+
+        return layers
+
 
 def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
                   i_size: int, o_size: int) -> List[Layer]:
@@ -188,20 +210,13 @@ def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
     Return the resulting trained network.
     """
 
-    di = {(0, 1, 2, 3): (3, 2)}
-
-    o_layer = Layer((o_size, i_size), True)
-
-    layers: List[Layer] = []
-    layers.append(o_layer)
-
-    for _ in range(1000):
-        pass
-
+    know_op = KnowOp(samples, i_size, o_size)
+    layers = know_op.train_network()
     return layers
 
 
-def propagate_forward(network: List[Layer], inputs: Tuple[int,...]) -> List[int]:
+def propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
+        -> List[int]:
 
     return []
 
