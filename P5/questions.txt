@@ -1,1 +1,0 @@
-im a little confused on how the next selected state is chosen. for the root node it's just random because all ucb = c but when a top-level state has been traversed down more than once, how does one go about choosing the next ucb without keeping it in a tree structure
