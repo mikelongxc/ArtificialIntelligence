@@ -181,7 +181,7 @@ def create_samples(f: Callable[..., int], n_args: int, n_bits: int,
 class KnowOp:
 
     def __init__(self, samples: Dict[Tuple[int, ...], Tuple[int, ...]],
-                  i_size: int, o_size: int):
+                 i_size: int, o_size: int):
 
         self.samples = samples
         self.i_size = i_size
@@ -194,7 +194,9 @@ class KnowOp:
         self.learning_rate = 0.1
         self.num_batches = 50
         self.num_training_iterations = 500
-        self.decay = 0.99
+        self.decay = 0.99999
+
+        self.network_size = 1
 
     def train_network(self) -> List[Layer]:
 
@@ -216,7 +218,7 @@ class KnowOp:
                 # a is List[float]
 
                 running_sum = 0
-                len_output = len(a)
+                len_output = self.o_size
                 da = []
                 for j in range(len_output):
                     loss = Math.loss(a[j], inputs[1][j])
@@ -227,7 +229,7 @@ class KnowOp:
                 # cost = running_sum / len_output # TODO save for updating w,b
 
                 # prop backward
-                propagate_backward(network, inputs[0], da)
+                self.propagate_backward(network, inputs[0], da)
 
             # AFTER MINI BATCH: update w and b params:
 
@@ -245,45 +247,44 @@ class KnowOp:
 
         return network
 
+    def propagate_backward(self, network: List[Layer],\
+                           inputs: Tuple[int, ...], da: List[float]) -> None:
+        """
 
-def propagate_backward(network: List[Layer],\
-                       inputs: Tuple[int, ...], da: List[float]) -> None:
-    """
+        input: dan (dal)
+        output: dan-1, dwn, dbn
+        """
 
-    input: dan (dal)
-    output: dan-1, dwn, dbn
-    """
+        # TODO only accounting for output (sigmoid) here
+        for i in range(self.network_size):
+            z_col = network[i].z
+            z_col_sigmoid = []
+            for j in range(self.o_size):
+                z = z_col[j]
+                z_col_sigmoid.append(Math.sigmoid_prime(z))
 
-    # TODO only accounting for output (sigmoid) here
-    for i in range(len(network)):
-        z_col = network[i].z
-        z_col_sigmoid = []
-        for j in range(len(z_col)):
-            z = z_col[j]
-            z_col_sigmoid.append(Math.sigmoid_prime(z))
+            # first eqn: dz = da * g'(z)
+            dz = [x * y for x, y in zip(da, z_col_sigmoid)]
 
-        # first eqn: dz = da * g'(z)
-        dz = [x * y for x, y in zip(da, z_col_sigmoid)]
+            # second eqn: dW = dz . aTn-1
 
-        # second eqn: dW = dz . aTn-1
+            # (8 x 1) matrix
+            dz_2d = [dz]
+            trans_dz = Math.transpose(dz_2d)
 
-        # (8 x 1) matrix
-        dz_2d = [dz]
-        trans_dz = Math.transpose(dz_2d)
+            input_list = int_list_to_float(list(inputs))
+            # (1 x 16) matrix
+            a_2d = [input_list]
 
-        input_list = int_list_to_float(list(inputs))
-        # (1 x 16) matrix
-        a_2d = [input_list]
+            # TODO: is this right?
+            dw = Math.matmul(trans_dz, a_2d)
+            network[i].dw = dw
 
-        # TODO: is this right?
-        dw = Math.matmul(trans_dz, a_2d)
-        network[i].dw = dw
+            # third eqn: db = dz
+            network[i].db = dz
 
-        # third eqn: db = dz
-        network[i].db = dz
-
-        # fourth eqn: da_n-1 = wT * dz
-        # TODO: dont need to compute bc only one layer :) (da[0] irrelevant)
+            # fourth eqn: da_n-1 = wT * dz
+            # TODO: dont need to compute bc only one layer :) (da[0] irrelevant)
 
 
 def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
@@ -320,9 +321,9 @@ def int_list_to_float(l: List[int]) -> List[float]:
 
 def main() -> None:
     random.seed(0)
-    # f = lambda x, y: x + y  # operation to learn
-    f = lambda x: x + 3
-    n_args = 1              # arity of operation
+    f = lambda x, y: x or y  # operation to learn
+    # f = lambda x: x + 3
+    n_args = 2              # arity of operation
     n_bits = 8              # size of each operand
 
     samples = create_samples(f, n_args, n_bits)
@@ -335,13 +336,81 @@ def main() -> None:
     print("Train Size:", len(train_set), "Test Size:", len(test_set))
 
     network = train_network(train_set, n_args * n_bits, n_bits)
+    err_ct = 0
+    total_ct = 0
     for inputs in test_set:
         output = tuple(round(n, 2) for n in propagate_forward(network, inputs))
         bits = tuple(round(n) for n in output)
-        print("OUTPUT:", output)
+        """print("OUTPUT:", output)
         print("BITACT:", bits)
-        print("BITEXP:", samples[inputs], end="\n\n")
+        print("BITEXP:", samples[inputs], end="\n\n")"""
+
+        if bits != samples[inputs]:
+            err_ct += 1
+        total_ct += 1
+
+    print("Errors: " + str(err_ct) + " / " + str(total_ct))
+    print("Accuracy: " + str(1 - err_ct/total_ct))
+
+
+def tester() -> None:
+    funcs = [lambda x: x, lambda x: x + 2, lambda x: x // 2,\
+             lambda x, y: x or y, lambda x, y: x and y, lambda x, y: x << y ]
+
+    random.seed(0)
+
+    for i in range(6):
+        print()
+        print("Testing function #" + str(i))
+        if i >= 3:
+            n_args = 2
+        else:
+            n_args = 1  # arity of operation
+        n_bits = 8  # size of each operand
+
+        f = funcs[i]
+
+        samples = create_samples(f, n_args, n_bits)
+        train_pct = 0.95
+        train_set = {inputs: samples[inputs]
+                     for inputs in random.sample(list(samples),
+                                                 k=int(
+                                                     len(samples) * train_pct))}
+        test_set = {inputs: samples[inputs]
+                    for inputs in samples if inputs not in train_set}
+        print("Train Size:", len(train_set), "Test Size:", len(test_set))
+
+        test(train_set, test_set, samples, n_args, n_bits)
+
+
+def test(train_set: Dict[Tuple[int, ...], Tuple[int, ...]],\
+         test_set: Dict[Tuple[int, ...], Tuple[int, ...]],\
+         samples: Dict[Tuple[int, ...], Tuple[int, ...]],\
+         n_args: int, n_bits: int)\
+         -> None:
+
+    network = train_network(train_set, n_args * n_bits, n_bits)
+    err_ct = 0
+    total_ct = 0
+    for inputs in test_set:
+        output = tuple(round(n, 2) for n in propagate_forward(network, inputs))
+        bits = tuple(round(n) for n in output)
+        """print("OUTPUT:", output)
+        print("BITACT:", bits)
+        print("BITEXP:", samples[inputs], end="\n\n")"""
+
+        if bits != samples[inputs]:
+            err_ct += 1
+        total_ct += 1
+
+    print("Errors: " + str(err_ct) + " / " + str(total_ct))
+    print("Accuracy: " + str(1 - err_ct / total_ct))
+
 
 
 if __name__ == "__main__":
-    main()
+    mode = 1     # 0 or 1
+    if mode == 0:
+        main()
+    else:
+        tester()
