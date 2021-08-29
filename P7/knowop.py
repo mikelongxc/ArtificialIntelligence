@@ -191,19 +191,21 @@ class KnowOp:
 
         self.learning_rate = 0.1
         self.num_batches = 100
-        self.num_training_iterations = 1000
-        self.decay = 0.85
+        self.num_training_iterations = 1800
+        self.decay = 0.99
 
     def train_network(self) -> List[Layer]:
 
         o_layer = Layer((self.o_size, self.i_size), True)
         network: List[Layer] = [o_layer]
 
+        # TRAINING ITERATIONS OUTER LOOP
         for _ in range(self.num_training_iterations):
 
             cur_batch = random.sample(self.samples.items(), self.num_batches)
-
             ct = 0
+
+            # FOR EACH EXAMPLE/SAMPLE IN MINI-BATCH
             for inputs in cur_batch:
                 ct += 1
 
@@ -222,9 +224,24 @@ class KnowOp:
 
                 cost = running_sum / len_output # TODO save for updating w,b
 
+                # prop backward
                 propagate_backward(network, inputs[0], da)
 
-                # update w and b
+            # AFTER MINI BATCH: update w and b params:
+
+            for p in range(self.o_size):
+                for q in range(self.i_size):
+                    # grad = avg of val in dw matrix at pq
+                    network[0].w[p][q] = network[0].w[p][q] - self.\
+                        learning_rate * network[0].dw[p][q]
+
+            # decrease learning rate slightly each iter
+
+            self.learning_rate = self.learning_rate * self.decay
+
+
+
+            #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 
             pass
 
@@ -252,12 +269,15 @@ def propagate_backward(network: List[Layer],\
 
         # second eqn: dW = dz . aTn-1
 
-        a_2d = [network[i].a]
-        trans = Math.transpose(a_2d)
-
+        # (8 x 1) matrix
         dz_2d = [dz]
-        dw = Math.matmul(dz_2d, a_2d)
+        trans_dz = Math.transpose(dz_2d)
 
+        # (1 x 16) matrix
+        a_2d = [list(inputs)]
+
+        # TODO: is this right?
+        dw = Math.matmul(trans_dz, a_2d)
         network[i].dw = dw
 
         # third eqn: db = dz
