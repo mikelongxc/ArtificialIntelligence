@@ -191,7 +191,7 @@ class KnowOp:
 
         self.learning_rate = 0.1
         self.num_batches = 100
-        self.num_training_iterations = 1
+        self.num_training_iterations = 1000
         self.decay = 0.85
 
     def train_network(self) -> List[Layer]:
@@ -252,18 +252,19 @@ def propagate_backward(network: List[Layer],\
 
         # second eqn: dW = dz . aTn-1
 
-        trans = Math.transpose(network[i].a)
+        a_2d = [network[i].a]
+        trans = Math.transpose(a_2d)
 
-        # third eqn:
+        dz_2d = [dz]
+        dw = Math.matmul(dz_2d, a_2d)
 
+        network[i].dw = dw
 
+        # third eqn: db = dz
+        network[i].db = dz
 
-
-
-
-
-
-
+        # fourth eqn: da_n-1 = wT * dz
+        # TODO: dont need to compute bc only one layer :) (da[0] irrelevant)
 
         pass
 
