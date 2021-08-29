@@ -15,11 +15,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/knowop.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="193" column="8" lean-forward="true" selection-start-line="193" selection-start-column="8" selection-end-line="193" selection-end-column="8" />
+            <state relative-caret-position="-1674">
+              <caret line="147" column="48" lean-forward="true" selection-start-line="147" selection-start-column="48" selection-end-line="147" selection-end-column="48" />
               <folding>
                 <element signature="e#138#149#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/codecs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="619">
+              <caret line="309" selection-start-line="309" selection-end-line="309" />
             </state>
           </provider>
         </entry>
@@ -29,6 +38,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>propagate_forward</find>
+      <find>cost</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -43,7 +53,7 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="11" />
-    <option name="y" value="123" />
+    <option name="y" value="303" />
     <option name="width" value="1280" />
     <option name="height" value="777" />
   </component>
@@ -71,6 +81,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -136,7 +147,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.30397022" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.27543426" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.10669975" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -154,17 +165,36 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/knowop.py</url>
-          <line>237</line>
-          <option name="timeStamp" value="11" />
+          <line>281</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/knowop.py</url>
+          <line>250</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="619">
+          <caret line="309" selection-start-line="309" selection-end-line="309" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/knowop.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="193" column="8" lean-forward="true" selection-start-line="193" selection-start-column="8" selection-end-line="193" selection-end-column="8" />
+        <state relative-caret-position="-1674">
+          <caret line="147" column="48" lean-forward="true" selection-start-line="147" selection-start-column="48" selection-end-line="147" selection-end-column="48" />
           <folding>
             <element signature="e#138#149#0" expanded="true" />
           </folding>

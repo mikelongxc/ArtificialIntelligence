@@ -189,16 +189,83 @@ class KnowOp:
 
         #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 
-        self.learning_rate = 0.01
+        self.learning_rate = 0.1
+        self.num_batches = 100
+        self.num_training_iterations = 1
+        self.decay = 0.85
 
     def train_network(self) -> List[Layer]:
 
         o_layer = Layer((self.o_size, self.i_size), True)
+        network: List[Layer] = [o_layer]
 
-        layers: List[Layer] = []
-        layers.append(o_layer)
+        for _ in range(self.num_training_iterations):
 
-        return layers
+            cur_batch = random.sample(self.samples.items(), self.num_batches)
+
+            ct = 0
+            for inputs in cur_batch:
+                ct += 1
+
+                # pass input onto next layer (updates z and a)
+                a = propagate_forward(network, inputs[0])
+                # a is List[float]
+
+                running_sum = 0
+                len_output = len(a)
+                da = []
+                for j in range(len_output):
+                    loss = Math.loss(a[j], inputs[1][j])
+                    loss_prime = Math.loss_prime(a[j], inputs[1][j])
+                    da.append(loss_prime)
+                    running_sum += loss
+
+                cost = running_sum / len_output # TODO save for updating w,b
+
+                propagate_backward(network, inputs[0], da)
+
+                # update w and b
+
+            pass
+
+        return network
+
+
+def propagate_backward(network: List[Layer],\
+                       inputs: Tuple[int, ...], da: List[float]):
+    """
+
+    input: dan (dal)
+    output: dan-1, dwn, dbn
+    """
+
+    # TODO only accounting for output (sigmoid) here
+    for i in range(len(network)):
+        z_col = network[i].z
+        z_col_sigmoid = []
+        for j in range(len(z_col)):
+            z = z_col[j]
+            z_col_sigmoid.append(Math.sigmoid_prime(z))
+
+        # first eqn: dz = da * g'(z)
+        dz = [x * y for x, y in zip(da, z_col_sigmoid)]
+
+        # second eqn: dW = dz . aTn-1
+
+        trans = Math.transpose(network[i].a)
+
+        # third eqn:
+
+
+
+
+
+
+
+
+
+
+        pass
 
 
 def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
@@ -215,15 +282,48 @@ def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
     return layers
 
 
-def propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
-        -> List[int]:
+def propagate_forward(network: List[Layer], inputs: Tuple[int, ...]) \
+        -> List[float]:
 
-    return []
+    i = 0
+    for i in range(len(network)):
+        a = network[i].activate(inputs)
+
+    return list(a)
+
+
+def old_propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
+        -> List[float]:
+
+    pre_x = list(inputs)
+    x = []
+    x.append(pre_x)
+    x = Math.transpose(x)
+
+    # num_neurons = len(network[0].b)
+
+    # for each layer in network (only 1 rn...)
+    for i in range(len(network)):
+
+        w = network[i].w
+        b = network[i].b
+        wx = Math.matmul(w, x)
+
+        for j in range(len(wx)):
+            network[i].z[j] = wx[j][0] + b[j]
+            network[i].a[j] = network[i].g(network[i].z[j])
+
+    # compute loss? with dict? or is z y hat?
+
+    # TODO: i?
+    return network[i].z
 
 
 def main() -> None:
+    test()
     random.seed(0)
     f = lambda x, y: x + y  # operation to learn
+    # f = lambda x: x // 2
     n_args = 2              # arity of operation
     n_bits = 8              # size of each operand
 
@@ -243,6 +343,14 @@ def main() -> None:
         print("OUTPUT:", output)
         print("BITACT:", bits)
         print("BITEXP:", samples[inputs], end="\n\n")
+
+def test() -> None:
+    one = [[2, 3, 4],
+           [2, 3, 4]]
+    two = [[2, 3, 4],
+           [2, 3, 4]]
+    three = Math.matmul(one, two)
+    print()
 
 if __name__ == "__main__":
     main()
