@@ -239,11 +239,7 @@ class KnowOp:
 
             self.learning_rate = self.learning_rate * self.decay
 
-
-
             #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
-
-            pass
 
         return network
 
@@ -341,7 +337,6 @@ def old_propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
 
 
 def main() -> None:
-    test()
     random.seed(0)
     f = lambda x, y: x + y  # operation to learn
     # f = lambda x: x // 2
@@ -365,13 +360,6 @@ def main() -> None:
         print("BITACT:", bits)
         print("BITEXP:", samples[inputs], end="\n\n")
 
-def test() -> None:
-    one = [[2, 3, 4],
-           [2, 3, 4]]
-    two = [[2, 3, 4],
-           [2, 3, 4]]
-    three = Math.matmul(one, two)
-    print()
 
 if __name__ == "__main__":
     main()
