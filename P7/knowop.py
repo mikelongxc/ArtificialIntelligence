@@ -192,8 +192,8 @@ class KnowOp:
         #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 
         self.learning_rate = 0.1
-        self.num_batches = 50
-        self.num_training_iterations = 500
+        self.num_batches = 10
+        self.num_training_iterations = 800
         self.decay = 0.99999
 
         self.network_size = 1
@@ -354,8 +354,14 @@ def main() -> None:
 
 
 def tester() -> None:
-    funcs = [lambda x: x, lambda x: x + 2, lambda x: x // 2,\
-             lambda x, y: x or y, lambda x, y: x and y, lambda x, y: x << y ]
+    _a = lambda x: x
+    _b = lambda x: x + 2
+    _c = lambda x: x // 2
+    _d = lambda x, y: x or y
+    _e = lambda x, y: x and y
+    _f = lambda x, y: x // y
+    
+    functions = [_a, _b, _c, _d, _e, _f]
 
     random.seed(0)
 
@@ -368,7 +374,7 @@ def tester() -> None:
             n_args = 1  # arity of operation
         n_bits = 8  # size of each operand
 
-        f = funcs[i]
+        f = functions[i]
 
         samples = create_samples(f, n_args, n_bits)
         train_pct = 0.95
@@ -407,10 +413,9 @@ def test(train_set: Dict[Tuple[int, ...], Tuple[int, ...]],\
     print("Accuracy: " + str(1 - err_ct / total_ct))
 
 
-
 if __name__ == "__main__":
-    mode = 1     # 0 or 1
-    if mode == 0:
+    MODE = 0     # 0 or 1
+    if MODE == 0:
         main()
     else:
         tester()
