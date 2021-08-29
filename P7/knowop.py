@@ -354,27 +354,27 @@ def main() -> None:
 
 
 def tester() -> None:
-    _a = lambda x: x
-    _b = lambda x: x + 2
-    _c = lambda x: x // 2
-    _d = lambda x, y: x or y
-    _e = lambda x, y: x and y
-    _f = lambda x, y: x // y
-    
+    _a: Callable[..., int] = lambda x: x
+    _b: Callable[..., int] = lambda x: x + 2
+    _c: Callable[..., int] = lambda x: x // 2
+    _d: Callable[..., int] = lambda x, y: x or y
+    _e: Callable[..., int] = lambda x, y: x and y
+    _f: Callable[..., int] = lambda x, y: x // y
+
     functions = [_a, _b, _c, _d, _e, _f]
 
     random.seed(0)
 
-    for i in range(6):
+    ct = 0
+    for f in functions:
+        ct += 1
         print()
-        print("Testing function #" + str(i))
-        if i >= 3:
+        print("Testing function #" + str(ct))
+        if ct >= 3:
             n_args = 2
         else:
             n_args = 1  # arity of operation
         n_bits = 8  # size of each operand
-
-        f = functions[i]
 
         samples = create_samples(f, n_args, n_bits)
         train_pct = 0.95
@@ -414,8 +414,5 @@ def test(train_set: Dict[Tuple[int, ...], Tuple[int, ...]],\
 
 
 if __name__ == "__main__":
-    MODE = 0     # 0 or 1
-    if MODE == 0:
-        main()
-    else:
-        tester()
+    # main()
+    tester()
