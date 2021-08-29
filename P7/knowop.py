@@ -193,7 +193,7 @@ class KnowOp:
 
         self.learning_rate = 0.1
         self.num_batches = 100
-        self.num_training_iterations = 1800
+        self.num_training_iterations = 1000
         self.decay = 0.99
 
     def train_network(self) -> List[Layer]:
@@ -346,9 +346,9 @@ def old_propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
 
 def main() -> None:
     random.seed(0)
-    f = lambda x, y: x + y  # operation to learn
-    # f = lambda x: x // 2
-    n_args = 2              # arity of operation
+    # f = lambda x, y: x + y  # operation to learn
+    f = lambda x: x // 2
+    n_args = 1              # arity of operation
     n_bits = 8              # size of each operand
 
     samples = create_samples(f, n_args, n_bits)
