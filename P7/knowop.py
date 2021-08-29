@@ -271,8 +271,7 @@ def propagate_backward(network: List[Layer],\
         dz_2d = [dz]
         trans_dz = Math.transpose(dz_2d)
 
-        input_list = list(inputs)
-        input_list = [float(_k) for _k in input_list]
+        input_list = int_list_to_float(list(inputs))
         # (1 x 16) matrix
         a_2d = [input_list]
 
@@ -310,11 +309,19 @@ def propagate_forward(network: List[Layer], inputs: Tuple[int, ...]) \
     return list(a)
 
 
+def int_list_to_float(l: List[int]) -> List[float]:
+    new: List[float] = []
+
+    for integer in l:
+        new.append(float(integer))
+
+    return new
+
+
 def old_propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
         -> List[float]:
 
-    pre_x = list(inputs)
-    pre_x = [float(i) for i in pre_x]
+    pre_x = int_list_to_float(list(inputs))
     x = [pre_x]
     x = Math.transpose(x)
 
