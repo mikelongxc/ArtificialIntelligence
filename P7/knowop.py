@@ -192,8 +192,8 @@ class KnowOp:
         #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 
         self.learning_rate = 0.1
-        self.num_batches = 100
-        self.num_training_iterations = 1000
+        self.num_batches = 50
+        self.num_training_iterations = 500
         self.decay = 0.99
 
     def train_network(self) -> List[Layer]:
@@ -318,36 +318,10 @@ def int_list_to_float(l: List[int]) -> List[float]:
     return new
 
 
-def old_propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
-        -> List[float]:
-
-    pre_x = int_list_to_float(list(inputs))
-    x = [pre_x]
-    x = Math.transpose(x)
-
-    # num_neurons = len(network[0].b)
-
-    # for each layer in network (only 1 rn...)
-    for i in range(len(network)):
-
-        w = network[i].w
-        b = network[i].b
-        wx = Math.matmul(w, x)
-
-        for j in range(len(wx)):
-            network[i].z[j] = wx[j][0] + b[j]
-            network[i].a[j] = network[i].g(network[i].z[j])
-
-    # compute loss? with dict? or is z y hat?
-
-    # TODO: i?
-    return network[i].z
-
-
 def main() -> None:
     random.seed(0)
     # f = lambda x, y: x + y  # operation to learn
-    f = lambda x: x // 2
+    f = lambda x: x + 3
     n_args = 1              # arity of operation
     n_bits = 8              # size of each operand
 
