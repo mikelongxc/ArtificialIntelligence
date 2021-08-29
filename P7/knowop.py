@@ -187,6 +187,8 @@ class KnowOp:
         self.i_size = i_size
         self.o_size = o_size
 
+        # self.num_samples = len(samples)
+
         #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 
         self.learning_rate = 0.1
@@ -222,7 +224,7 @@ class KnowOp:
                     da.append(loss_prime)
                     running_sum += loss
 
-                cost = running_sum / len_output # TODO save for updating w,b
+                # cost = running_sum / len_output # TODO save for updating w,b
 
                 # prop backward
                 propagate_backward(network, inputs[0], da)
@@ -245,7 +247,7 @@ class KnowOp:
 
 
 def propagate_backward(network: List[Layer],\
-                       inputs: Tuple[int, ...], da: List[float]):
+                       inputs: Tuple[int, ...], da: List[float]) -> None:
     """
 
     input: dan (dal)
@@ -282,8 +284,6 @@ def propagate_backward(network: List[Layer],\
         # fourth eqn: da_n-1 = wT * dz
         # TODO: dont need to compute bc only one layer :) (da[0] irrelevant)
 
-        pass
-
 
 def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
                   i_size: int, o_size: int) -> List[Layer]:
@@ -302,7 +302,6 @@ def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
 def propagate_forward(network: List[Layer], inputs: Tuple[int, ...]) \
         -> List[float]:
 
-    i = 0
     for i in range(len(network)):
         a = network[i].activate(inputs)
 
