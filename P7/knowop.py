@@ -271,8 +271,10 @@ def propagate_backward(network: List[Layer],\
         dz_2d = [dz]
         trans_dz = Math.transpose(dz_2d)
 
+        input_list = list(inputs)
+        [float(_k) for _k in input_list]
         # (1 x 16) matrix
-        a_2d = [list(inputs)]
+        a_2d = [list(input_list)]
 
         # TODO: is this right?
         dw = Math.matmul(trans_dz, a_2d)
@@ -312,8 +314,8 @@ def old_propagate_forward(network: List[Layer], inputs: Tuple[int, ...])\
         -> List[float]:
 
     pre_x = list(inputs)
-    x = []
-    x.append(pre_x)
+    [float(i) for i in pre_x]
+    x = [pre_x]
     x = Math.transpose(x)
 
     # num_neurons = len(network[0].b)
