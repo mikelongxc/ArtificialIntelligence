@@ -193,7 +193,7 @@ class KnowOp:
 
         self.learning_rate = 0.1
         self.num_batches = 10
-        self.num_training_iterations = 800
+        self.num_training_iterations = 1000
         self.decay = 0.99999
 
         self.network_size = 1
@@ -203,20 +203,20 @@ class KnowOp:
         o_layer = Layer((self.o_size, self.i_size), True)
         network: List[Layer] = [o_layer]
 
-        # TRAINING ITERATIONS OUTER LOOP
+        # training iterations outer loop
         for _ in range(self.num_training_iterations):
 
             cur_batch = random.sample(self.samples.items(), self.num_batches)
             ct = 0
 
-            # FOR EACH EXAMPLE/SAMPLE IN MINI-BATCH
+            # iterate over each sample in the mini-batch
             for inputs in cur_batch:
                 ct += 1
 
-                # pass input onto next layer (updates z and a)
+                # 1. Propagate forward
                 a = propagate_forward(network, inputs[0])
-                # a is List[float]
 
+                # 2. Calculate loss and create da (and get cost^)
                 running_sum = 0
                 len_output = self.o_size
                 da = []
@@ -226,24 +226,22 @@ class KnowOp:
                     da.append(loss_prime)
                     running_sum += loss
 
-                # cost = running_sum / len_output # TODO save for updating w,b
+                # ^Note: In a neural net with hidden layers, the cost would be
+                # used to update w and b parameters in each layer
+                # cost = running_sum / len_output
 
-                # prop backward
+                # 3. Propagate backward:
                 self.propagate_backward(network, inputs[0], da)
 
-            # AFTER MINI BATCH: update w and b params:
-
+            # AFTER MINI-BATCH: update w and b parameters:
             for p in range(self.o_size):
                 for q in range(self.i_size):
-                    # grad = avg of val in dw matrix at pq
+                    # gradient is avg of val in dw matrix at pq
                     network[0].w[p][q] = network[0].w[p][q] - self.\
                         learning_rate * network[0].dw[p][q]
 
             # decrease learning rate slightly each iter
-
             self.learning_rate = self.learning_rate * self.decay
-
-            #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 
         return network
 
@@ -255,7 +253,7 @@ class KnowOp:
         output: dan-1, dwn, dbn
         """
 
-        # TODO only accounting for output (sigmoid) here
+        # Note: only accounting for sigmoid fxn. Use ReLU for multi-layered NN
         for i in range(self.network_size):
             z_col = network[i].z
             z_col_sigmoid = []
@@ -263,28 +261,24 @@ class KnowOp:
                 z = z_col[j]
                 z_col_sigmoid.append(Math.sigmoid_prime(z))
 
-            # first eqn: dz = da * g'(z)
+            # 1. first eqn: dz = da * g'(z):
             dz = [x * y for x, y in zip(da, z_col_sigmoid)]
 
-            # second eqn: dW = dz . aTn-1
-
-            # (8 x 1) matrix
+            # 2. second eqn: dW = dz . aTn-1:
             dz_2d = [dz]
             trans_dz = Math.transpose(dz_2d)
 
             input_list = int_list_to_float(list(inputs))
-            # (1 x 16) matrix
             a_2d = [input_list]
 
-            # TODO: is this right?
             dw = Math.matmul(trans_dz, a_2d)
             network[i].dw = dw
 
-            # third eqn: db = dz
+            # 3. third eqn: db = dz
             network[i].db = dz
 
-            # fourth eqn: da_n-1 = wT * dz
-            # TODO: dont need to compute bc only one layer :) (da[0] irrelevant)
+            # 4. fourth eqn: da_n-1 = wT * dz
+            # Note: would need to computer fourth equation for multi-layered NN
 
 
 def train_network(samples: Dict[Tuple[int, ...], Tuple[int, ...]],
@@ -322,7 +316,6 @@ def int_list_to_float(l: List[int]) -> List[float]:
 def main() -> None:
     random.seed(0)
     f = lambda x, y: x or y  # operation to learn
-    # f = lambda x: x + 3
     n_args = 2              # arity of operation
     n_bits = 8              # size of each operand
 
@@ -370,7 +363,7 @@ def tester() -> None:
         ct += 1
         print()
         print("Testing function #" + str(ct))
-        if ct >= 3:
+        if ct >= 4:
             n_args = 2
         else:
             n_args = 1  # arity of operation
